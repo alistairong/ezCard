@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>276377448776-8h97sndd7vk19psulc2c7bened2o4vln.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.276377448776-8h97sndd7vk19psulc2c7bened2o4vln</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCqFIQSWxvg-XpRqJrZ5YdB3JtvPVbGrOc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>276377448776</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.andrewwhitehead.ezCard</string>
+	<key>PROJECT_ID</key>
+	<string>ezcard-7af95</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ezcard-7af95.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:276377448776:ios:05ebeb3e04d2e033</string>
+	<key>DATABASE_URL</key>
+	<string>https://ezcard-7af95.firebaseio.com</string>
+</dict>
+</plist>

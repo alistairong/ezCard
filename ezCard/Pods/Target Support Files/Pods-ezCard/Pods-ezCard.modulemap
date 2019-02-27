@@ -1,0 +1,6 @@
+framework module Pods_ezCard {
+  umbrella header "Pods-ezCard-umbrella.h"
+
+  export *
+  module * { export * }
+}
