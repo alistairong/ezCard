@@ -9,14 +9,50 @@
 import UIKit
 import Firebase
 
+extension UIViewController {
+    func embeddedInNavigationController() -> UINavigationController {
+        return UINavigationController(rootViewController: self)
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    var loggedIn = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        if loggedIn {
+            let homeViewController = HomeViewController(style: .grouped)
+            homeViewController.tabBarItem = UITabBarItem(title: "Home", image: #imageLiteral(resourceName: "home"), tag: 0)
+            
+            let scanViewController = ScanViewController()
+            scanViewController.tabBarItem = UITabBarItem(title: "Scan", image: #imageLiteral(resourceName: "qrCode"), tag: 1)
+            
+            let contactsViewController = ContactsViewController(style: .grouped)
+            contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
+            
+            let tabBarController = UITabBarController()
+            tabBarController.viewControllers = [homeViewController.embeddedInNavigationController(),
+                                                scanViewController.embeddedInNavigationController(),
+                                                contactsViewController.embeddedInNavigationController()]
+            
+            window!.rootViewController = tabBarController
+        } else {
+            let loginViewController = LoginViewController()
+            
+            window!.rootViewController = loginViewController.embeddedInNavigationController()
+        }
+    
+        window!.makeKeyAndVisible()
+        
+        UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)
+        
         FirebaseApp.configure()
+        
         return true
     }
 
