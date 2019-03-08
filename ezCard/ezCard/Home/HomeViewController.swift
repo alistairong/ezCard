@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class HomeViewController: UITableViewController {
     
@@ -14,6 +15,11 @@ class HomeViewController: UITableViewController {
         super.viewDidLoad()
         
         configureNavigationBar()
+        
+        if Auth.auth().currentUser == nil {
+            let loginViewController = LoginViewController()
+            present(loginViewController.embeddedInNavigationController(), animated: false, completion: nil)
+        }
     }
 
     /*
