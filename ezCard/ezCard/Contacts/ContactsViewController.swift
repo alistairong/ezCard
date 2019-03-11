@@ -13,7 +13,7 @@ class ContactsViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        configureNavigationBar()
+        addProfileButtonAndSearchBarToNavigationBar()
     }
 
     // MARK: - Table view data source

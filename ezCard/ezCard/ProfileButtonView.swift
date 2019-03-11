@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseStorage
 
 class ProfileButtonView: UIView {
     
@@ -50,14 +52,52 @@ class ProfileButtonView: UIView {
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.tintColor = .darkGray
-        profileImageView.image = #imageLiteral(resourceName: "person") // TODO: load profile image
-        profileImageView.contentMode = .bottom // TODO: .aspectFill if profile image != nil
+        profileImageView.image = #imageLiteral(resourceName: "person")
+        profileImageView.contentMode = .bottom
         
         profileButton.addSubview(profileImageView)
+        
+        weak var weakProfileImageView = profileImageView
+        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
+            guard let user = user else {
+                return
+            }
+            
+            self?.fetchProfileImage(for: user) { (image, error) in
+                guard let profileImage = image else {
+                    return
+                }
+                
+                weakProfileImageView?.image = profileImage
+                weakProfileImageView?.contentMode = .scaleAspectFill
+            }
+        }
     }
     
     @objc private func profileButtonTapped(_ sender: Any?) {
         tappedCallback?()
+    }
+    
+    private func fetchProfileImage(for user: User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
+        let cacheKey = "profile_image_\(user.uid)"
+        
+        if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage, !forceRefetch {
+            completion(imageFromCache, nil)
+        } else {
+            let profileImgRef = Storage.storage().reference().child("profile_images").child("\(user.uid).jpg")
+            
+            // limit profile images to 2MB (2 * 1024 * 1024 bytes)
+            profileImgRef.getData(maxSize: 2 * 1024 * 1024) { data, error in
+                if let error = error {
+                    print("Error fetching profile image:", error)
+                    completion(nil, error)
+                } else {
+                    let image = UIImage(data: data!)!
+                    profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
+                    completion(image, error)
+                }
+            }
+        }
     }
 
 }

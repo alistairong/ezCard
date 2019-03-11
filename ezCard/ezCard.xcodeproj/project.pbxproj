@@ -22,7 +22,7 @@
 		494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CF22230691800B5A7E1 /* ScanViewController.swift */; };
 		494E8CF52230691800B5A7E1 /* ScanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 494E8CF32230691800B5A7E1 /* ScanViewController.xib */; };
 		494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CF82230701F00B5A7E1 /* ContactsViewController.swift */; };
-		494E8CFD223071A000B5A7E1 /* UIViewController+NavigationBarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CFC223071A000B5A7E1 /* UIViewController+NavigationBarConfig.swift */; };
+		494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */; };
 		494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */; };
 		494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0022307D4400B5A7E1 /* ContactViewController.swift */; };
 		494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */; };
@@ -49,7 +49,7 @@
 		494E8CF22230691800B5A7E1 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		494E8CF32230691800B5A7E1 /* ScanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScanViewController.xib; sourceTree = "<group>"; };
 		494E8CF82230701F00B5A7E1 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
-		494E8CFC223071A000B5A7E1 /* UIViewController+NavigationBarConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBarConfig.swift"; sourceTree = "<group>"; };
+		494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ProfileButtonSearchBarNav.swift"; sourceTree = "<group>"; };
 		494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButtonView.swift; sourceTree = "<group>"; };
 		494E8D0022307D4400B5A7E1 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationViewController.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 				494E8D0922307EF200B5A7E1 /* Scan */,
 				494E8D0822307EE800B5A7E1 /* Contacts */,
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
-				494E8CFC223071A000B5A7E1 /* UIViewController+NavigationBarConfig.swift */,
+				494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */,
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
@@ -277,8 +277,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ezCard/Pods-ezCard-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -286,8 +293,15 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -310,7 +324,7 @@
 				494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
-				494E8CFD223071A000B5A7E1 /* UIViewController+NavigationBarConfig.swift in Sources */,
+				494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */,
 				494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */,
 				494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */,
 				4903B308223096F20022F040 /* RegisterViewController.swift in Sources */,

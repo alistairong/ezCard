@@ -14,11 +14,11 @@ class HomeViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureNavigationBar()
+        addProfileButtonAndSearchBarToNavigationBar()
         
         if Auth.auth().currentUser == nil {
             let loginViewController = LoginViewController()
-            present(loginViewController.embeddedInNavigationController(), animated: false, completion: nil)
+            present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
         }
     }
 

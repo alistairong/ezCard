@@ -35,8 +35,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
             guard let strongSelf = self else { return }
             
-            if error != nil {
-                let alertController = UIAlertController(title: "Oops!", message: "The username and password combination do not match any stored on the server. Please try again.", preferredStyle: .alert)
+            if let error = error {
+                let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 strongSelf.present(alertController, animated: true, completion: nil)
                 

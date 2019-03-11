@@ -9,11 +9,7 @@
 import UIKit
 import Firebase
 
-extension UIViewController {
-    func embeddedInNavigationController() -> UINavigationController {
-        return UINavigationController(rootViewController: self)
-    }
-}
+let profileImageCache = NSCache<AnyObject, AnyObject>() // global profile image cache
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,9 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
         
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [homeViewController.embeddedInNavigationController(),
-                                            scanViewController.embeddedInNavigationController(),
-                                            contactsViewController.embeddedInNavigationController()]
+        tabBarController.viewControllers = [UINavigationController(rootViewController: homeViewController),
+                                            UINavigationController(rootViewController: scanViewController),
+                                            UINavigationController(rootViewController: contactsViewController)]
         
         window!.rootViewController = tabBarController
     

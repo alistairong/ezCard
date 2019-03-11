@@ -13,8 +13,8 @@ class ProfileViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        configureNavigationBar()
-        navigationItem.leftBarButtonItem = nil
+        addProfileButtonAndSearchBarToNavigationBar()
+        navigationItem.leftBarButtonItem = nil // remove the profile button since we're already at the profile screen
         
         navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped(_:))),
                                               UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))]
@@ -32,7 +32,7 @@ class ProfileViewController: UITableViewController {
     
     @objc func addTapped(_ sender: Any?) {
         let cardViewController = CardViewController(style: .grouped)
-        present(cardViewController.embeddedInNavigationController(), animated: true, completion: nil)
+        present(UINavigationController(rootViewController: cardViewController), animated: true, completion: nil)
     }
 
     // MARK: - Table view data source
