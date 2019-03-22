@@ -9,7 +9,16 @@
 import UIKit
 
 class CardViewController: UITableViewController {
-
+    
+    private let cardItems: [String] = [
+    "Phone", "Email", "Address", "Company", "Facebook",
+    "LinkedIn", "GitHub", "Resume"
+    ]
+    
+    private let numberOfRowsAtSection: [Int] = [1, 8]
+    private let firstSection = 0
+    private let defaultCellIdentifier = "reuseIdentifier"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -17,6 +26,9 @@ class CardViewController: UITableViewController {
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "checkmark"), style: .plain, target: self, action: #selector(saveTapped(_:)))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "x"), style: .plain, target: self, action: #selector(cancelTapped(_:)))
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: defaultCellIdentifier)
+//        tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: "textInputCell")
     }
     
     @objc func saveTapped(_ sender: Any?) {
@@ -28,27 +40,73 @@ class CardViewController: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
 
-    // MARK: - Table view data source
+    // MARK: - Table View Functions
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 2
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+
+        var rows: Int = 0
+        
+        // if first section, instantiate only 1 row for name of card
+        if section < numberOfRowsAtSection.count {
+            rows = numberOfRowsAtSection[section]
+        }
+        
+        return rows
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        // if first section, instantiate textfield for name of card
+        if (indexPath.section == firstSection) {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "textInputCell") as! TextFieldTableViewCell
+//
+//            cell.textChanged {[weak tableView] (_) in
+//                tableView?.beginUpdates()
+//                tableView?.endUpdates()
+//            }
+//
+//            return cell
+            return createTableRow(tableView)
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier, for: indexPath)
+            
+            let cardItem = cardItems[indexPath.row]
+            cell.textLabel?.text = cardItem
+            
+            return cell
+        }
+    }
+    
+    func createTableRow(_ tableView: UITableView) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: defaultCellIdentifier) as! UITableViewCell
+        
+        let tf = UITextField(frame: CGRect(x: 20, y: 12, width: 300, height: 20))
+        tf.placeholder = "Enter card name"
+        tf.font = UIFont.systemFont(ofSize: 17)
+        
+        cell.addSubview(tf)
+        
         return cell
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let isCardItems = indexPath.section != firstSection
+        
+        if (isCardItems) {
+            let hasCheckmark = (tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCell.AccessoryType.checkmark)
+            
+            if (hasCheckmark) {
+                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.none
+            } else {
+                tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCell.AccessoryType.checkmark
+            }
+        }
+        
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -82,16 +140,6 @@ class CardViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
     }
     */
 
