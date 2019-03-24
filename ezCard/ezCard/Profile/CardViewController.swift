@@ -20,12 +20,13 @@ class CardViewController: UITableViewController {
         false, false
     ]
     
+    private var cardNameTextField: UITextField!
+    
     private let numberOfRowsAtSection: [Int] = [1, 8]
     private let firstSection = 0
     private let defaultCellIdentifier = "reuseIdentifier"
     private let textInputCellIdentifier = "textInputCell"
     private let placeholder = "Enter card name"
-    private var cardNameTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
