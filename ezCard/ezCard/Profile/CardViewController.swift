@@ -27,6 +27,8 @@ class CardViewController: UITableViewController {
     private let defaultCellIdentifier = "reuseIdentifier"
     private let textInputCellIdentifier = "textInputCell"
     private let placeholder = "Enter card name"
+    private let cardName = "Card Name"
+    private let cardInfoToAdd = "Add Info to Card"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,6 +118,14 @@ class CardViewController: UITableViewController {
                 cell?.accessoryType = UITableViewCell.AccessoryType.checkmark
                 setCardItem(row: currentRow, selected: true)
             }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if (section == firstSection) {
+            return cardName
+        } else {
+            return cardInfoToAdd
         }
     }
     
