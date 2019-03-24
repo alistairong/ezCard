@@ -33,15 +33,10 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     @objc func settingsTapped(_ sender: Any?) {
         // TODO: present CNContactViewController
         
-        //need to take some things out here too. might be uncessasry
-        let store = CNContactStore()
         let newContact = CNMutableContact()
         let cnContactVC = CNContactViewController(forNewContact: newContact)
         cnContactVC.delegate = self
         navigationController?.pushViewController(cnContactVC, animated: true)
-        let request = CNSaveRequest()
-        request.add(newContact, toContainerWithIdentifier: nil)
-        
         
         
         
@@ -51,39 +46,27 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?) {
         
         
-        let ref = Database.database().reference()
-        
         if contact != nil
         {
             
             let uuid = UUID().uuidString
+            let data = try! CNContactVCardSerialization.data(with: [contact!])
             
-            let newRef = ref.child(uuid)
-//              try vcard stuff
-//            let data = try! CNContactVCardSerialization.data(with: [contact!])
-//            print("vcard below")
-//            print(data.description)
+        
+            let storageRef = Storage.storage().reference()
+            var location = "contacts/" + uuid
+            let vcapRef = storageRef.child(location)
             
-            newRef.setValue([
-                "first name": contact?.givenName,
-                "last name": contact?.familyName,
-                "company" : contact?.organizationName,
-                "phoneNumbers": contact?.phoneNumbers.description,
-                "emailAddresses": contact?.emailAddresses.description,
-                //"ringtone": if needed
-                //text tone if needed
-                "urlAddresses": contact?.urlAddresses.description,
-                "birtdays": contact?.birthday?.description,
-                "contactRelations": contact?.contactRelations.description,
-                "socialProfiles": contact?.socialProfiles.description,
-                "instantMessages":contact?.instantMessageAddresses.description,
-                "notes": contact?.note,
-                ])
+            let uploadTask = vcapRef.putData(data, metadata: nil) { (metadata, error) in
+                guard let metadata = metadata else {
+                    print("error has occured uploading vcap file")
+                    return
+                }
+            }
         }
-        else{
-            viewController.dismiss(animated: true, completion: nil)
+        
+        viewController.dismiss(animated: true, completion: nil)
             
-        }
         
     }
     
