@@ -18,27 +18,11 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="bla rtext" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dmk-ZF-QeZ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    </textView>
-                </subviews>
-                <constraints>
-                    <constraint firstItem="Dmk-ZF-QeZ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="3dd-4h-zgg"/>
-                    <constraint firstItem="Dmk-ZF-QeZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="g98-xQ-QO5"/>
-                    <constraint firstAttribute="trailing" secondItem="Dmk-ZF-QeZ" secondAttribute="trailing" id="iOY-9t-HYJ"/>
-                    <constraint firstAttribute="bottom" secondItem="Dmk-ZF-QeZ" secondAttribute="bottom" constant="-0.5" id="t2C-8F-Duf"/>
-                </constraints>
             </tableViewCellContentView>
             <accessibility key="accessibilityConfiguration">
                 <accessibilityTraits key="traits" notEnabled="YES"/>
             </accessibility>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <connections>
-                <outlet property="cardNameTextView" destination="Dmk-ZF-QeZ" id="SSp-gd-WtB"/>
-            </connections>
             <point key="canvasLocation" x="40" y="46.776611694152926"/>
         </tableViewCell>
     </objects>
