@@ -30,6 +30,8 @@
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
 		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
+		F3C3801A224475B700F2206B /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C38018224475B700F2206B /* TextFieldTableViewCell.xib */; };
+		F3C3801B224475B700F2206B /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C38019224475B700F2206B /* TextFieldTableViewCell.swift */; };
 		FC9F44353E4F40C261D9928C /* Pods_ezCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +64,8 @@
 		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		59506B0FA1DB936E64A2E2C2 /* Pods-ezCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.release.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.release.xcconfig"; sourceTree = "<group>"; };
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
+		F3C38018224475B700F2206B /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		F3C38019224475B700F2206B /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +159,8 @@
 			children = (
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
 				4903B2FC223092510022F040 /* CardViewController.swift */,
+				F3C38019224475B700F2206B /* TextFieldTableViewCell.swift */,
+				F3C38018224475B700F2206B /* TextFieldTableViewCell.xib */,
 				4903B2FE223093A60022F040 /* QRCodeViewController.swift */,
 				4903B2FF223093A60022F040 /* QRCodeViewController.xib */,
 			);
@@ -258,6 +264,7 @@
 				493C0D502226E31D00DF2482 /* Assets.xcassets in Resources */,
 				4903B3052230949B0022F040 /* LoginViewController.xib in Resources */,
 				4903B309223096F20022F040 /* RegisterViewController.xib in Resources */,
+				F3C3801A224475B700F2206B /* TextFieldTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +335,7 @@
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
 				494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */,
 				494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */,
+				F3C3801B224475B700F2206B /* TextFieldTableViewCell.swift in Sources */,
 				494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */,
 				4903B308223096F20022F040 /* RegisterViewController.swift in Sources */,
 				4903B2FD223092510022F040 /* CardViewController.swift in Sources */,
