@@ -13,7 +13,26 @@ import FirebaseStorage
 
 class ProfileViewController: UITableViewController, CNContactViewControllerDelegate {
     
+    private struct Constants {
+        static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
+        static let tableViewHeaderHeight = CGFloat(117.0)
+    }
+    
     let vCardRemoteRef = Storage.storage().reference().child("users").child("\(Auth.auth().currentUser!.uid).vcard")
+    
+    let currentUser = Auth.auth().currentUser!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let headerView = ProfilePictureAndNameView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
+        headerView.nameLabel.text = currentUser.displayName
+        tableView.tableHeaderView = headerView
+        
+        tableView.separatorColor = .clear
+        
+        tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -174,25 +193,18 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 0
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cardTableViewCellReuseIdentifier, for: indexPath) as! CardTableViewCell
 
-        // Configure the cell...
+        // TODO: configure the cell
 
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.

@@ -13,22 +13,28 @@ import ContactsUI
 
 class ProfileButtonView: UIView {
     
+    static let defaultSize = CGFloat(40.0)
+    
     private struct Constants {
-        static let defaultProfileButtonSize = CGFloat(40.0)
         static let shadowOffset = CGFloat(2.0)
     }
     
     private var profileImageView: UIImageView!
+    private var profileButton: UIButton!
     
     var tappedCallback: (() -> Void)?
+    
+    convenience init() {
+        self.init(buttonSize: ProfileButtonView.defaultSize)
+    }
 
-    init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: Constants.defaultProfileButtonSize, height: Constants.defaultProfileButtonSize))
+    init(buttonSize: CGFloat) {
+        super.init(frame: CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize))
         
         commonInit()
     }
     
-    private override init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -38,10 +44,11 @@ class ProfileButtonView: UIView {
         commonInit()
     }
     
-    func commonInit() {
-        let profileButton = UIButton(frame: CGRect(x: 0, y: -Constants.shadowOffset, width: frame.width, height: frame.height))
+    private func commonInit() {
+        profileButton = UIButton(frame: CGRect(x: 0, y: -Constants.shadowOffset, width: frame.width, height: frame.height))
+        profileButton.translatesAutoresizingMaskIntoConstraints = false
         profileButton.backgroundColor = .lightGray
-        profileButton.layer.cornerRadius = profileButton.frame.width / 2
+        profileButton.layer.cornerRadius = profileButton.bounds.width / 2
         profileButton.layer.borderWidth = 3.0
         profileButton.layer.borderColor = UIColor.white.cgColor
         profileButton.layer.masksToBounds = false
@@ -51,14 +58,24 @@ class ProfileButtonView: UIView {
         profileButton.addTarget(self, action: #selector(profileButtonTapped(_:)), for: .touchUpInside)
         addSubview(profileButton)
         
+        profileButton.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        profileButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        profileButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        profileButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
         profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: profileButton.frame.width, height: profileButton.frame.height))
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.layer.masksToBounds = true
-        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
         profileImageView.tintColor = .darkGray
         profileImageView.image = #imageLiteral(resourceName: "person")
         profileImageView.contentMode = .bottom
-        
         profileButton.addSubview(profileImageView)
+        
+        profileImageView.leadingAnchor.constraint(equalTo: profileButton.leadingAnchor).isActive = true
+        profileImageView.trailingAnchor.constraint(equalTo: profileButton.trailingAnchor).isActive = true
+        profileImageView.topAnchor.constraint(equalTo: profileButton.topAnchor).isActive = true
+        profileImageView.bottomAnchor.constraint(equalTo: profileButton.bottomAnchor).isActive = true
         
         weak var weakProfileImageView = profileImageView
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
@@ -75,6 +92,13 @@ class ProfileButtonView: UIView {
                 weakProfileImageView?.contentMode = .scaleAspectFill
             }
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        profileButton?.layer.cornerRadius = profileButton.bounds.width / 2
+        profileImageView?.layer.cornerRadius = profileImageView.bounds.width / 2
     }
     
     @objc private func profileButtonTapped(_ sender: Any?) {
