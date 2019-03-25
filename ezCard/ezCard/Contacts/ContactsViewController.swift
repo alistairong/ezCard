@@ -14,6 +14,8 @@ class ContactsViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         addProfileButtonAndSearchBarToNavigationBar()
+        
+        (navigationItem.leftBarButtonItem?.customView?.subviews.first as? ProfileButtonView)?.refresh(forceRefetch: true)
     }
 
     // MARK: - Table view data source

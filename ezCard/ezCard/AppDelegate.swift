@@ -8,6 +8,9 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
+
+var currentUserData: Data? //cache for the current user's vCard
 
 let profileImageCache = NSCache<AnyObject, AnyObject>() // global profile image cache
 
@@ -40,6 +43,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.makeKeyAndVisible()
         
         UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)
+        
+        Auth.auth().addStateDidChangeListener { (auth, user) in
+            guard let user = user else {
+                currentUserData = nil
+                
+                return
+            }
+            
+            let vCardRemoteRef = Storage.storage().reference().child("users").child("\(user.uid).vcard")
+            vCardRemoteRef.getData(maxSize: Int64.max) { (data, error) in
+                currentUserData = data
+            }
+        }
         
         return true
     }

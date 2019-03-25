@@ -21,6 +21,12 @@ class HomeViewController: UITableViewController {
             present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        (navigationItem.leftBarButtonItem?.customView?.subviews.first as? ProfileButtonView)?.refresh(forceRefetch: true)
+    }
 
     /*
     /// callback for ... button on ID card

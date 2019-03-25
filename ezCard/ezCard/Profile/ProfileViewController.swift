@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import ContactsUI
+import FirebaseAuth
+import FirebaseStorage
 
-class ProfileViewController: UITableViewController {
-        
+class ProfileViewController: UITableViewController, CNContactViewControllerDelegate {
+    
+    let vCardRemoteRef = Storage.storage().reference().child("users").child("\(Auth.auth().currentUser!.uid).vcard")
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -27,12 +32,144 @@ class ProfileViewController: UITableViewController {
     }
     
     @objc func settingsTapped(_ sender: Any?) {
-        // TODO: present CNContactViewController
+        var contact: CNContact?
+        if let currentUserData = currentUserData {
+            do {
+                contact = try CNContactVCardSerialization.contacts(with: currentUserData).first
+            } catch let error {
+                print("error while deserializing local currentUserData:", error)
+            }
+        }
+        
+        let contactVC = CNContactViewController(forNewContact: contact)
+        contactVC.delegate = self
+        contactVC.allowsActions = false
+        present(UINavigationController(rootViewController: contactVC), animated: true, completion: nil)
     }
     
     @objc func addTapped(_ sender: Any?) {
         let cardViewController = CardViewController(style: .grouped)
         present(UINavigationController(rootViewController: cardViewController), animated: true, completion: nil)
+    }
+    
+    // MARK: - CNContactViewControllerDelegate
+    
+    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?) {
+        viewController.dismiss(animated: true, completion: nil)
+        
+        guard let contact = contact else {
+            return
+        }
+        
+        let oldUserData = currentUserData
+        
+        do {
+            let vCardData = try CNContactVCardSerialization.data(with: [contact])
+            
+            currentUserData = vCardData
+            
+            vCardRemoteRef.putData(vCardData, metadata: nil) { [weak self] (metadata, error) in
+                if let error = error {
+                    let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self?.present(alertController, animated: true, completion: nil)
+                    
+                    currentUserData = oldUserData
+                    
+                    return
+                }
+                
+                print("successfully uploaded vcard")
+                
+                if let originalImageData = contact.imageData, let image = UIImage(data: originalImageData), let imageData = image.jpegData(compressionQuality: 0.3) {
+                    let currentUser = Auth.auth().currentUser!
+                    let profileImgRef = Storage.storage().reference().child("profile_images").child("\(currentUser.uid).jpg")
+                    
+                    let metadata = StorageMetadata()
+                    metadata.contentType = "image/jpeg"
+                    
+                    profileImgRef.putData(imageData, metadata: metadata) { (metadata, error) in
+                        if let error = error {
+                            print("1 error uploading profile image:", error)
+                            return
+                        }
+                        
+                        profileImgRef.downloadURL(completion: { (url, error) in
+                            if let error = error {
+                                print("2 error uploading profile image:", error)
+                                return
+                            }
+                            
+                            let changeRequest = currentUser.createProfileChangeRequest()
+                            changeRequest.photoURL = url
+                            changeRequest.commitChanges { (error) in
+                                if let error = error {
+                                    print("3 error uploading profile image:", error)
+                                    return
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        } catch let error {
+            let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alertController, animated: true, completion: nil)
+            
+            currentUserData = oldUserData
+        }
+    }
+    
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        dismiss(animated: true, completion: nil)
+        
+        guard let currentUser = Auth.auth().currentUser else {
+            print("uid was nil")
+            return
+        }
+        
+        guard let image = info[.originalImage] as? UIImage, let imageData = image.jpegData(compressionQuality: 0.3) else {
+            print("Image was nil")
+            return
+        }
+        
+        let profileImgRef = Storage.storage().reference().child("profile_images").child("\(currentUser.uid).jpg")
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        profileImgRef.putData(imageData, metadata: metadata) { [weak self] (metadata, error) in
+            if let error = error {
+                let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                self?.present(alertController, animated: true, completion: nil)
+                
+                return
+            }
+            
+            profileImgRef.downloadURL(completion: { (url, error) in
+                if let error = error {
+                    let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self?.present(alertController, animated: true, completion: nil)
+                    
+                    return
+                }
+                
+                let changeRequest = currentUser.createProfileChangeRequest()
+                changeRequest.photoURL = url
+                changeRequest.commitChanges { (error) in
+                    if let error = error {
+                        let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                        self?.present(alertController, animated: true, completion: nil)
+                        
+                        return
+                    }
+                }
+            })
+        }
     }
 
     // MARK: - Table view data source

@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseStorage
+import ContactsUI
 
 class ProfileButtonView: UIView {
     
@@ -16,6 +17,8 @@ class ProfileButtonView: UIView {
         static let defaultProfileButtonSize = CGFloat(40.0)
         static let shadowOffset = CGFloat(2.0)
     }
+    
+    private var profileImageView: UIImageView!
     
     var tappedCallback: (() -> Void)?
 
@@ -48,7 +51,7 @@ class ProfileButtonView: UIView {
         profileButton.addTarget(self, action: #selector(profileButtonTapped(_:)), for: .touchUpInside)
         addSubview(profileButton)
         
-        let profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: profileButton.frame.width, height: profileButton.frame.height))
+        profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: profileButton.frame.width, height: profileButton.frame.height))
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.tintColor = .darkGray
@@ -76,6 +79,22 @@ class ProfileButtonView: UIView {
     
     @objc private func profileButtonTapped(_ sender: Any?) {
         tappedCallback?()
+    }
+    
+    func refresh(forceRefetch: Bool = false) {
+        guard let user = Auth.auth().currentUser else {
+            return
+        }
+        
+        weak var weakProfileImageView = profileImageView
+        fetchProfileImage(for: user) { (image, error) in
+            guard let profileImage = image else {
+                return
+            }
+            
+            weakProfileImageView?.image = profileImage
+            weakProfileImageView?.contentMode = .scaleAspectFill
+        }
     }
     
     private func fetchProfileImage(for user: User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
