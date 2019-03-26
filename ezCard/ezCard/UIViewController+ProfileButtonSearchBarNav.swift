@@ -8,14 +8,10 @@
 
 import UIKit
 
-fileprivate struct Constants {
-    static let profileButtonViewPadding = CGFloat(6.0)
-}
-
 extension UIViewController {
     
     func addProfileButtonAndSearchBarToNavigationBar() {
-        navigationItem.title = "" // remove back button text
+        navigationItem.title = Constants.blank // remove back button text
         
         let searchBar = UISearchBar(frame: CGRect.zero)
         searchBar.searchBarStyle = .minimal

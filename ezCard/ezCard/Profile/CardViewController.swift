@@ -11,24 +11,6 @@ import Firebase
 import ContactsUI
 
 class CardViewController: UITableViewController {
-    
-    private struct Constants {
-        static let numberOfRowsAtSection: [Int] = [1, 8]
-        static let firstSection = 0
-        static let identifierDefaultCell = "reuseIdentifier"
-        static let identifierTextInputCell = "textInputCell"
-        static let placeholder = "Enter card name"
-        static let cardName = "Card Name"
-        static let cardInfoToAdd = "Add Info to Card"
-        static let typeAddCard = "typeAddCard"
-        static let typeEditCard = "typeEditCard"
-    }
-    
-    private let cardItems: [String] = [
-        "Phone", "Email", "Address", "Company", "Facebook",
-        "LinkedIn", "GitHub", "Resume"
-    ]
-    
     private var selectedCardItems: [Bool] = [
         false, false, false, false, false, false,
         false, false
@@ -107,7 +89,7 @@ class CardViewController: UITableViewController {
         } else {
             cell = (tableView.dequeueReusableCell(withIdentifier: Constants.identifierTextInputCell, for: indexPath) as! TextFieldTableViewCell)
             
-            let cardItem = cardItems[currentRow]
+            let cardItem = Constants.cardItems[currentRow]
             cell.textLabel?.text = cardItem
         }
         

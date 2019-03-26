@@ -18,7 +18,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "" // remove back button text
+        navigationItem.title = Constants.blank // remove back button text
     }
     
     override func viewWillAppear(_ animated: Bool) {

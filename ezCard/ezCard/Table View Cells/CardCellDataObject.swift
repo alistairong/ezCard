@@ -9,19 +9,19 @@
 import Foundation
 
 class CardCellDataObject {
-    var title = ""
+    var title = Constants.blank
     
-    var detailLabel1 = ""
-    var dataLabel1 = ""
+    var detailLabel1 = Constants.blank
+    var dataLabel1 = Constants.blank
     
-    var detailLabel2 = ""
-    var dataLabel2 = ""
+    var detailLabel2 = Constants.blank
+    var dataLabel2 = Constants.blank
     
-    var detailLabel3 = ""
-    var dataLabel3 = ""
+    var detailLabel3 = Constants.blank
+    var dataLabel3 = Constants.blank
     
-    var detailLabel4 = ""
-    var dataLabel4 = ""
+    var detailLabel4 = Constants.blank
+    var dataLabel4 = Constants.blank
     
     init() {}
     

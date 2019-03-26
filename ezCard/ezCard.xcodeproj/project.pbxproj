@@ -30,6 +30,7 @@
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
 		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
+		F37C7C80224AEC9E0072F499 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37C7C7F224AEC9E0072F499 /* Constants.swift */; };
 		F3C3801A224475B700F2206B /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C38018224475B700F2206B /* TextFieldTableViewCell.xib */; };
 		F3C3801B224475B700F2206B /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C38019224475B700F2206B /* TextFieldTableViewCell.swift */; };
 		F3F312C52249A04800BC2791 /* ContactsUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F312C42249A04800BC2791 /* ContactsUtility.swift */; };
@@ -66,6 +67,7 @@
 		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		59506B0FA1DB936E64A2E2C2 /* Pods-ezCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.release.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.release.xcconfig"; sourceTree = "<group>"; };
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
+		F37C7C7F224AEC9E0072F499 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F3C38018224475B700F2206B /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		F3C38019224475B700F2206B /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		F3F312C42249A04800BC2791 /* ContactsUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsUtility.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
 				49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */,
 				49B5E05522497C9400D3F739 /* Table View Cells */,
+				F37C7C7E224AEC790072F499 /* Utility */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
 				493C0D5A2226E3AB00DF2482 /* GoogleService-Info.plist */,
@@ -136,7 +139,6 @@
 			children = (
 				494E8CF82230701F00B5A7E1 /* ContactsViewController.swift */,
 				494E8D0022307D4400B5A7E1 /* ContactViewController.swift */,
-				F3F312C42249A04800BC2791 /* ContactsUtility.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -191,6 +193,15 @@
 				F3F312C62249ABF600BC2791 /* CardCellDataObject.swift */,
 			);
 			path = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		F37C7C7E224AEC790072F499 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F3F312C42249A04800BC2791 /* ContactsUtility.swift */,
+				F37C7C7F224AEC9E0072F499 /* Constants.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		F50D26C39B5F3F2E2FD89E05 /* Pods */ = {
@@ -335,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4903B3042230949B0022F040 /* LoginViewController.swift in Sources */,
+				F37C7C80224AEC9E0072F499 /* Constants.swift in Sources */,
 				493C0D492226E31B00DF2482 /* AppDelegate.swift in Sources */,
 				494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,

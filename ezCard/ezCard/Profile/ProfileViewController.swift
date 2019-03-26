@@ -25,16 +25,6 @@ protocol ViewControl {
 }
 
 class ProfileViewController: UITableViewController, CNContactViewControllerDelegate, ViewControl {
-    
-    private struct Constants {
-        static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
-        static let tableViewHeaderHeight = CGFloat(117.0)
-        static let cardItems: [String] = [
-            "Phone", "Email", "Address", "Company", "Facebook",
-            "LinkedIn", "GitHub", "Resume"
-        ]
-    }
-    
     let vCardRemoteRef = Storage.storage().reference().child("users").child("\(Auth.auth().currentUser!.uid).vcard")
     
     let currentUser = Auth.auth().currentUser!
@@ -121,7 +111,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     func editProfileCard(cellIndex: Int, cardTitle: String, selectedCardItems: [Bool]) {
         let cardToEdit = profileCards[cellIndex]
         
-        cardToEdit["cardTitle"] = cardTitle
+        cardToEdit[Constants.cardTitle] = cardTitle
         
         var counter = 0
         for cardItem in Constants.cardItems {
@@ -152,7 +142,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         
         let cardToEdit = profileCards[cellIndex]
         
-        cardToEdit["cardTitle"] = cardTitle
+        cardToEdit[Constants.cardTitle] = cardTitle
         
         var counter = 0
         for cardItem in Constants.cardItems {
@@ -167,7 +157,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     func createCardItemsDict(cardTitle: String, selectedCardItems: [Bool]) -> NSMutableDictionary {
         let cardItemsDict = NSMutableDictionary()
         
-        cardItemsDict.setValue(cardTitle, forKey: "cardTitle")
+        cardItemsDict.setValue(cardTitle, forKey: Constants.cardTitle)
         for index in 0...7 {
             let cardItem = Constants.cardItems[index]
             let isSelected = selectedCardItems[index]
@@ -312,7 +302,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         cell.cellIndex = indexPath.row
         
         let cellCardItemsDict = profileCards[indexPath.row]
-        cell.titleLabel?.text = cellCardItemsDict["cardTitle"] as! String
+        cell.titleLabel?.text = cellCardItemsDict[Constants.cardTitle] as? String
         
         var counter = 0
         for cardItem in Constants.cardItems {
@@ -357,15 +347,4 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         return true
     }
     */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
 }
