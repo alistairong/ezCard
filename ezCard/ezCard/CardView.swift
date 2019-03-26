@@ -9,7 +9,22 @@
 import UIKit
 
 class CardView: UIView {
-
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    @IBOutlet weak var detailLabel1: UILabel!
+    @IBOutlet weak var dataLabel1: UILabel!
+    
+    @IBOutlet weak var detailLabel2: UILabel!
+    @IBOutlet weak var dataLabel2: UILabel!
+    
+    @IBOutlet weak var detailLabel3: UILabel!
+    @IBOutlet weak var dataLabel3: UILabel!
+    
+    @IBOutlet weak var detailLabel4: UILabel!
+    @IBOutlet weak var dataLabel4: UILabel!
+    
+    
     @IBOutlet var contentView: UIView!
     
     override init(frame: CGRect) {
