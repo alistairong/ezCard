@@ -9,6 +9,8 @@
 import UIKit
 
 class CardTableViewCell: UITableViewCell {
+    
+    var delegate: ProfileViewController!
 
     @IBOutlet weak var titleLabel: UILabel?
     
@@ -24,4 +26,9 @@ class CardTableViewCell: UITableViewCell {
     @IBOutlet weak var detailLabel4: UILabel?
     @IBOutlet weak var dataLabel4: UILabel?
     
+    @IBAction func editCard(_ sender: Any) {
+        var cardData = CardCellDataObject()
+        cardData.setTitle(title: (self.titleLabel?.text)!)
+        delegate.tapEditCard(cardData: cardData, cardCell: self)
+    }
 }

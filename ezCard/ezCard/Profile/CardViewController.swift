@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import ContactsUI
 
 class CardViewController: UITableViewController {
     
@@ -33,20 +35,32 @@ class CardViewController: UITableViewController {
     private let typeAddCard = "typeAddCard"
     private let typeEditCard = "typeEditCard"
     
+    var dataSource: CardCellDataObject!
+    var delegate: CardTableViewCell!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cardType = "Card" // TODO: change to "Add Card" or "Edit Card" depending on which is happening
+        if (dataSource != nil && delegate != nil) {
+            cardType = typeEditCard
+        } else {
+            cardType = typeAddCard
+        }
+        
+        print(cardType)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "checkmark"), style: .plain, target: self, action: #selector(saveTapped(_:)))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "x"), style: .plain, target: self, action: #selector(cancelTapped(_:)))
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: identifierDefaultCell)
         tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: identifierTextInputCell)
+        
     }
     
     @objc func saveTapped(_ sender: Any?) {
         // TODO: save the changes to the card
+        delegate?.titleLabel?.text = cardNameTextField.text
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -89,9 +103,9 @@ class CardViewController: UITableViewController {
         
         if (cardType == typeEditCard) {
             if (isFirstSection) {
-                cell.cardNameTextField?.text = "previous card name add it here"
+                cell.cardNameTextField?.text = dataSource.getTitle()
             } else {
-                toggleCheckmark(cell: cell, row: currentRow)
+//                toggleCheckmark(cell: cell, row: currentRow)
             }
         }
         
@@ -103,6 +117,7 @@ class CardViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifierTextInputCell) as! TextFieldTableViewCell
         
         let tf = UITextField(frame: CGRect(x: 20, y: 12, width: 300, height: 20))
+        tf.text = dataSource?.getTitle()
         tf.placeholder = placeholder
         tf.font = UIFont.systemFont(ofSize: 17)
         

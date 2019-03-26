@@ -11,7 +11,11 @@ import ContactsUI
 import FirebaseAuth
 import FirebaseStorage
 
-class ProfileViewController: UITableViewController, CNContactViewControllerDelegate {
+protocol ViewControl {
+    func tapEditCard(cardData: CardCellDataObject, cardCell: CardTableViewCell)
+}
+
+class ProfileViewController: UITableViewController, CNContactViewControllerDelegate, ViewControl {
     
     private struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
@@ -68,6 +72,13 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     
     @objc func addTapped(_ sender: Any?) {
         let cardViewController = CardViewController(style: .grouped)
+        present(UINavigationController(rootViewController: cardViewController), animated: true, completion: nil)
+    }
+    
+    func tapEditCard(cardData: CardCellDataObject, cardCell: CardTableViewCell) {
+        let cardViewController = CardViewController(style: .grouped)
+        cardViewController.dataSource = cardData
+        cardViewController.delegate = cardCell
         present(UINavigationController(rootViewController: cardViewController), animated: true, completion: nil)
     }
     
@@ -202,6 +213,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cardTableViewCellReuseIdentifier, for: indexPath) as! CardTableViewCell
 
         // TODO: configure the cell
+        cell.delegate = self
 
         return cell
     }
