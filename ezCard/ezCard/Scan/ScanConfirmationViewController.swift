@@ -8,11 +8,14 @@
 
 import UIKit
 
-class ScanConfirmationViewController: UITableViewController {
-        
+class ScanConfirmationViewController: UIViewController {
+    @IBOutlet weak var qrLabel: UILabel!
+    var qrMetadata:String = String()
+    var delegate:ScanViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        qrLabel.text = qrMetadata
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -28,6 +31,14 @@ class ScanConfirmationViewController: UITableViewController {
         navigationController?.pushViewController(contactViewController, animated: true)
     }
     */
+    @IBAction func declineTransactionTapped(_ sender: Any) {
+        delegate!.startCamera()
+        dismiss(animated: true, completion: nil)
+    }
+    @IBAction func acceptTransactionTapped(_ sender: Any) {
+        delegate!.startCamera()
+        dismiss(animated: true, completion: nil)
+    }
     
     func acceptTransactionTapped() {
         // TODO: accept the transaction (add contact to current user's contact list)
@@ -41,7 +52,7 @@ class ScanConfirmationViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    /*override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 0
     }
@@ -49,7 +60,7 @@ class ScanConfirmationViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 0
-    }
+    }*/
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,9 +72,9 @@ class ScanConfirmationViewController: UITableViewController {
     }
     */
 
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    /*override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return false
-    }
+    }*/
 
     /*
     // MARK: - Navigation
@@ -75,4 +86,8 @@ class ScanConfirmationViewController: UITableViewController {
     }
     */
     
+}
+
+protocol QRScanner {
+    func startCamera()
 }
