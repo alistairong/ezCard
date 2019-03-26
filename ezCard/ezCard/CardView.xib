@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,6 +21,10 @@
                 <outlet property="detailLabel2" destination="CM5-Pw-kEE" id="Uim-wo-0Zw"/>
                 <outlet property="detailLabel3" destination="tmL-T3-dBy" id="x3X-Kj-h6X"/>
                 <outlet property="detailLabel4" destination="BZP-30-qgW" id="LRw-kG-7Qn"/>
+                <outlet property="moreButton" destination="z0A-72-pGr" id="qzf-SF-oBy"/>
+                <outlet property="profileImageContainerView" destination="UiV-mu-y0Y" id="5eB-vT-8uW"/>
+                <outlet property="profileImageView" destination="kWG-PQ-IXh" id="w9y-WH-TNg"/>
+                <outlet property="qrCodeButton" destination="wtA-Vk-ebG" id="hf0-QM-dkK"/>
                 <outlet property="titleLabel" destination="Fe8-54-KcN" id="Ibk-ah-H7G"/>
             </connections>
         </placeholder>
@@ -28,13 +32,33 @@
         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g7n-gy-Jv0">
             <rect key="frame" x="0.0" y="0.0" width="375" height="449"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jvz-q4-fEb" customClass="ProfileButtonView" customModule="ezCard" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UiV-mu-y0Y">
                     <rect key="frame" x="16" y="16" width="40" height="40"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person" translatesAutoresizingMaskIntoConstraints="NO" id="kWG-PQ-IXh">
+                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="Jvz-q4-fEb" secondAttribute="height" multiplier="1:1" id="4SA-dG-WJ5"/>
-                        <constraint firstAttribute="width" constant="40" id="kIT-xx-cd1"/>
+                        <constraint firstAttribute="bottom" secondItem="kWG-PQ-IXh" secondAttribute="bottom" id="27A-Ak-qzT"/>
+                        <constraint firstAttribute="width" constant="40" id="3gf-Sz-jaR"/>
+                        <constraint firstItem="kWG-PQ-IXh" firstAttribute="leading" secondItem="UiV-mu-y0Y" secondAttribute="leading" id="IQq-S5-gPY"/>
+                        <constraint firstItem="kWG-PQ-IXh" firstAttribute="top" secondItem="UiV-mu-y0Y" secondAttribute="top" id="KkK-5I-jbd"/>
+                        <constraint firstAttribute="trailing" secondItem="kWG-PQ-IXh" secondAttribute="trailing" id="Sj1-xv-pQz"/>
+                        <constraint firstAttribute="width" secondItem="UiV-mu-y0Y" secondAttribute="height" multiplier="1:1" id="jkl-Hv-6tN"/>
                     </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="20"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fe8-54-KcN">
                     <rect key="frame" x="76" y="16" width="237" height="40"/>
@@ -170,6 +194,9 @@
                         <constraint firstAttribute="width" secondItem="wtA-Vk-ebG" secondAttribute="height" multiplier="1:1" id="hzS-vG-kFn"/>
                     </constraints>
                     <state key="normal" image="qrCode"/>
+                    <connections>
+                        <action selector="qrCodeButtonTapped:" destination="-1" eventType="touchUpInside" id="ZYy-2Q-yrs"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z0A-72-pGr">
                     <rect key="frame" x="329" y="411" width="30" height="30"/>
@@ -177,23 +204,26 @@
                         <constraint firstAttribute="width" constant="30" id="nb5-Cg-5eG"/>
                     </constraints>
                     <state key="normal" image="dots"/>
+                    <connections>
+                        <action selector="moreButtonTapped:" destination="-1" eventType="touchUpInside" id="9ZC-yQ-qWX"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="rb4-Af-aG1" firstAttribute="leading" secondItem="g7n-gy-Jv0" secondAttribute="leading" constant="16" id="5n4-ZK-1UZ"/>
+                <constraint firstItem="UiV-mu-y0Y" firstAttribute="top" secondItem="DtK-lr-sNS" secondAttribute="top" constant="16" id="6Ti-pK-HTb"/>
                 <constraint firstItem="wtA-Vk-ebG" firstAttribute="leading" secondItem="Fe8-54-KcN" secondAttribute="trailing" constant="16" id="B3T-94-bcc"/>
+                <constraint firstItem="Fe8-54-KcN" firstAttribute="bottom" secondItem="UiV-mu-y0Y" secondAttribute="bottom" id="CWT-Ey-HeV"/>
                 <constraint firstItem="z0A-72-pGr" firstAttribute="top" secondItem="rb4-Af-aG1" secondAttribute="bottom" id="CyD-Qr-Zy6"/>
                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="KMk-MQ-p3V"/>
-                <constraint firstItem="Fe8-54-KcN" firstAttribute="top" secondItem="Jvz-q4-fEb" secondAttribute="top" id="MYG-iT-si8"/>
-                <constraint firstItem="Fe8-54-KcN" firstAttribute="bottom" secondItem="Jvz-q4-fEb" secondAttribute="bottom" id="NGr-iT-unV"/>
                 <constraint firstItem="z0A-72-pGr" firstAttribute="width" secondItem="z0A-72-pGr" secondAttribute="height" multiplier="1:1" id="NSj-ih-Oka"/>
-                <constraint firstItem="Fe8-54-KcN" firstAttribute="leading" secondItem="Jvz-q4-fEb" secondAttribute="trailing" constant="20" id="Pcc-1U-Epb"/>
-                <constraint firstItem="rb4-Af-aG1" firstAttribute="top" secondItem="Jvz-q4-fEb" secondAttribute="bottom" constant="20" id="UQi-1r-FHU"/>
-                <constraint firstItem="Jvz-q4-fEb" firstAttribute="leading" secondItem="g7n-gy-Jv0" secondAttribute="leading" constant="16" id="cFI-1Y-vLG"/>
-                <constraint firstItem="Jvz-q4-fEb" firstAttribute="top" secondItem="g7n-gy-Jv0" secondAttribute="top" constant="16" id="fOP-P5-ip0"/>
+                <constraint firstItem="Fe8-54-KcN" firstAttribute="leading" secondItem="UiV-mu-y0Y" secondAttribute="trailing" constant="20" id="Pkm-Ao-ra0"/>
+                <constraint firstItem="Fe8-54-KcN" firstAttribute="top" secondItem="UiV-mu-y0Y" secondAttribute="top" id="QWL-Pu-Da3"/>
                 <constraint firstAttribute="trailing" secondItem="wtA-Vk-ebG" secondAttribute="trailing" constant="16" id="h9G-Gv-NMF"/>
                 <constraint firstAttribute="bottom" secondItem="z0A-72-pGr" secondAttribute="bottom" constant="8" id="hG2-iQ-c7R"/>
+                <constraint firstItem="UiV-mu-y0Y" firstAttribute="leading" secondItem="DtK-lr-sNS" secondAttribute="leading" constant="16" id="q1P-WH-fFy"/>
+                <constraint firstItem="rb4-Af-aG1" firstAttribute="top" secondItem="UiV-mu-y0Y" secondAttribute="bottom" constant="20" id="qUn-AV-hML"/>
                 <constraint firstAttribute="trailing" secondItem="rb4-Af-aG1" secondAttribute="trailing" constant="16" id="s3F-PV-RiH"/>
                 <constraint firstAttribute="trailing" secondItem="z0A-72-pGr" secondAttribute="trailing" constant="16" id="s4x-P6-3vk"/>
                 <constraint firstItem="wtA-Vk-ebG" firstAttribute="top" secondItem="g7n-gy-Jv0" secondAttribute="top" constant="8" id="vKR-fR-Xby"/>
@@ -210,6 +240,7 @@
     </objects>
     <resources>
         <image name="dots" width="25" height="5"/>
+        <image name="person" width="30" height="31"/>
         <image name="qrCode" width="22" height="22"/>
     </resources>
 </document>

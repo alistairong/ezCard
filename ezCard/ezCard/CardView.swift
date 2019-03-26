@@ -10,6 +10,26 @@ import UIKit
 
 class CardView: UIView {
     
+    private struct Constants {
+        static let shadowOffset = CGFloat(2.0)
+    }
+    
+    @IBOutlet weak var profileImageContainerView: UIView! {
+        didSet {
+            profileImageContainerView.layer.borderWidth = 3.0
+            profileImageContainerView.layer.borderColor = UIColor.white.cgColor
+            profileImageContainerView.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
+            profileImageContainerView.layer.shadowRadius = 2.0
+            profileImageContainerView.layer.shadowOpacity = 0.5
+        }
+    }
+    @IBOutlet weak var profileImageView: UIImageView! {
+        didSet {
+            profileImageView.image = profileImageView.image?.withRenderingMode(.alwaysTemplate)
+            profileImageView.tintColor = .darkGray
+        }
+    }
+    
     @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var detailLabel1: UILabel!
@@ -23,6 +43,13 @@ class CardView: UIView {
     
     @IBOutlet weak var detailLabel4: UILabel!
     @IBOutlet weak var dataLabel4: UILabel!
+    
+    @IBOutlet weak var qrCodeButton: UIButton!
+    
+    @IBOutlet weak var moreButton: UIButton!
+    
+    var qrCodeButtonTappedCallback: (() -> Void)?
+    var moreButtonTappedCallback: (() -> Void)?
     
     
     @IBOutlet var contentView: UIView!
@@ -53,4 +80,12 @@ class CardView: UIView {
         contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
 
+    @IBAction func qrCodeButtonTapped(_ sender: UIButton) {
+        qrCodeButtonTappedCallback?()
+    }
+    
+    @IBAction func moreButtonTapped(_ sender: UIButton) {
+        moreButtonTappedCallback?()
+    }
+    
 }
