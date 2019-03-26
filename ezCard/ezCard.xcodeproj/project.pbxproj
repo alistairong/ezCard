@@ -25,6 +25,7 @@
 		494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0022307D4400B5A7E1 /* ContactViewController.swift */; };
 		494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */; };
 		494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */; };
+		495CF42A224AA526008CDB58 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495CF429224AA526008CDB58 /* GlobalConstants.swift */; };
 		497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */; };
 		497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */; };
 		497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F22249B96D0030FE9F /* RegisterViewController.swift */; };
@@ -61,6 +62,7 @@
 		494E8D0022307D4400B5A7E1 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationViewController.swift; sourceTree = "<group>"; };
 		494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		495CF429224AA526008CDB58 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		497B36F22249B96D0030FE9F /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				493C0D482226E31B00DF2482 /* AppDelegate.swift */,
+				495CF429224AA526008CDB58 /* GlobalConstants.swift */,
 				497B36F82249CEAA0030FE9F /* UserDataManager.swift */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
@@ -341,6 +344,7 @@
 			files = (
 				497B36F92249CEAA0030FE9F /* UserDataManager.swift in Sources */,
 				4903B3042230949B0022F040 /* LoginViewController.swift in Sources */,
+				495CF42A224AA526008CDB58 /* GlobalConstants.swift in Sources */,
 				493C0D492226E31B00DF2482 /* AppDelegate.swift in Sources */,
 				494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */,
 				497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */,
