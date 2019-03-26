@@ -12,6 +12,7 @@ class ScanConfirmationViewController: UIViewController {
     @IBOutlet weak var qrLabel: UILabel!
     var qrMetadata:String = String()
     var delegate:ScanViewController?
+    @IBOutlet weak var qrTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
