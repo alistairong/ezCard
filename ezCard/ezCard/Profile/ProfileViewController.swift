@@ -10,9 +10,18 @@ import UIKit
 import ContactsUI
 import FirebaseAuth
 import FirebaseStorage
+import FirebaseDatabase
 
 protocol ViewControl {
-    func tapEditCard(cardData: CardCellDataObject, cardCell: CardTableViewCell)
+    func tapEditCard(cardData: CardCellDataObject, cardCell: CardTableViewCell, profileDelegate: ProfileViewController)
+    
+    func addProfileCard(cardTitle: String, selectedCardItems: [Bool])
+    
+    func editProfileCard(cellIndex: Int, cardTitle: String, selectedCardItems: [Bool])
+    
+    func addProfileCard(cardDelegate: CardTableViewCell)
+    
+    func editProfileCard(cardDelegate: CardTableViewCell)
 }
 
 class ProfileViewController: UITableViewController, CNContactViewControllerDelegate, ViewControl {
@@ -20,11 +29,19 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     private struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
         static let tableViewHeaderHeight = CGFloat(117.0)
+        static let cardItems: [String] = [
+            "Phone", "Email", "Address", "Company", "Facebook",
+            "LinkedIn", "GitHub", "Resume"
+        ]
     }
     
     let vCardRemoteRef = Storage.storage().reference().child("users").child("\(Auth.auth().currentUser!.uid).vcard")
     
     let currentUser = Auth.auth().currentUser!
+    
+    var profileCards: [NSMutableDictionary] = []
+    
+    var ref: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +53,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         tableView.separatorColor = .clear
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
+        
+        ref = Database.database().reference()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,14 +93,88 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     
     @objc func addTapped(_ sender: Any?) {
         let cardViewController = CardViewController(style: .grouped)
+        cardViewController.profileDelegate = self
+        
         present(UINavigationController(rootViewController: cardViewController), animated: true, completion: nil)
     }
     
-    func tapEditCard(cardData: CardCellDataObject, cardCell: CardTableViewCell) {
+    // MARK: - View Control Delegate Functions
+    
+    func tapEditCard(cardData: CardCellDataObject, cardCell: CardTableViewCell, profileDelegate: ProfileViewController) {
         let cardViewController = CardViewController(style: .grouped)
-        cardViewController.dataSource = cardData
-        cardViewController.delegate = cardCell
+        cardViewController.cardDataSource = cardData
+        cardViewController.cardDelegate = cardCell
+        cardViewController.profileDelegate = profileDelegate
+        
         present(UINavigationController(rootViewController: cardViewController), animated: true, completion: nil)
+    }
+    
+    func addProfileCard(cardTitle: String, selectedCardItems: [Bool]) {
+        let newProfileCard = createCardItemsDict(cardTitle: cardTitle, selectedCardItems: selectedCardItems)
+        
+        profileCards.append(newProfileCard)
+        
+        print(profileCards)
+        tableView.reloadData()
+    }
+    
+    func editProfileCard(cellIndex: Int, cardTitle: String, selectedCardItems: [Bool]) {
+        let cardToEdit = profileCards[cellIndex]
+        
+        cardToEdit["cardTitle"] = cardTitle
+        
+        var counter = 0
+        for cardItem in Constants.cardItems {
+            cardToEdit[cardItem] = selectedCardItems[counter]
+            counter += 1
+        }
+        
+        print(profileCards)
+        tableView.reloadData()
+    }
+    
+    func addProfileCard(cardDelegate: CardTableViewCell) {
+        let cardTitle = cardDelegate.titleLabel?.text
+        let selectedCardItems = cardDelegate.selectedCardItems
+        
+        let newProfileCard = createCardItemsDict(cardTitle: cardTitle!, selectedCardItems: selectedCardItems)
+        
+        profileCards.append(newProfileCard)
+        
+        print(profileCards)
+        tableView.reloadData()
+    }
+    
+    func editProfileCard(cardDelegate: CardTableViewCell) {
+        let cardTitle = cardDelegate.titleLabel?.text
+        let selectedCardItems = cardDelegate.selectedCardItems
+        let cellIndex = cardDelegate.cellIndex!
+        
+        let cardToEdit = profileCards[cellIndex]
+        
+        cardToEdit["cardTitle"] = cardTitle
+        
+        var counter = 0
+        for cardItem in Constants.cardItems {
+            cardToEdit[cardItem] = selectedCardItems[counter]
+            counter += 1
+        }
+        
+        print(profileCards)
+        tableView.reloadData()
+    }
+    
+    func createCardItemsDict(cardTitle: String, selectedCardItems: [Bool]) -> NSMutableDictionary {
+        let cardItemsDict = NSMutableDictionary()
+        
+        cardItemsDict.setValue(cardTitle, forKey: "cardTitle")
+        for index in 0...7 {
+            let cardItem = Constants.cardItems[index]
+            let isSelected = selectedCardItems[index]
+            cardItemsDict.setValue(isSelected, forKey: cardItem)
+        }
+        
+        return cardItemsDict
     }
     
     // MARK: - CNContactViewControllerDelegate
@@ -208,7 +301,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return profileCards.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -216,7 +309,17 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
 
         // TODO: configure the cell
         cell.delegate = self
-
+        cell.cellIndex = indexPath.row
+        
+        let cellCardItemsDict = profileCards[indexPath.row]
+        cell.titleLabel?.text = cellCardItemsDict["cardTitle"] as! String
+        
+        var counter = 0
+        for cardItem in Constants.cardItems {
+            cell.selectedCardItems[counter] = cellCardItemsDict[cardItem] as! Bool
+            counter += 1
+        }
+        
         return cell
     }
 

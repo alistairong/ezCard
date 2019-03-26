@@ -31,9 +31,11 @@ class CardTableViewCell: UITableViewCell {
         false, false
     ]
     
+    var cellIndex: Int!
+    
     @IBAction func editCard(_ sender: Any) {
         let cardData = CardCellDataObject()
         cardData.setTitle(title: (self.titleLabel?.text)!)
-        delegate.tapEditCard(cardData: cardData, cardCell: self)
+        delegate.tapEditCard(cardData: cardData, cardCell: self, profileDelegate: delegate)
     }
 }

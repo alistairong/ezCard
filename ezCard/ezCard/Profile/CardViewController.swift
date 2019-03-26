@@ -37,15 +37,16 @@ class CardViewController: UITableViewController {
     private var cardNameTextField: UITextField!
     private var cardType: String!
     
-    var dataSource: CardCellDataObject!
-    var delegate: CardTableViewCell!
+    var cardDataSource: CardCellDataObject!
+    var cardDelegate: CardTableViewCell!
+    var profileDelegate: ProfileViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if (dataSource != nil && delegate != nil) {
+        if (cardDataSource != nil && cardDelegate != nil) {
             cardType = Constants.typeEditCard
-            selectedCardItems = delegate.selectedCardItems
+            selectedCardItems = cardDelegate.selectedCardItems
         } else {
             cardType = Constants.typeAddCard
         }
@@ -59,8 +60,17 @@ class CardViewController: UITableViewController {
     
     @objc func saveTapped(_ sender: Any?) {
         // TODO: save the changes to the card
-        delegate?.titleLabel?.text = cardNameTextField.text
-        delegate?.selectedCardItems = selectedCardItems
+        cardDelegate?.titleLabel?.text = cardNameTextField.text
+        cardDelegate?.selectedCardItems = selectedCardItems
+        
+        if (cardType == Constants.typeAddCard) {
+            profileDelegate.addProfileCard(cardTitle: cardNameTextField.text!, selectedCardItems: selectedCardItems)
+//            profileDelegate.addProfileCard(cardDelegate: cardDelegate)
+        } else {
+            profileDelegate.editProfileCard(cellIndex: cardDelegate.cellIndex, cardTitle: cardNameTextField.text!, selectedCardItems: selectedCardItems)
+//            profileDelegate.editProfileCard(cardDelegate: cardDelegate)
+        }
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -103,7 +113,7 @@ class CardViewController: UITableViewController {
         
         if (cardType == Constants.typeEditCard) {
             if (isFirstSection) {
-                cell.cardNameTextField?.text = dataSource.getTitle()
+                cell.cardNameTextField?.text = cardDataSource.getTitle()
             } else {
                 setCheckmark(cell: cell, row: currentRow)
             }
@@ -117,7 +127,7 @@ class CardViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.identifierTextInputCell) as! TextFieldTableViewCell
         
         let tf = UITextField(frame: CGRect(x: 20, y: 12, width: 300, height: 20))
-        tf.text = dataSource?.getTitle()
+        tf.text = cardDataSource?.getTitle()
         tf.placeholder = Constants.placeholder
         tf.font = UIFont.systemFont(ofSize: 17)
         
