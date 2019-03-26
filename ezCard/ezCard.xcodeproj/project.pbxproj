@@ -27,6 +27,9 @@
 		494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0022307D4400B5A7E1 /* ContactViewController.swift */; };
 		494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */; };
 		494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */; };
+		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
+		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
+		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
 		FC9F44353E4F40C261D9928C /* Pods_ezCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +57,9 @@
 		494E8D0022307D4400B5A7E1 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationViewController.swift; sourceTree = "<group>"; };
 		494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
+		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
+		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		59506B0FA1DB936E64A2E2C2 /* Pods-ezCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.release.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.release.xcconfig"; sourceTree = "<group>"; };
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +114,8 @@
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
 				494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */,
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
+				49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */,
+				49B5E05522497C9400D3F739 /* Table View Cells */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
 				493C0D5A2226E3AB00DF2482 /* GoogleService-Info.plist */,
@@ -162,6 +170,15 @@
 				4903B307223096F20022F040 /* RegisterViewController.xib */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		49B5E05522497C9400D3F739 /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				49B5E05622497D5700D3F739 /* CardTableViewCell.swift */,
+				49B5E05722497D5700D3F739 /* CardTableViewCell.xib */,
+			);
+			path = "Table View Cells";
 			sourceTree = "<group>";
 		};
 		F50D26C39B5F3F2E2FD89E05 /* Pods */ = {
@@ -236,6 +253,7 @@
 				4903B301223093A60022F040 /* QRCodeViewController.xib in Resources */,
 				493C0D532226E31D00DF2482 /* LaunchScreen.storyboard in Resources */,
 				493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */,
+				49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */,
 				494E8CF52230691800B5A7E1 /* ScanViewController.xib in Resources */,
 				493C0D502226E31D00DF2482 /* Assets.xcassets in Resources */,
 				4903B3052230949B0022F040 /* LoginViewController.xib in Resources */,
@@ -276,38 +294,22 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ezCard/Pods-ezCard-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ezCard/Pods-ezCard-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
-				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ezCard/Pods-ezCard-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ezCard/Pods-ezCard-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -330,6 +332,8 @@
 				4903B308223096F20022F040 /* RegisterViewController.swift in Sources */,
 				4903B2FD223092510022F040 /* CardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
+				49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */,
+				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
