@@ -31,6 +31,8 @@
 		497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */; };
 		497B36F72249BF890030FE9F /* CenteredTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36F52249BF890030FE9F /* CenteredTextTableViewCell.xib */; };
 		497B36F92249CEAA0030FE9F /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F82249CEAA0030FE9F /* UserDataManager.swift */; };
+		497B36FB2249E3B40030FE9F /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36FA2249E3B40030FE9F /* CardView.swift */; };
+		497B36FD2249E4600030FE9F /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36FC2249E4600030FE9F /* CardView.xib */; };
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
 		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
@@ -65,6 +67,8 @@
 		497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredTextTableViewCell.swift; sourceTree = "<group>"; };
 		497B36F52249BF890030FE9F /* CenteredTextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CenteredTextTableViewCell.xib; sourceTree = "<group>"; };
 		497B36F82249CEAA0030FE9F /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
+		497B36FA2249E3B40030FE9F /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		497B36FC2249E4600030FE9F /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
 		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 				494E8D0922307EF200B5A7E1 /* Scan */,
 				494E8D0822307EE800B5A7E1 /* Contacts */,
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
+				497B36FA2249E3B40030FE9F /* CardView.swift */,
+				497B36FC2249E4600030FE9F /* CardView.xib */,
 				494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */,
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
 				49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */,
@@ -264,6 +270,7 @@
 			files = (
 				4903B301223093A60022F040 /* QRCodeViewController.xib in Resources */,
 				493C0D532226E31D00DF2482 /* LaunchScreen.storyboard in Resources */,
+				497B36FD2249E4600030FE9F /* CardView.xib in Resources */,
 				493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */,
 				49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */,
 				497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */,
@@ -339,6 +346,7 @@
 				497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */,
 				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
+				497B36FB2249E3B40030FE9F /* CardView.swift in Sources */,
 				494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
