@@ -106,10 +106,10 @@
                     <rect key="frame" x="0.0" y="331" width="375" height="336"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="H0l-ag-m1w" userLabel="Buttons Stack View">
-                            <rect key="frame" x="146" y="130" width="83" height="76"/>
+                            <rect key="frame" x="153" y="130" width="69" height="76"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L97-0o-8Rh">
-                                    <rect key="frame" x="0.0" y="0.0" width="83" height="33"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="69" height="33"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <state key="normal" title="LOGIN"/>
                                     <connections>
@@ -117,9 +117,9 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Opo-pT-KZx">
-                                    <rect key="frame" x="0.0" y="43" width="83" height="33"/>
+                                    <rect key="frame" x="0.0" y="43" width="69" height="33"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                    <state key="normal" title="REGISTER"/>
+                                    <state key="normal" title="SIGN UP"/>
                                     <connections>
                                         <action selector="registerTapped:" destination="-1" eventType="touchUpInside" id="bjW-8N-lz8"/>
                                     </connections>

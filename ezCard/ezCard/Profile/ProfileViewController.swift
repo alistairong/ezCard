@@ -18,9 +18,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         static let tableViewHeaderHeight = CGFloat(117.0)
     }
     
-    let vCardRemoteRef = Storage.storage().reference().child("users").child("\(Auth.auth().currentUser!.uid).vcard")
-    
     let currentUser = Auth.auth().currentUser!
+    var dataManager: UserDataManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +27,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         let headerView = ProfilePictureAndNameView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
         headerView.nameLabel.text = currentUser.displayName
         tableView.tableHeaderView = headerView
+        
+        dataManager = UserDataManager(user: currentUser)
         
         tableView.separatorColor = .clear
         
@@ -80,114 +81,30 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
             return
         }
         
+        let headerView = ProfilePictureAndNameView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
+        headerView.nameLabel.text = "\(contact.givenName) \(contact.familyName)"
+        tableView.tableHeaderView = headerView
+        
         let oldUserData = currentUserData
         
-        do {
-            let vCardData = try CNContactVCardSerialization.data(with: [contact])
-            
-            currentUserData = vCardData
-            
-            vCardRemoteRef.putData(vCardData, metadata: nil) { [weak self] (metadata, error) in
-                if let error = error {
-                    let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    self?.present(alertController, animated: true, completion: nil)
-                    
-                    currentUserData = oldUserData
-                    
-                    return
-                }
-                
-                print("successfully uploaded vcard")
-                
-                if let originalImageData = contact.imageData, let image = UIImage(data: originalImageData), let imageData = image.jpegData(compressionQuality: 0.3) {
-                    let currentUser = Auth.auth().currentUser!
-                    let profileImgRef = Storage.storage().reference().child("profile_images").child("\(currentUser.uid).jpg")
-                    
-                    let metadata = StorageMetadata()
-                    metadata.contentType = "image/jpeg"
-                    
-                    profileImgRef.putData(imageData, metadata: metadata) { (metadata, error) in
-                        if let error = error {
-                            print("1 error uploading profile image:", error)
-                            return
-                        }
-                        
-                        profileImgRef.downloadURL(completion: { (url, error) in
-                            if let error = error {
-                                print("2 error uploading profile image:", error)
-                                return
-                            }
-                            
-                            let changeRequest = currentUser.createProfileChangeRequest()
-                            changeRequest.photoURL = url
-                            changeRequest.commitChanges { (error) in
-                                if let error = error {
-                                    print("3 error uploading profile image:", error)
-                                    return
-                                }
-                            }
-                        })
-                    }
-                }
-            }
-        } catch let error {
-            let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            present(alertController, animated: true, completion: nil)
-            
-            currentUserData = oldUserData
-        }
-    }
-    
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        dismiss(animated: true, completion: nil)
-        
-        guard let currentUser = Auth.auth().currentUser else {
-            print("uid was nil")
-            return
-        }
-        
-        guard let image = info[.originalImage] as? UIImage, let imageData = image.jpegData(compressionQuality: 0.3) else {
-            print("Image was nil")
-            return
-        }
-        
-        let profileImgRef = Storage.storage().reference().child("profile_images").child("\(currentUser.uid).jpg")
-        
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
-        
-        profileImgRef.putData(imageData, metadata: metadata) { [weak self] (metadata, error) in
+        dataManager.upload(contact) { [weak self] (error) in
             if let error = error {
                 let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 self?.present(alertController, animated: true, completion: nil)
                 
+                currentUserData = oldUserData
+                
                 return
             }
             
-            profileImgRef.downloadURL(completion: { (url, error) in
-                if let error = error {
-                    let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    self?.present(alertController, animated: true, completion: nil)
-                    
-                    return
-                }
-                
-                let changeRequest = currentUser.createProfileChangeRequest()
-                changeRequest.photoURL = url
-                changeRequest.commitChanges { (error) in
-                    if let error = error {
-                        let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                        self?.present(alertController, animated: true, completion: nil)
-                        
-                        return
-                    }
-                }
-            })
+            do {
+                currentUserData = try CNContactVCardSerialization.data(with: [contact])
+            } catch let e {
+                print("error caching currentUserData:", e)
+            }
+            
+            self?.currentUser.reload(completion: nil)
         }
     }
 

@@ -10,7 +10,7 @@ import UIKit
 
 class ProfilePictureAndNameView: UIView {
 
-    private var profileButtonView: ProfileButtonView!
+    var profileButtonView: ProfileButtonView!
     var nameLabel: UILabel!
     
     override init(frame: CGRect) {

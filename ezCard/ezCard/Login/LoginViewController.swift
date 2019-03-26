@@ -50,7 +50,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func registerTapped(_ sender: Any) {
-        let registerViewController = RegisterViewController()
+        let registerViewController = RegisterViewController(style: .grouped)
         navigationController?.pushViewController(registerViewController, animated: true)
     }
     

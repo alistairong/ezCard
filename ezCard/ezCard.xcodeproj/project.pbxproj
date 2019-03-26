@@ -12,8 +12,6 @@
 		4903B301223093A60022F040 /* QRCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4903B2FF223093A60022F040 /* QRCodeViewController.xib */; };
 		4903B3042230949B0022F040 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4903B3022230949B0022F040 /* LoginViewController.swift */; };
 		4903B3052230949B0022F040 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4903B3032230949B0022F040 /* LoginViewController.xib */; };
-		4903B308223096F20022F040 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4903B306223096F20022F040 /* RegisterViewController.swift */; };
-		4903B309223096F20022F040 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4903B307223096F20022F040 /* RegisterViewController.xib */; };
 		493C0D492226E31B00DF2482 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493C0D482226E31B00DF2482 /* AppDelegate.swift */; };
 		493C0D502226E31D00DF2482 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 493C0D4F2226E31D00DF2482 /* Assets.xcassets */; };
 		493C0D532226E31D00DF2482 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */; };
@@ -27,6 +25,12 @@
 		494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0022307D4400B5A7E1 /* ContactViewController.swift */; };
 		494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */; };
 		494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */; };
+		497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */; };
+		497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */; };
+		497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F22249B96D0030FE9F /* RegisterViewController.swift */; };
+		497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */; };
+		497B36F72249BF890030FE9F /* CenteredTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36F52249BF890030FE9F /* CenteredTextTableViewCell.xib */; };
+		497B36F92249CEAA0030FE9F /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F82249CEAA0030FE9F /* UserDataManager.swift */; };
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
 		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
@@ -40,8 +44,6 @@
 		4903B2FF223093A60022F040 /* QRCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRCodeViewController.xib; sourceTree = "<group>"; };
 		4903B3022230949B0022F040 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4903B3032230949B0022F040 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
-		4903B306223096F20022F040 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		4903B307223096F20022F040 /* RegisterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
 		493C0D452226E31B00DF2482 /* ezCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ezCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		493C0D482226E31B00DF2482 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		493C0D4F2226E31D00DF2482 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,6 +59,12 @@
 		494E8D0022307D4400B5A7E1 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationViewController.swift; sourceTree = "<group>"; };
 		494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		497B36F22249B96D0030FE9F /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredTextTableViewCell.swift; sourceTree = "<group>"; };
+		497B36F52249BF890030FE9F /* CenteredTextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CenteredTextTableViewCell.xib; sourceTree = "<group>"; };
+		497B36F82249CEAA0030FE9F /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
 		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
@@ -106,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				493C0D482226E31B00DF2482 /* AppDelegate.swift */,
+				497B36F82249CEAA0030FE9F /* UserDataManager.swift */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
 				494E8D0A22307EFB00B5A7E1 /* Home */,
@@ -166,8 +175,7 @@
 			children = (
 				4903B3022230949B0022F040 /* LoginViewController.swift */,
 				4903B3032230949B0022F040 /* LoginViewController.xib */,
-				4903B306223096F20022F040 /* RegisterViewController.swift */,
-				4903B307223096F20022F040 /* RegisterViewController.xib */,
+				497B36F22249B96D0030FE9F /* RegisterViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -177,6 +185,10 @@
 			children = (
 				49B5E05622497D5700D3F739 /* CardTableViewCell.swift */,
 				49B5E05722497D5700D3F739 /* CardTableViewCell.xib */,
+				497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */,
+				497B36F52249BF890030FE9F /* CenteredTextTableViewCell.xib */,
+				497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */,
+				497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */,
 			);
 			path = "Table View Cells";
 			sourceTree = "<group>";
@@ -254,10 +266,11 @@
 				493C0D532226E31D00DF2482 /* LaunchScreen.storyboard in Resources */,
 				493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */,
 				49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */,
+				497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */,
 				494E8CF52230691800B5A7E1 /* ScanViewController.xib in Resources */,
 				493C0D502226E31D00DF2482 /* Assets.xcassets in Resources */,
+				497B36F72249BF890030FE9F /* CenteredTextTableViewCell.xib in Resources */,
 				4903B3052230949B0022F040 /* LoginViewController.xib in Resources */,
-				4903B309223096F20022F040 /* RegisterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,17 +332,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				497B36F92249CEAA0030FE9F /* UserDataManager.swift in Sources */,
 				4903B3042230949B0022F040 /* LoginViewController.swift in Sources */,
 				493C0D492226E31B00DF2482 /* AppDelegate.swift in Sources */,
 				494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */,
+				497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */,
+				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
 				494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
+				497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */,
 				494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */,
 				494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */,
 				494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */,
-				4903B308223096F20022F040 /* RegisterViewController.swift in Sources */,
 				4903B2FD223092510022F040 /* CardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
 				49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */,
