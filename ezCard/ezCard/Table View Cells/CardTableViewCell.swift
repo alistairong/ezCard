@@ -26,8 +26,13 @@ class CardTableViewCell: UITableViewCell {
     @IBOutlet weak var detailLabel4: UILabel?
     @IBOutlet weak var dataLabel4: UILabel?
     
+    var selectedCardItems: [Bool] = [
+        false, false, false, false, false, false,
+        false, false
+    ]
+    
     @IBAction func editCard(_ sender: Any) {
-        var cardData = CardCellDataObject()
+        let cardData = CardCellDataObject()
         cardData.setTitle(title: (self.titleLabel?.text)!)
         delegate.tapEditCard(cardData: cardData, cardCell: self)
     }

@@ -12,6 +12,18 @@ import ContactsUI
 
 class CardViewController: UITableViewController {
     
+    private struct Constants {
+        static let numberOfRowsAtSection: [Int] = [1, 8]
+        static let firstSection = 0
+        static let identifierDefaultCell = "reuseIdentifier"
+        static let identifierTextInputCell = "textInputCell"
+        static let placeholder = "Enter card name"
+        static let cardName = "Card Name"
+        static let cardInfoToAdd = "Add Info to Card"
+        static let typeAddCard = "typeAddCard"
+        static let typeEditCard = "typeEditCard"
+    }
+    
     private let cardItems: [String] = [
         "Phone", "Email", "Address", "Company", "Facebook",
         "LinkedIn", "GitHub", "Resume"
@@ -25,16 +37,6 @@ class CardViewController: UITableViewController {
     private var cardNameTextField: UITextField!
     private var cardType: String!
     
-    private let numberOfRowsAtSection: [Int] = [1, 8]
-    private let firstSection = 0
-    private let identifierDefaultCell = "reuseIdentifier"
-    private let identifierTextInputCell = "textInputCell"
-    private let placeholder = "Enter card name"
-    private let cardName = "Card Name"
-    private let cardInfoToAdd = "Add Info to Card"
-    private let typeAddCard = "typeAddCard"
-    private let typeEditCard = "typeEditCard"
-    
     var dataSource: CardCellDataObject!
     var delegate: CardTableViewCell!
     
@@ -42,25 +44,23 @@ class CardViewController: UITableViewController {
         super.viewDidLoad()
         
         if (dataSource != nil && delegate != nil) {
-            cardType = typeEditCard
+            cardType = Constants.typeEditCard
+            selectedCardItems = delegate.selectedCardItems
         } else {
-            cardType = typeAddCard
+            cardType = Constants.typeAddCard
         }
-        
-        print(cardType)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "checkmark"), style: .plain, target: self, action: #selector(saveTapped(_:)))
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "x"), style: .plain, target: self, action: #selector(cancelTapped(_:)))
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: identifierDefaultCell)
-        tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: identifierTextInputCell)
-        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.identifierDefaultCell)
+        tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: Constants.identifierTextInputCell)
     }
     
     @objc func saveTapped(_ sender: Any?) {
         // TODO: save the changes to the card
         delegate?.titleLabel?.text = cardNameTextField.text
-        
+        delegate?.selectedCardItems = selectedCardItems
         dismiss(animated: true, completion: nil)
     }
     
@@ -79,8 +79,8 @@ class CardViewController: UITableViewController {
         var rows: Int = 0
         
         // if first section, instantiate only 1 row for name of card
-        if section < numberOfRowsAtSection.count {
-            rows = numberOfRowsAtSection[section]
+        if section < Constants.numberOfRowsAtSection.count {
+            rows = Constants.numberOfRowsAtSection[section]
         }
         
         return rows
@@ -89,23 +89,23 @@ class CardViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> TextFieldTableViewCell {
         // if first section, instantiate textfield for name of card
         var cell: TextFieldTableViewCell!
-        let isFirstSection = (indexPath.section == firstSection)
+        let isFirstSection = (indexPath.section == Constants.firstSection)
         let currentRow = indexPath.row
         
         if (isFirstSection) {
             cell = createFirstTableRow(tableView)
         } else {
-            cell = (tableView.dequeueReusableCell(withIdentifier: identifierTextInputCell, for: indexPath) as! TextFieldTableViewCell)
+            cell = (tableView.dequeueReusableCell(withIdentifier: Constants.identifierTextInputCell, for: indexPath) as! TextFieldTableViewCell)
             
             let cardItem = cardItems[currentRow]
             cell.textLabel?.text = cardItem
         }
         
-        if (cardType == typeEditCard) {
+        if (cardType == Constants.typeEditCard) {
             if (isFirstSection) {
                 cell.cardNameTextField?.text = dataSource.getTitle()
             } else {
-//                toggleCheckmark(cell: cell, row: currentRow)
+                setCheckmark(cell: cell, row: currentRow)
             }
         }
         
@@ -114,11 +114,11 @@ class CardViewController: UITableViewController {
     
     func createFirstTableRow(_ tableView: UITableView) -> TextFieldTableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifierTextInputCell) as! TextFieldTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.identifierTextInputCell) as! TextFieldTableViewCell
         
         let tf = UITextField(frame: CGRect(x: 20, y: 12, width: 300, height: 20))
         tf.text = dataSource?.getTitle()
-        tf.placeholder = placeholder
+        tf.placeholder = Constants.placeholder
         tf.font = UIFont.systemFont(ofSize: 17)
         
         cell.cardNameTextField = tf
@@ -130,7 +130,7 @@ class CardViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let isCardItems = indexPath.section != firstSection
+        let isCardItems = indexPath.section != Constants.firstSection
         
         if (isCardItems) {
             //resign responder of card name input cell
@@ -144,16 +144,28 @@ class CardViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (section == firstSection) {
-            return cardName
+        if (section == Constants.firstSection) {
+            return Constants.cardName
         } else {
-            return cardInfoToAdd
+            return Constants.cardInfoToAdd
         }
     }
     
     // MARK: - Utility Functions
     func setCardItem(row: Int, selected: Bool) {
         selectedCardItems[row] = selected
+    }
+    
+    func setCheckmark(cell: UITableViewCell?, row: Int) {
+        let hasCheckmark = (selectedCardItems[row] == true)
+        
+        if (hasCheckmark) {
+            cell?.accessoryType = UITableViewCell.AccessoryType.checkmark
+            setCardItem(row: row, selected: true)
+        } else {
+            cell?.accessoryType = UITableViewCell.AccessoryType.none
+            setCardItem(row: row, selected: false)
+        }
     }
     
     func toggleCheckmark(cell: UITableViewCell?, row: Int) {

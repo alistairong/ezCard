@@ -48,6 +48,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
                                               UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))]
     }
     
+    // MARK: - Nav Buttons
+    
     @objc func shareTapped(_ sender: Any?) {
         let qrCodeViewController = QRCodeViewController()
         //qrCodeViewController.card =  // TODO: pass the card we're sharing to the view controller
