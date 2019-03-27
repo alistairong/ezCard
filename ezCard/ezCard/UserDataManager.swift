@@ -8,16 +8,16 @@
 
 import Contacts
 import FirebaseStorage
-import FirebaseAuth
+import Firebase
 
 class UserDataManager {
     
-    private let _user: User
+    private let _user: Firebase.User
     private let vCardRemoteRef: StorageReference
     private let profileImgRef: StorageReference
     private var profileImgDownloadURL: URL?
     
-    init(user: User) {
+    init(user: Firebase.User) {
         _user = user
         vCardRemoteRef = Storage.storage().reference().child("users").child("\(user.uid).vcard")
         profileImgRef = Storage.storage().reference().child("profile_images").child("\(user.uid).jpg")

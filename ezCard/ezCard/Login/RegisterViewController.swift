@@ -10,6 +10,7 @@ import UIKit
 import Contacts
 import FirebaseStorage
 import FirebaseAuth
+import FirebaseDatabase
 
 class RegisterViewController: UITableViewController, UITextFieldDelegate {
     
@@ -25,6 +26,8 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
         static let textField = "TextFieldTableViewCell"
         static let centeredText = "CenteredTextTableViewCell"
     }
+    
+    let usersRef = Database.database().reference(withPath: "users")
     
     var firstName: String?
     var lastName: String?
@@ -162,6 +165,21 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 // user has been created and signed in
                 
                 let newUser = (authResult?.user)!
+                
+                // update display name for quick reference
+                let changeRequest = newUser.createProfileChangeRequest()
+                changeRequest.displayName = firstName + " " + lastName
+                changeRequest.commitChanges { (error) in
+                    guard let error = error else {
+                        return
+                    }
+                    print("error changing user display name:", error)
+                }
+                
+                // create the user's entry in the database
+                let user = User(uid: newUser.uid, firstName: firstName, lastName: lastName, email: email)
+                let userRef = strongSelf.usersRef.child(newUser.uid)
+                userRef.setValue(user.toAnyObject())
                 
                 // upload initial vCard
                 let contact = CNMutableContact()

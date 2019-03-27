@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import FirebaseStorage
 
 class CardView: UIView {
     
     private struct Constants {
         static let shadowOffset = CGFloat(2.0)
     }
+    
+    let profileImgsRef = Storage.storage().reference().child("profile_images")
     
     @IBOutlet weak var profileImageContainerView: UIView! {
         didSet {
@@ -86,6 +89,34 @@ class CardView: UIView {
     
     @IBAction func moreButtonTapped(_ sender: UIButton) {
         moreButtonTappedCallback?()
+    }
+    
+    func configure(with card: Card) {
+        titleLabel.text = card.name
+        
+        let cacheKey = "profile_image_\(card.userId)"
+        
+        if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage {
+            profileImageView.image = imageFromCache
+            profileImageView.contentMode = .scaleAspectFill
+        } else {
+            let profileImgRef = profileImgsRef.child("\(card.userId).jpg")
+            
+            // limit profile images to 2MB (2 * 1024 * 1024 bytes)
+            profileImgRef.getData(maxSize: 2 * 1024 * 1024) { [weak self] (data, error) in
+                if let error = error {
+                    print("Error fetching profile image:", error)
+                    self?.profileImageView.contentMode = .bottom
+                } else {
+                    let image = UIImage(data: data!)!
+                    profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
+                    self?.profileImageView.image = image
+                    self?.profileImageView.contentMode = .scaleAspectFill
+                }
+            }
+        }
+        
+        // TODO: configure data field labels
     }
     
 }

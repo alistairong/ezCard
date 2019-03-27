@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import FirebaseStorage
 
 var currentUserData: Data? //cache for the current user's vCard
 

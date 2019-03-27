@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4903B2FD223092510022F040 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4903B2FC223092510022F040 /* CardViewController.swift */; };
+		4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4903B2FC223092510022F040 /* ManageCardViewController.swift */; };
 		4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4903B2FE223093A60022F040 /* QRCodeViewController.swift */; };
 		4903B301223093A60022F040 /* QRCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4903B2FF223093A60022F040 /* QRCodeViewController.xib */; };
 		4903B3042230949B0022F040 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4903B3022230949B0022F040 /* LoginViewController.swift */; };
@@ -37,12 +37,14 @@
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
 		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
+		49F57C7C224AC25F000C365A /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7B224AC25F000C365A /* Card.swift */; };
+		49F57C80224AD6F2000C365A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7F224AD6F2000C365A /* User.swift */; };
 		FC9F44353E4F40C261D9928C /* Pods_ezCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ezCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4903B2FC223092510022F040 /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
+		4903B2FC223092510022F040 /* ManageCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCardViewController.swift; sourceTree = "<group>"; };
 		4903B2FE223093A60022F040 /* QRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		4903B2FF223093A60022F040 /* QRCodeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRCodeViewController.xib; sourceTree = "<group>"; };
 		4903B3022230949B0022F040 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,8 @@
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
 		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
+		49F57C7B224AC25F000C365A /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		49F57C7F224AD6F2000C365A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		59506B0FA1DB936E64A2E2C2 /* Pods-ezCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.release.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.release.xcconfig"; sourceTree = "<group>"; };
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +126,8 @@
 				493C0D482226E31B00DF2482 /* AppDelegate.swift */,
 				495CF429224AA526008CDB58 /* GlobalConstants.swift */,
 				497B36F82249CEAA0030FE9F /* UserDataManager.swift */,
+				49F57C7B224AC25F000C365A /* Card.swift */,
+				49F57C7F224AD6F2000C365A /* User.swift */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
 				494E8D0A22307EFB00B5A7E1 /* Home */,
@@ -172,7 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
-				4903B2FC223092510022F040 /* CardViewController.swift */,
+				4903B2FC223092510022F040 /* ManageCardViewController.swift */,
 				4903B2FE223093A60022F040 /* QRCodeViewController.swift */,
 				4903B2FF223093A60022F040 /* QRCodeViewController.xib */,
 			);
@@ -320,6 +326,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-ezCard/Pods-ezCard-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -328,6 +335,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,13 +360,15 @@
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
 				497B36FB2249E3B40030FE9F /* CardView.swift in Sources */,
 				494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */,
+				49F57C80224AD6F2000C365A /* User.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
 				497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */,
 				494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */,
 				494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */,
 				494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */,
-				4903B2FD223092510022F040 /* CardViewController.swift in Sources */,
+				49F57C7C224AC25F000C365A /* Card.swift in Sources */,
+				4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
 				49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */,
 				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,

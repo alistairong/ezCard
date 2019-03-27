@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import FirebaseAuth
+import Firebase
 import FirebaseStorage
-import ContactsUI
 
 class ProfileButtonView: UIView {
     
@@ -121,7 +120,7 @@ class ProfileButtonView: UIView {
         }
     }
     
-    private func fetchProfileImage(for user: User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
+    private func fetchProfileImage(for user: Firebase.User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
         let cacheKey = "profile_image_\(user.uid)"
         
         if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage, !forceRefetch {
