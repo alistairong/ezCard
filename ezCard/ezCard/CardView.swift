@@ -13,6 +13,7 @@ class CardView: UIView {
     
     private struct Constants {
         static let shadowOffset = CGFloat(2.0)
+        static let numFieldsShown = 4
     }
     
     let profileImgsRef = Storage.storage().reference().child("profile_images")
@@ -116,7 +117,37 @@ class CardView: UIView {
             }
         }
         
-        // TODO: configure data field labels
+        detailLabel1.text = nil
+        dataLabel1.text = nil
+        detailLabel2.text = nil
+        dataLabel2.text = nil
+        detailLabel3.text = nil
+        dataLabel3.text = nil
+        detailLabel4.text = nil
+        dataLabel4.text = nil
+        
+        var counter = 1
+        for (key, value) in card.fields {
+            if counter > Constants.numFieldsShown {
+                break
+            }
+            
+            if counter == 1 {
+                detailLabel1.text = key
+                dataLabel1.text = value
+            } else if counter == 2 {
+                detailLabel2.text = key
+                dataLabel2.text = value
+            } else if counter == 3 {
+                detailLabel3.text = key
+                dataLabel3.text = value
+            } else if counter == 4 {
+                detailLabel4.text = key
+                dataLabel4.text = value
+            }
+            
+            counter += 1
+        }
     }
     
 }

@@ -39,6 +39,10 @@
 		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
 		49F57C7C224AC25F000C365A /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7B224AC25F000C365A /* Card.swift */; };
 		49F57C80224AD6F2000C365A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7F224AD6F2000C365A /* User.swift */; };
+		49F57C82224B0483000C365A /* OrganizationUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C81224B0483000C365A /* OrganizationUser.swift */; };
+		49F57C84224B0494000C365A /* IndividualUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C83224B0494000C365A /* IndividualUser.swift */; };
+		49F57C87224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C85224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift */; };
+		49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */; };
 		FC9F44353E4F40C261D9928C /* Pods_ezCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +82,10 @@
 		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		49F57C7B224AC25F000C365A /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		49F57C7F224AD6F2000C365A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		49F57C81224B0483000C365A /* OrganizationUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationUser.swift; sourceTree = "<group>"; };
+		49F57C83224B0494000C365A /* IndividualUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualUser.swift; sourceTree = "<group>"; };
+		49F57C85224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectTextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoundedRectTextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		59506B0FA1DB936E64A2E2C2 /* Pods-ezCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.release.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.release.xcconfig"; sourceTree = "<group>"; };
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -128,6 +136,8 @@
 				497B36F82249CEAA0030FE9F /* UserDataManager.swift */,
 				49F57C7B224AC25F000C365A /* Card.swift */,
 				49F57C7F224AD6F2000C365A /* User.swift */,
+				49F57C81224B0483000C365A /* OrganizationUser.swift */,
+				49F57C83224B0494000C365A /* IndividualUser.swift */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
 				494E8D0A22307EFB00B5A7E1 /* Home */,
@@ -202,6 +212,8 @@
 				49B5E05722497D5700D3F739 /* CardTableViewCell.xib */,
 				497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */,
 				497B36F52249BF890030FE9F /* CenteredTextTableViewCell.xib */,
+				49F57C85224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift */,
+				49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */,
 				497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */,
 				497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */,
 			);
@@ -283,6 +295,7 @@
 				493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */,
 				49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */,
 				497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */,
+				49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */,
 				494E8CF52230691800B5A7E1 /* ScanViewController.xib in Resources */,
 				493C0D502226E31D00DF2482 /* Assets.xcassets in Resources */,
 				497B36F72249BF890030FE9F /* CenteredTextTableViewCell.xib in Resources */,
@@ -355,6 +368,7 @@
 				495CF42A224AA526008CDB58 /* GlobalConstants.swift in Sources */,
 				493C0D492226E31B00DF2482 /* AppDelegate.swift in Sources */,
 				494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */,
+				49F57C82224B0483000C365A /* OrganizationUser.swift in Sources */,
 				497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */,
 				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
@@ -362,6 +376,7 @@
 				494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */,
 				49F57C80224AD6F2000C365A /* User.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
+				49F57C87224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
 				497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */,
 				494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */,
@@ -372,6 +387,7 @@
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
 				49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */,
 				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,
+				49F57C84224B0494000C365A /* IndividualUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 fileprivate struct Constants {
     static let profileButtonViewPadding = CGFloat(6.0)
@@ -41,6 +42,23 @@ extension UIViewController {
         
         let profileBarButton = UIBarButtonItem(customView: profileButtonContainerView)
         navigationItem.leftBarButtonItem = profileBarButton
+        
+        let logoutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
+        logoutButton.tintColor = .red
+        navigationItem.rightBarButtonItem = logoutButton
+    }
+    
+    @objc func signOut() {
+        do {
+            try Auth.auth().signOut()
+            
+            let loginViewController = LoginViewController()
+            present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
+        } catch {
+            let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alertController, animated: true, completion: nil)
+        }
     }
     
 }

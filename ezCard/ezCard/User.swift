@@ -7,58 +7,55 @@
 //
 
 import Foundation
-import Firebase
 import FirebaseDatabase
+
+enum UserType: String, CaseIterable {
+    case individual
+    case organization
+    case unknown
+    
+    static let allQuantifiableCases: [UserType] = [.individual, .organization]
+}
 
 class User {
     
     let ref: DatabaseReference?
     let key: String
     
+    let type: UserType
+    
     let uid: String
     
-    let firstName: String
-    let lastName: String
-    
     let email: String
-
-    var cardIds: [String]
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, firstName: String, lastName: String, email: String, cardIds: [String] = []) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String) {
         self.ref = ref
         self.key = key
         
+        self.type = type
+        
         self.uid = uid
         
-        self.firstName = firstName
-        self.lastName = lastName
-        
         self.email = email
-        
-        self.cardIds = cardIds
     }
     
     convenience init?(snapshot: DataSnapshot) {
         guard
             let value = snapshot.value as? [String: AnyObject],
-            let firstName = value["firstName"] as? String,
-            let lastName = value["lastName"] as? String,
+            let type = value["type"] as? String,
             let email = value["email"] as? String,
-            let uid = value["uid"] as? String,
-            let cardIds = value["cardIds"] as? [String] else {
+            let uid = value["uid"] as? String else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, firstName: firstName, lastName: lastName, email: email, cardIds: cardIds)
+        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email)
     }
     
     func toAnyObject() -> Any {
         return [
-            "firstName": firstName,
-            "lastName": lastName,
+            "type": type.rawValue,
             "email": email,
-            "uid": uid,
-            "cardIds": cardIds
+            "uid": uid
         ]
     }
     

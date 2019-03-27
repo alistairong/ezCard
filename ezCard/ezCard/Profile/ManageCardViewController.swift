@@ -67,7 +67,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (section == 0) ? 1 : availableFields.count // TODO: replace 0 with number of data fields present on user profile
+        return (section == 0) ? 1 : availableFields.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,6 +108,11 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else {
+            return
+        }
+        
+        if indexPath.section == 0 {
+            (cell as! TextFieldTableViewCell).becomeFirstResponder()
             return
         }
         

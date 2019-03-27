@@ -1,0 +1,50 @@
+//
+//  IndividualUser.swift
+//  ezCard
+//
+//  Created by Andrew Whitehead on 3/26/19.
+//  Copyright © 2019 Andrew Whitehead. All rights reserved.
+//
+
+import Foundation
+import FirebaseDatabase
+
+class IndividualUser: User {
+    
+    let firstName: String
+    let lastName: String
+    
+    var cardIds: [String]
+    
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String] = []) {
+        self.firstName = firstName
+        self.lastName = lastName
+        
+        self.cardIds = cardIds
+        
+        super.init(ref: ref, key: key, uid: uid, type: UserType.individual, email: email)
+    }
+    
+    convenience init?(snapshot: DataSnapshot) {
+        guard
+            let value = snapshot.value as? [String: AnyObject],
+            let uid = value["uid"] as? String,
+            let email = value["email"] as? String,
+            let firstName = value["firstName"] as? String,
+            let lastName = value["lastName"] as? String,
+            let cardIds = value["cardIds"] as? [String] else {
+                return nil
+        }
+        
+        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, firstName: firstName, lastName: lastName, cardIds: cardIds)
+    }
+    
+    override func toAnyObject() -> Any {
+        var ret = super.toAnyObject() as! [String: Any]
+        ret["firstName"] = firstName
+        ret["lastName"] = lastName
+        ret["cardIds"] = cardIds
+        return ret
+    }
+    
+}

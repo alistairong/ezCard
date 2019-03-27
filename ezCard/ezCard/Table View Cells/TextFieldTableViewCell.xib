@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,9 +20,9 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Text" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qzi-p9-V6L">
-                        <rect key="frame" x="16" y="6.5" width="288" height="42"/>
+                        <rect key="frame" x="16" y="0.0" width="288" height="55.5"/>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="gXU-4P-kbN"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="gXU-4P-kbN"/>
                         </constraints>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -35,8 +35,8 @@
                 <constraints>
                     <constraint firstItem="Qzi-p9-V6L" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="Wnm-23-OcM"/>
                     <constraint firstAttribute="trailing" secondItem="Qzi-p9-V6L" secondAttribute="trailing" constant="16" id="bzr-cj-h2v"/>
-                    <constraint firstItem="Qzi-p9-V6L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6.5" id="cpE-3F-eTp"/>
-                    <constraint firstAttribute="bottom" secondItem="Qzi-p9-V6L" secondAttribute="bottom" constant="7" id="jx0-JA-I2v"/>
+                    <constraint firstItem="Qzi-p9-V6L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="cpE-3F-eTp"/>
+                    <constraint firstAttribute="bottom" secondItem="Qzi-p9-V6L" secondAttribute="bottom" id="jx0-JA-I2v"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
