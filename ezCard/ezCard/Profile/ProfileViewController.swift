@@ -45,6 +45,16 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         
         ref = Database.database().reference()
+//        let userID = Auth.auth().currentUser?.uid
+//        ref.child("users").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
+//            // Get user value
+//            let value = snapshot.value as? NSDictionary
+////            let fetchedProfileCards = value?[Constants.profileCardsLabel] as? [NSMutableDictionary] ?? []
+//            self.profileCards = fetchedProfileCards
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
+//        print("where am i now: \(profileCards)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,7 +114,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         
         profileCards.append(newProfileCard)
         
-        print(profileCards)
+        self.ref.child("users").child(Auth.auth().currentUser!.uid).setValue([Constants.profileCardsLabel: profileCards])
+        
         tableView.reloadData()
     }
     
@@ -119,7 +130,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
             counter += 1
         }
         
-        print(profileCards)
+        self.ref.child("users").child(Auth.auth().currentUser!.uid).setValue([Constants.profileCardsLabel: profileCards])
+        
         tableView.reloadData()
     }
     
@@ -131,7 +143,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         
         profileCards.append(newProfileCard)
         
-        print(profileCards)
+        self.ref.child("users").child(Auth.auth().currentUser!.uid).setValue([Constants.profileCardsLabel: profileCards])
+
         tableView.reloadData()
     }
     
@@ -150,7 +163,8 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
             counter += 1
         }
         
-        print(profileCards)
+        self.ref.child("users").child(Auth.auth().currentUser!.uid).setValue([Constants.profileCardsLabel: profileCards])
+        
         tableView.reloadData()
     }
     

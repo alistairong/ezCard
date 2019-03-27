@@ -14,6 +14,7 @@ class Constants {
     static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
     static let tableViewHeaderHeight = CGFloat(117.0)
     static let cardTitle = "cardTitle"
+    static let profileCardsLabel = "profileCards"
     
     // MARK: - Profile Button Search Bar Nav
     static let profileButtonViewPadding = CGFloat(6.0)
