@@ -14,11 +14,17 @@ class OrganizationUser: User {
     let name: String
     
     var members: [String]
+    var cardIds: [String]
+    var transactionIds: [String]
+    var contactIds: [String]
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, name: String, members: [String] = []) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, name: String, members: [String] = [], cardIds: [String] = [], transactionIds: [String] = [], contactIds: [String] = []) {
         self.name = name
         
         self.members = members
+        self.cardIds = cardIds
+        self.transactionIds = transactionIds
+        self.contactIds = contactIds
         
         super.init(ref: ref, key: key, uid: uid, type: UserType.organization, email: email)
     }
@@ -29,17 +35,23 @@ class OrganizationUser: User {
             let uid = value["uid"] as? String,
             let email = value["email"] as? String,
             let name = value["organizationName"] as? String,
-            let members = value["members"] as? [String] else {
+            let members = value["members"] as? [String],
+            let cardIds = value["cardIds"] as? [String],
+            let transactionIds = value["transactionIds"] as? [String],
+            let contactIds = value["contactIds"] as? [String] else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, name: name, members: members)
+        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, name: name, members: members, cardIds: cardIds, transactionIds: transactionIds, contactIds: contactIds)
     }
     
     override func toAnyObject() -> Any {
         var ret = super.toAnyObject() as! [String: Any]
         ret["organizationName"] = name
         ret["members"] = members
+        ret["cardIds"] = cardIds
+        ret["transactionIds"] = transactionIds
+        ret["contactIds"] = contactIds
         return ret
     }
     
