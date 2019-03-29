@@ -89,7 +89,17 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
     @objc func accountTypeValueChanged(_ sender: UISegmentedControl) {
         type = UserType.allQuantifiableCases[sender.selectedSegmentIndex]
         
+        clearText()
         tableView.reloadData()
+    }
+    
+    func clearText() {
+        self.organizationName = Optional.none
+        self.firstName = Optional.none
+        self.lastName = Optional.none
+        self.email = Optional.none
+        self.password = Optional.none
+        self.confirmPassword = Optional.none
     }
     
     // MARK: - UITextFieldDelegate
@@ -147,6 +157,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 }
             } else if (indexPath.row == IndividualTypeRowIdentifier.email.rawValue && type == .individual) || (indexPath.row == OrganizationTypeRowIdentifier.email.rawValue && type == .organization) {
                 cell.textField.placeholder = (type == .individual) ? "Email" : "Admin Email"
+                cell.textField.isSecureTextEntry = false
                 
                 cell.textField.text = email
                 
@@ -156,6 +167,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
             } else if (indexPath.row == IndividualTypeRowIdentifier.password.rawValue && type == .individual) || (indexPath.row == OrganizationTypeRowIdentifier.password.rawValue && type == .organization) {
                 cell.textField.placeholder = "Password"
                 cell.textField.isSecureTextEntry = true
+                cell.textField.textContentType = .oneTimeCode
                 
                 cell.textField.text = password
                 
@@ -165,6 +177,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
             } else if (indexPath.row == IndividualTypeRowIdentifier.confirmPassword.rawValue && type == .individual) || (indexPath.row == OrganizationTypeRowIdentifier.confirmPassword.rawValue && type == .organization) {
                 cell.textField.placeholder = "Confirm Password"
                 cell.textField.isSecureTextEntry = true
+                cell.textField.textContentType = .oneTimeCode
                 
                 cell.textField.text = confirmPassword
                 
