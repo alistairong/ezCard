@@ -44,6 +44,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
             
             // user has successfully signed in
+            let homeViewController = HomeViewController(style: .grouped)
+            homeViewController.tabBarItem = UITabBarItem(title: "Home", image: #imageLiteral(resourceName: "home"), tag: 0)
+            
+            let scanViewController = ScanViewController()
+            scanViewController.tabBarItem = UITabBarItem(title: "Scan", image: #imageLiteral(resourceName: "qrCode"), tag: 1)
+            
+            let contactsViewController = ContactsViewController(style: .grouped)
+            contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
+            
+            let tabBarController = UITabBarController()
+            tabBarController.viewControllers = [UINavigationController(rootViewController: homeViewController),
+                                                UINavigationController(rootViewController: scanViewController),
+                                                UINavigationController(rootViewController: contactsViewController)]
+            let window = UIApplication.shared.delegate!.window
+            window??.rootViewController = tabBarController
+            
+            window??.makeKeyAndVisible()
             
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         }
@@ -51,6 +68,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func registerTapped(_ sender: Any) {
         let registerViewController = RegisterViewController(style: .grouped)
+        usernameTextField?.text = Optional.none
+        passwordTextField?.text = Optional.none
         navigationController?.pushViewController(registerViewController, animated: true)
     }
     

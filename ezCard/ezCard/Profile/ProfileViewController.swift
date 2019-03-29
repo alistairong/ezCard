@@ -27,6 +27,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     var dataManager: UserDataManager!
     
     var cards: [Card] = []
+    var cardIds: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,16 +42,41 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         
-        cardsRef.queryOrdered(byChild: "createdAt").observe(.value) { [weak self] (snapshot) in
-            var newCards: [Card] = []
+//        cardsRef.queryOrdered(byChild: "createdAt").observe(.value) { [weak self] (snapshot) in
+//            var newCards: [Card] = []
+//            for child in snapshot.children {
+//                if let snapshot = child as? DataSnapshot, let card = Card(snapshot: snapshot), card.userId == self?.currentUser.uid {
+//                    newCards.append(card)
+//                }
+//            }
+//
+//            self?.cards = newCards.reversed()
+//            self?.tableView.reloadData()
+//        }
+        
+        userCardsRef.observe(.value) { [weak self] (snapshot) in
+            var newCardIds: [String] = []
             for child in snapshot.children {
-                if let snapshot = child as? DataSnapshot, let card = Card(snapshot: snapshot), card.userId == self?.currentUser.uid {
-                    newCards.append(card)
+                if let snapshot = child as? DataSnapshot, let cardId = snapshot.key as String? {
+                    newCardIds.append(cardId)
                 }
             }
+
+            self?.cardIds = newCardIds
             
-            self?.cards = newCards.reversed()
-            self?.tableView.reloadData()
+            self!.cardsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                var newCards: [Card] = []
+                for cardId in (self?.cardIds)! {
+                    if let child = snapshot.childSnapshot(forPath: cardId) as DataSnapshot?, let card = Card(snapshot: child), card.userId == self?.currentUser.uid {
+                        newCards.append(card)
+                    }
+                }
+                
+                self?.cards = newCards.sorted(by: { (c1: Card, c2: Card) -> Bool in
+                    return c1.createdAt.compare(c2.createdAt) == ComparisonResult.orderedAscending
+                })
+                self?.tableView.reloadData()
+            }
         }
     }
     
