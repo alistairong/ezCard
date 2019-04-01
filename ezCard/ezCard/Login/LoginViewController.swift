@@ -43,14 +43,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            // user has successfully signed in
-            
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
     
     @IBAction func registerTapped(_ sender: Any) {
         let registerViewController = RegisterViewController(style: .grouped)
+        usernameTextField?.text = Optional.none
+        passwordTextField?.text = Optional.none
         navigationController?.pushViewController(registerViewController, animated: true)
     }
     

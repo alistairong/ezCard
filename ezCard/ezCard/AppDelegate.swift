@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if Auth.auth().currentUser == nil { // TODO: check if user exists in database too
             let loginViewController = LoginViewController()
-            homeViewController.present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
+            tabBarController.viewControllers!.first!.present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
         }
         
         UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)

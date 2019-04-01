@@ -8,8 +8,21 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
 
 class HomeViewController: UITableViewController {
+    
+    var userTransactionsRef: DatabaseReference? {
+        guard let currentUser = Auth.auth().currentUser else {
+            return nil
+        }
+        
+        return Database.database().reference(withPath: "users").child(currentUser.uid).child("transactions")
+    }
+    let transactionsRef = Database.database().reference(withPath: "transactions")
+    
+    var transactions: [Transaction] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()

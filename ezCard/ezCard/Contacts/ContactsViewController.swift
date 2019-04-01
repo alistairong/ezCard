@@ -7,8 +7,22 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
 
 class ContactsViewController: UITableViewController {
+    
+    var userContactsRef: DatabaseReference? {
+        guard let currentUser = Auth.auth().currentUser else {
+            return nil
+        }
+        
+        return Database.database().reference(withPath: "users").child(currentUser.uid).child("contacts")
+    }
+    let contactsRef = Database.database().reference(withPath: "contacts")
+    
+    var contacts: [Contact] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

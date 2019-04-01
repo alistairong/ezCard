@@ -15,12 +15,16 @@ class IndividualUser: User {
     let lastName: String
     
     var cardIds: [String]
+    var transactionIds: [String]
+    var contactIds: [String]
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String] = []) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String] = [], transactionIds: [String] = [], contactIds: [String] = []) {
         self.firstName = firstName
         self.lastName = lastName
         
         self.cardIds = cardIds
+        self.transactionIds = transactionIds
+        self.contactIds = contactIds
         
         super.init(ref: ref, key: key, uid: uid, type: UserType.individual, email: email)
     }
@@ -32,11 +36,13 @@ class IndividualUser: User {
             let email = value["email"] as? String,
             let firstName = value["firstName"] as? String,
             let lastName = value["lastName"] as? String,
-            let cardIds = value["cardIds"] as? [String] else {
+            let cardIds = value["cardIds"] as? [String],
+            let transactionIds = value["transactionIds"] as? [String],
+            let contactIds = value["contactIds"] as? [String] else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, firstName: firstName, lastName: lastName, cardIds: cardIds)
+        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, firstName: firstName, lastName: lastName, cardIds: cardIds, transactionIds: transactionIds, contactIds: contactIds)
     }
     
     override func toAnyObject() -> Any {
@@ -44,6 +50,8 @@ class IndividualUser: User {
         ret["firstName"] = firstName
         ret["lastName"] = lastName
         ret["cardIds"] = cardIds
+        ret["transactionIds"] = transactionIds
+        ret["contactIds"] = contactIds
         return ret
     }
     
