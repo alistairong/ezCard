@@ -61,7 +61,7 @@ class Transaction {
             "createdAt" : createdAt.timeIntervalSince1970,
             "userId": userId,
             "description": description ?? "",
-            "cardId": cardId
+            "cardId": cardId ?? ""
         ]
     }
     

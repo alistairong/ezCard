@@ -42,18 +42,6 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         
-//        cardsRef.queryOrdered(byChild: "createdAt").observe(.value) { [weak self] (snapshot) in
-//            var newCards: [Card] = []
-//            for child in snapshot.children {
-//                if let snapshot = child as? DataSnapshot, let card = Card(snapshot: snapshot), card.userId == self?.currentUser.uid {
-//                    newCards.append(card)
-//                }
-//            }
-//
-//            self?.cards = newCards.reversed()
-//            self?.tableView.reloadData()
-//        }
-        
         userCardsRef.observe(.value) { [weak self] (snapshot) in
             var newCardIds: [String] = []
             for child in snapshot.children {
@@ -88,12 +76,6 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         
         navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped(_:))),
                                               UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))]
-    }
-    
-    @objc func shareTapped(_ sender: Any?) {
-        let qrCodeViewController = QRCodeViewController()
-        //qrCodeViewController.card =  // TODO: pass the card we're sharing to the view controller
-        navigationController?.pushViewController(qrCodeViewController, animated: true)
     }
     
     @objc func settingsTapped(_ sender: Any?) {
@@ -181,6 +163,12 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         let card = cards[indexPath.row]
 
         cell.cardView.configure(with: card)
+        
+        cell.cardView.qrCodeButtonTappedCallback = { [weak self] in
+            let qrCodeViewController = QRCodeViewController()
+            qrCodeViewController.card =  card
+            self?.navigationController?.pushViewController(qrCodeViewController, animated: true)
+        }
         
         cell.cardView.moreButtonTappedCallback = { [weak self] in
             let manageCardViewController = ManageCardViewController(style: .grouped)

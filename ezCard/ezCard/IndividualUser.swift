@@ -14,11 +14,11 @@ class IndividualUser: User {
     let firstName: String
     let lastName: String
     
-    var cardIds: [String]
-    var transactionIds: [String]
-    var contactIds: [String]
+    var cardIds: [String]?
+    var transactionIds: [String]?
+    var contactIds: [String]?
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String] = [], transactionIds: [String] = [], contactIds: [String] = []) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String]? = [], transactionIds: [String]? = [], contactIds: [String]? = []) {
         self.firstName = firstName
         self.lastName = lastName
         
@@ -35,12 +35,14 @@ class IndividualUser: User {
             let uid = value["uid"] as? String,
             let email = value["email"] as? String,
             let firstName = value["firstName"] as? String,
-            let lastName = value["lastName"] as? String,
-            let cardIds = value["cardIds"] as? [String],
-            let transactionIds = value["transactionIds"] as? [String],
-            let contactIds = value["contactIds"] as? [String] else {
+            let lastName = value["lastName"] as? String
+        else {
                 return nil
         }
+        
+        let cardIds = value["cardIds"] as? [String]
+        let transactionIds = value["transactionIds"] as? [String]
+        let contactIds = value["contactIds"] as? [String]
         
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, firstName: firstName, lastName: lastName, cardIds: cardIds, transactionIds: transactionIds, contactIds: contactIds)
     }
@@ -49,9 +51,9 @@ class IndividualUser: User {
         var ret = super.toAnyObject() as! [String: Any]
         ret["firstName"] = firstName
         ret["lastName"] = lastName
-        ret["cardIds"] = cardIds
-        ret["transactionIds"] = transactionIds
-        ret["contactIds"] = contactIds
+        ret["cardIds"] = cardIds ?? []
+        ret["transactionIds"] = transactionIds ?? []
+        ret["contactIds"] = contactIds ?? []
         return ret
     }
     

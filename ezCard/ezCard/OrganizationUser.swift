@@ -13,12 +13,12 @@ class OrganizationUser: User {
     
     let name: String
     
-    var members: [String]
-    var cardIds: [String]
-    var transactionIds: [String]
-    var contactIds: [String]
+    var members: [String]?
+    var cardIds: [String]?
+    var transactionIds: [String]?
+    var contactIds: [String]?
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, name: String, members: [String] = [], cardIds: [String] = [], transactionIds: [String] = [], contactIds: [String] = []) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, name: String, members: [String]? = [], cardIds: [String]? = [], transactionIds: [String]? = [], contactIds: [String]? = []) {
         self.name = name
         
         self.members = members
@@ -34,13 +34,15 @@ class OrganizationUser: User {
             let value = snapshot.value as? [String: AnyObject],
             let uid = value["uid"] as? String,
             let email = value["email"] as? String,
-            let name = value["organizationName"] as? String,
-            let members = value["members"] as? [String],
-            let cardIds = value["cardIds"] as? [String],
-            let transactionIds = value["transactionIds"] as? [String],
-            let contactIds = value["contactIds"] as? [String] else {
+            let name = value["organizationName"] as? String
+        else {
                 return nil
         }
+        
+        let members = value["members"] as? [String]
+        let cardIds = value["cardIds"] as? [String]
+        let transactionIds = value["transactionIds"] as? [String]
+        let contactIds = value["contactIds"] as? [String]
         
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, name: name, members: members, cardIds: cardIds, transactionIds: transactionIds, contactIds: contactIds)
     }
@@ -48,10 +50,10 @@ class OrganizationUser: User {
     override func toAnyObject() -> Any {
         var ret = super.toAnyObject() as! [String: Any]
         ret["organizationName"] = name
-        ret["members"] = members
-        ret["cardIds"] = cardIds
-        ret["transactionIds"] = transactionIds
-        ret["contactIds"] = contactIds
+        ret["members"] = members ?? []
+        ret["cardIds"] = cardIds ?? []
+        ret["transactionIds"] = transactionIds ?? []
+        ret["contactIds"] = contactIds ?? []
         return ret
     }
     

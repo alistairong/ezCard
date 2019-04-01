@@ -18,16 +18,17 @@ class ScanConfirmationViewController: UITableViewController {
     private struct Constants {
         static let topSeparatorTag = 983743
         static let bottomSeparatorTag = 983742
+        static let labelPadding = CGFloat(20)
+        static let footerBottomPadding = CGFloat(75)
     }
     
     var separatorColor: UIColor?
     
-    var qrMetadata: String!
+    var card: Card!
+    var sharingUserName: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("Showing scan confirmation VC for metadata:", qrMetadata)
         
         separatorColor = tableView.separatorColor
         tableView.separatorColor = .clear
@@ -91,7 +92,11 @@ class ScanConfirmationViewController: UITableViewController {
             
             let cell = cell as! CardTableViewCell
             
+            cell.cardView.configure(with: card)
             
+            cell.cardView.qrCodeButton.isHidden = true
+            
+            // TODO: implement more button callback
         } else if indexPath.section == 1 { // accept
             let cell = cell as! CenteredTextTableViewCell
             
@@ -105,6 +110,45 @@ class ScanConfirmationViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        guard let sharingUserName = self.sharingUserName, let card = self.card, section == 0 else {
+            return nil
+        }
+        
+        return "\(sharingUserName) would like to share \(card.name == nil ? "a card" : "their \"\(card.name!)\" card") with you."
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard section == 0 else {
+            return nil
+        }
+        
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width - Constants.labelPadding * 2, height: CGFloat.greatestFiniteMagnitude))
+        containerView.clipsToBounds = true
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: containerView.bounds.width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.text = self.tableView(tableView, titleForFooterInSection: section)
+        label.sizeToFit()
+        label.frame.origin = CGPoint(x: Constants.labelPadding, y: Constants.labelPadding / 2)
+        
+        containerView.frame.size = CGSize(width: label.bounds.width, height: label.bounds.height + Constants.labelPadding / 2 + Constants.footerBottomPadding)
+        containerView.addSubview(label)
+        
+        return containerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        guard section == 0 else {
+            return 0
+        }
+        
+        let view = self.tableView(tableView, viewForFooterInSection: section)!
+        return view.bounds.height
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import FirebaseDatabase
 
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
@@ -17,6 +18,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     
     let captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+    
+    let usersRef = Database.database().reference(withPath: "users")
+    let cardsRef = Database.database().reference(withPath: "cards")
     
     var isPresentingScanConfirmationViewController = false
     
@@ -101,9 +105,41 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             if !isPresentingScanConfirmationViewController {
                 isPresentingScanConfirmationViewController = true
                 
-                let scanConfirmationViewController = ScanConfirmationViewController(style: .grouped)
-                scanConfirmationViewController.qrMetadata = underlyingData
-                present(scanConfirmationViewController, animated: true, completion: nil)
+                let qrMetadata = underlyingData.split(separator: " ")
+                cardsRef.child(String(qrMetadata[1])).observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                    guard let strongSelf = self, let card = Card(snapshot: snapshot) else {
+                        return
+                    }
+                    
+                    let scanConfirmationViewController = ScanConfirmationViewController(style: .grouped)
+                    
+                    scanConfirmationViewController.card = card
+                    
+                    strongSelf.usersRef.child(card.userId).observeSingleEvent(of: .value, with: { (snapshot) in
+                        guard let user = User(snapshot: snapshot) else {
+                            return
+                        }
+                        
+                        switch user.type {
+                        case .individual:
+                            guard let individualUser = IndividualUser(snapshot: snapshot) else {
+                                break
+                            }
+                            
+                            scanConfirmationViewController.sharingUserName = individualUser.firstName + " " + individualUser.lastName
+                        case .organization:
+                            guard let organizationUser = OrganizationUser(snapshot: snapshot) else {
+                                break
+                            }
+                            
+                            scanConfirmationViewController.sharingUserName = organizationUser.name
+                        case .unknown:
+                            scanConfirmationViewController.sharingUserName = "Someone"
+                        }
+                        
+                        strongSelf.present(scanConfirmationViewController, animated: true, completion: nil)
+                    })
+                }
             }
         }
     }
