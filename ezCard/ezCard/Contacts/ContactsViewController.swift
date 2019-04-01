@@ -13,9 +13,13 @@ import FirebaseDatabase
 
 class ContactsViewController: UITableViewController {
     
-    let currentUser = Auth.auth().currentUser!
-    
-    let userContactsRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid).child("contacts")
+    var userContactsRef: DatabaseReference? {
+        guard let currentUser = Auth.auth().currentUser else {
+            return nil
+        }
+        
+        return Database.database().reference(withPath: "users").child(currentUser.uid).child("contacts")
+    }
     let contactsRef = Database.database().reference(withPath: "contacts")
     
     var contacts: [Contact] = []

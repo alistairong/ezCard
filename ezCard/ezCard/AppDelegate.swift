@@ -23,33 +23,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
+        let homeViewController = HomeViewController(style: .grouped)
+        homeViewController.tabBarItem = UITabBarItem(title: "Home", image: #imageLiteral(resourceName: "home"), tag: 0)
+        
+        let scanViewController = ScanViewController()
+        scanViewController.tabBarItem = UITabBarItem(title: "Scan", image: #imageLiteral(resourceName: "qrCode"), tag: 1)
+        
+        let contactsViewController = ContactsViewController(style: .grouped)
+        contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
+        
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [UINavigationController(rootViewController: homeViewController),
+                                            UINavigationController(rootViewController: scanViewController),
+                                            UINavigationController(rootViewController: contactsViewController)]
+        
+        window!.rootViewController = tabBarController
+    
+        window!.makeKeyAndVisible()
+        
         if Auth.auth().currentUser == nil { // TODO: check if user exists in database too
             let loginViewController = LoginViewController()
-            let tempViewController = UIViewController()
-            
-            window!.rootViewController = tempViewController
-            
-            window!.makeKeyAndVisible()
-            
-            tempViewController.present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
-        } else {
-            let homeViewController = HomeViewController(style: .grouped)
-            homeViewController.tabBarItem = UITabBarItem(title: "Home", image: #imageLiteral(resourceName: "home"), tag: 0)
-            
-            let scanViewController = ScanViewController()
-            scanViewController.tabBarItem = UITabBarItem(title: "Scan", image: #imageLiteral(resourceName: "qrCode"), tag: 1)
-            
-            let contactsViewController = ContactsViewController(style: .grouped)
-            contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
-            
-            let tabBarController = UITabBarController()
-            tabBarController.viewControllers = [UINavigationController(rootViewController: homeViewController),
-                                                UINavigationController(rootViewController: scanViewController),
-                                                UINavigationController(rootViewController: contactsViewController)]
-            
-            window!.rootViewController = tabBarController
-        
-            window!.makeKeyAndVisible()
+            tabBarController.viewControllers!.first!.present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
         }
         
         UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)

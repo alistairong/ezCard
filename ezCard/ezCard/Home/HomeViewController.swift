@@ -13,11 +13,13 @@ import FirebaseDatabase
 
 class HomeViewController: UITableViewController {
     
-    let currentUser = Auth.auth().currentUser!
-    
-    let userCardsRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid).child("cards")
-    let userTransactionsRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid).child("transactions")
-    let cardsRef = Database.database().reference(withPath: "cards")
+    var userTransactionsRef: DatabaseReference? {
+        guard let currentUser = Auth.auth().currentUser else {
+            return nil
+        }
+        
+        return Database.database().reference(withPath: "users").child(currentUser.uid).child("transactions")
+    }
     let transactionsRef = Database.database().reference(withPath: "transactions")
     
     var transactions: [Transaction] = []
