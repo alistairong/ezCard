@@ -16,11 +16,10 @@
 		493C0D502226E31D00DF2482 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 493C0D4F2226E31D00DF2482 /* Assets.xcassets */; };
 		493C0D532226E31D00DF2482 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */; };
 		493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 493C0D5A2226E3AB00DF2482 /* GoogleService-Info.plist */; };
-		494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CEE223068DA00B5A7E1 /* HomeViewController.swift */; };
+		494E8CF0223068DA00B5A7E1 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CEE223068DA00B5A7E1 /* FeedViewController.swift */; };
 		494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CF22230691800B5A7E1 /* ScanViewController.swift */; };
 		494E8CF52230691800B5A7E1 /* ScanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 494E8CF32230691800B5A7E1 /* ScanViewController.xib */; };
 		494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CF82230701F00B5A7E1 /* ContactsViewController.swift */; };
-		494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */; };
 		494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */; };
 		494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0022307D4400B5A7E1 /* ContactViewController.swift */; };
 		494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */; };
@@ -36,7 +35,6 @@
 		497B36FD2249E4600030FE9F /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36FC2249E4600030FE9F /* CardView.xib */; };
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
-		49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */; };
 		49F57C7C224AC25F000C365A /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7B224AC25F000C365A /* Card.swift */; };
 		49F57C80224AD6F2000C365A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7F224AD6F2000C365A /* User.swift */; };
 		49F57C82224B0483000C365A /* OrganizationUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C81224B0483000C365A /* OrganizationUser.swift */; };
@@ -61,11 +59,10 @@
 		493C0D522226E31D00DF2482 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		493C0D542226E31D00DF2482 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		493C0D5A2226E3AB00DF2482 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		494E8CEE223068DA00B5A7E1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		494E8CEE223068DA00B5A7E1 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		494E8CF22230691800B5A7E1 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		494E8CF32230691800B5A7E1 /* ScanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScanViewController.xib; sourceTree = "<group>"; };
 		494E8CF82230701F00B5A7E1 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
-		494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ProfileButtonSearchBarNav.swift"; sourceTree = "<group>"; };
 		494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButtonView.swift; sourceTree = "<group>"; };
 		494E8D0022307D4400B5A7E1 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationViewController.swift; sourceTree = "<group>"; };
@@ -81,7 +78,6 @@
 		497B36FC2249E4600030FE9F /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
-		49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAndNameView.swift; sourceTree = "<group>"; };
 		49F57C7B224AC25F000C365A /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		49F57C7F224AD6F2000C365A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		49F57C81224B0483000C365A /* OrganizationUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationUser.swift; sourceTree = "<group>"; };
@@ -146,15 +142,13 @@
 				49F57C83224B0494000C365A /* IndividualUser.swift */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
-				494E8D0A22307EFB00B5A7E1 /* Home */,
+				494E8D0A22307EFB00B5A7E1 /* Feed */,
 				494E8D0922307EF200B5A7E1 /* Scan */,
 				494E8D0822307EE800B5A7E1 /* Contacts */,
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
 				497B36FA2249E3B40030FE9F /* CardView.swift */,
 				497B36FC2249E4600030FE9F /* CardView.xib */,
-				494E8CFC223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift */,
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
-				49B5E05A2249800000D3F739 /* ProfilePictureAndNameView.swift */,
 				49B5E05522497C9400D3F739 /* Table View Cells */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
@@ -182,12 +176,12 @@
 			path = Scan;
 			sourceTree = "<group>";
 		};
-		494E8D0A22307EFB00B5A7E1 /* Home */ = {
+		494E8D0A22307EFB00B5A7E1 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				494E8CEE223068DA00B5A7E1 /* HomeViewController.swift */,
+				494E8CEE223068DA00B5A7E1 /* FeedViewController.swift */,
 			);
-			path = Home;
+			path = Feed;
 			sourceTree = "<group>";
 		};
 		494E8D0B22307F3900B5A7E1 /* Profile */ = {
@@ -380,20 +374,18 @@
 				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
 				497B36FB2249E3B40030FE9F /* CardView.swift in Sources */,
-				494E8CF0223068DA00B5A7E1 /* HomeViewController.swift in Sources */,
+				494E8CF0223068DA00B5A7E1 /* FeedViewController.swift in Sources */,
 				49F57C80224AD6F2000C365A /* User.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
 				49F57C87224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
 				497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */,
-				494E8CFD223071A000B5A7E1 /* UIViewController+ProfileButtonSearchBarNav.swift in Sources */,
 				494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */,
 				F34CE4F3224D99E30075A23F /* Transaction.swift in Sources */,
 				494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */,
 				49F57C7C224AC25F000C365A /* Card.swift in Sources */,
 				4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
-				49B5E05B2249800000D3F739 /* ProfilePictureAndNameView.swift in Sources */,
 				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,
 				49F57C84224B0494000C365A /* IndividualUser.swift in Sources */,
 			);

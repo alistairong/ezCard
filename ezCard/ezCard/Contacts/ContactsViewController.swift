@@ -24,12 +24,10 @@ class ContactsViewController: UITableViewController {
     
     var contacts: [Contact] = []
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        addProfileButtonAndSearchBarToNavigationBar()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        (navigationItem.leftBarButtonItem?.customView?.subviews.first as? ProfileButtonView)?.refresh(forceRefetch: true)
+        title = "Contacts"
     }
 
     // MARK: - Table view data source

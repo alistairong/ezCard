@@ -251,18 +251,6 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 case .individual:
                     let user = IndividualUser(uid: newUser.uid, email: email, firstName: strongSelf.firstName!, lastName: strongSelf.lastName!)
                     userRef.setValue(user.toAnyObject())
-                    
-                    // upload initial vCard
-                    let contact = CNMutableContact()
-                    contact.givenName = strongSelf.firstName!
-                    contact.familyName = strongSelf.lastName!
-                    
-                    let dataManager = UserDataManager(user: newUser)
-                    dataManager.upload(contact, completion: { (error) in
-                        if let error = error {
-                            print("error uploading initial vCard:", error)
-                        }
-                    })
                 case .organization:
                     let user = OrganizationUser(uid: newUser.uid, email: email, name: strongSelf.organizationName!)
                     userRef.setValue(user.toAnyObject())

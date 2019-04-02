@@ -18,6 +18,10 @@ class OrganizationUser: User {
     var transactionIds: [String]?
     var contactIds: [String]?
     
+    override var displayName: String {
+        return name
+    }
+    
     init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, name: String, members: [String]? = [], cardIds: [String]? = [], transactionIds: [String]? = [], contactIds: [String]? = []) {
         self.name = name
         

@@ -28,6 +28,10 @@ class User {
     
     let email: String
     
+    var displayName: String {
+        return email
+    }
+    
     init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String) {
         self.ref = ref
         self.key = key
@@ -49,6 +53,27 @@ class User {
         }
         
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email)
+    }
+    
+    static func fetchUser(with uid: String, completion: ((User?) -> Void)?) {
+        let usersRef = Database.database().reference(withPath: "users")
+        usersRef.child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let baseUser = User(snapshot: snapshot) else {
+                completion?(nil)
+                return
+            }
+            
+            switch baseUser.type {
+            case .individual:
+                let user = IndividualUser(snapshot: snapshot)
+                completion?(user)
+            case .organization:
+                let user = OrganizationUser(snapshot: snapshot)
+                completion?(user)
+            case .unknown:
+                completion?(baseUser)
+            }
+        })
     }
     
     func toAnyObject() -> Any {

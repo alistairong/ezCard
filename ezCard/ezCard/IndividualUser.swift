@@ -18,6 +18,10 @@ class IndividualUser: User {
     var transactionIds: [String]?
     var contactIds: [String]?
     
+    override var displayName: String {
+        return firstName + " " + lastName
+    }
+    
     init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String]? = [], transactionIds: [String]? = [], contactIds: [String]? = []) {
         self.firstName = firstName
         self.lastName = lastName

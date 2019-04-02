@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  FeedViewController.swift
 //  ezCard
 //
 //  Created by Andrew Whitehead on 3/6/19.
@@ -11,7 +11,7 @@ import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
 
-class HomeViewController: UITableViewController {
+class FeedViewController: UITableViewController {
     
     var userTransactionsRef: DatabaseReference? {
         guard let currentUser = Auth.auth().currentUser else {
@@ -27,13 +27,7 @@ class HomeViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addProfileButtonAndSearchBarToNavigationBar()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        (navigationItem.leftBarButtonItem?.customView?.subviews.first as? ProfileButtonView)?.refresh(forceRefetch: true)
+        title = "Feed"
     }
 
     /*

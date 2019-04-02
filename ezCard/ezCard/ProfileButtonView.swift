@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 import FirebaseStorage
 
 class ProfileButtonView: UIView {
@@ -16,10 +15,18 @@ class ProfileButtonView: UIView {
     
     private struct Constants {
         static let shadowOffset = CGFloat(2.0)
+        static let imageViewPadding: CGFloat = CGFloat(5)
+        static let defaultImage = #imageLiteral(resourceName: "person")
     }
     
     private var profileImageView: UIImageView!
     private var profileButton: UIButton!
+    
+    var user: User? {
+        didSet {
+            refresh(forceRefetch: true)
+        }
+    }
     
     var tappedCallback: (() -> Void)?
     
@@ -27,14 +34,19 @@ class ProfileButtonView: UIView {
         self.init(buttonSize: ProfileButtonView.defaultSize)
     }
 
-    init(buttonSize: CGFloat) {
+    init(user: User? = nil, buttonSize: CGFloat) {
         super.init(frame: CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize))
         
         commonInit()
+        
+        self.user = user
+        refresh(forceRefetch: true)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        commonInit()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,7 +62,7 @@ class ProfileButtonView: UIView {
         profileButton.layer.cornerRadius = profileButton.bounds.width / 2
         profileButton.layer.borderWidth = 3.0
         profileButton.layer.borderColor = UIColor.white.cgColor
-        profileButton.layer.masksToBounds = false
+        profileButton.clipsToBounds = false
         profileButton.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
         profileButton.layer.shadowRadius = 2.0
         profileButton.layer.shadowOpacity = 0.5
@@ -64,40 +76,25 @@ class ProfileButtonView: UIView {
         
         profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: profileButton.frame.width, height: profileButton.frame.height))
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.layer.masksToBounds = true
-        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
+        profileImageView.clipsToBounds = true
+        profileImageView.layer.cornerRadius = (profileButton.bounds.width - 2 * Constants.imageViewPadding) / 2
         profileImageView.tintColor = .darkGray
-        profileImageView.image = #imageLiteral(resourceName: "person")
-        profileImageView.contentMode = .bottom
+        profileImageView.image = Constants.defaultImage
+        profileImageView.contentMode = .scaleAspectFit
         profileButton.addSubview(profileImageView)
         
-        profileImageView.leadingAnchor.constraint(equalTo: profileButton.leadingAnchor).isActive = true
-        profileImageView.trailingAnchor.constraint(equalTo: profileButton.trailingAnchor).isActive = true
-        profileImageView.topAnchor.constraint(equalTo: profileButton.topAnchor).isActive = true
+        profileImageView.leadingAnchor.constraint(equalTo: profileButton.leadingAnchor, constant: Constants.imageViewPadding).isActive = true
+        profileImageView.trailingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: -Constants.imageViewPadding).isActive = true
+        profileImageView.topAnchor.constraint(greaterThanOrEqualTo: profileButton.topAnchor, constant: Constants.imageViewPadding).isActive = true
         profileImageView.bottomAnchor.constraint(equalTo: profileButton.bottomAnchor).isActive = true
-        
-        weak var weakProfileImageView = profileImageView
-        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
-            guard let user = user else {
-                return
-            }
-            
-            self?.fetchProfileImage(for: user) { (image, error) in
-                guard let profileImage = image else {
-                    return
-                }
-                
-                weakProfileImageView?.image = profileImage
-                weakProfileImageView?.contentMode = .scaleAspectFill
-            }
-        }
+        profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor, multiplier: 1.0).isActive = true
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         profileButton?.layer.cornerRadius = profileButton.bounds.width / 2
-        profileImageView?.layer.cornerRadius = profileImageView.bounds.width / 2
+        profileImageView?.layer.cornerRadius = (profileButton.bounds.width - 2 * Constants.imageViewPadding) / 2
     }
     
     @objc private func profileButtonTapped(_ sender: Any?) {
@@ -105,22 +102,25 @@ class ProfileButtonView: UIView {
     }
     
     func refresh(forceRefetch: Bool = false) {
-        guard let user = Auth.auth().currentUser else {
+        guard let user = self.user else {
+            profileImageView.image = Constants.defaultImage
             return
         }
         
         weak var weakProfileImageView = profileImageView
         fetchProfileImage(for: user) { (image, error) in
             guard let profileImage = image else {
+                weakProfileImageView?.image = Constants.defaultImage
                 return
             }
             
             weakProfileImageView?.image = profileImage
-            weakProfileImageView?.contentMode = .scaleAspectFill
         }
     }
     
-    private func fetchProfileImage(for user: Firebase.User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
+    private func fetchProfileImage(for user: User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
+        self.user = user
+        
         let cacheKey = "profile_image_\(user.uid)"
         
         if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage, !forceRefetch {
@@ -131,7 +131,12 @@ class ProfileButtonView: UIView {
             // limit profile images to 2MB (2 * 1024 * 1024 bytes)
             profileImgRef.getData(maxSize: 2 * 1024 * 1024) { data, error in
                 if let error = error {
-                    print("Error fetching profile image:", error)
+                    let storageError = StorageErrorCode(rawValue: (error as NSError).code)
+                    
+                    if storageError != .objectNotFound {
+                        print("Error fetching profile image:", error)
+                    }
+                    
                     completion(nil, error)
                 } else {
                     let image = UIImage(data: data!)!

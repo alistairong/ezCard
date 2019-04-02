@@ -99,7 +99,6 @@ class CardView: UIView {
         
         if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage {
             profileImageView.image = imageFromCache
-            profileImageView.contentMode = .scaleAspectFill
         } else {
             let profileImgRef = profileImgsRef.child("\(card.userId).jpg")
             
@@ -107,12 +106,10 @@ class CardView: UIView {
             profileImgRef.getData(maxSize: 2 * 1024 * 1024) { [weak self] (data, error) in
                 if let error = error {
                     print("Error fetching profile image:", error)
-                    self?.profileImageView.contentMode = .bottom
                 } else {
                     let image = UIImage(data: data!)!
                     profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
                     self?.profileImageView.image = image
-                    self?.profileImageView.contentMode = .scaleAspectFill
                 }
             }
         }

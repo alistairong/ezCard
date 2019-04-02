@@ -12,19 +12,40 @@ import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
 
-class ProfileViewController: UITableViewController, CNContactViewControllerDelegate, ManageCardViewControllerDelegate {
+class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate {
     
     private struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
         static let tableViewHeaderHeight = CGFloat(117.0)
     }
     
-    let currentUser = Auth.auth().currentUser!
+    var user: User? {
+        willSet {
+            userCardsRef?.removeAllObservers()
+            cardsRef.removeAllObservers()
+        }
+        didSet {
+            tableView.tableHeaderView = headerView(name: user?.displayName)
+            observeCards()
+            
+            if user?.uid == Auth.auth().currentUser?.uid {
+                navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped(_:)))
+            } else {
+                navigationItem.leftBarButtonItem = nil
+                navigationItem.leftBarButtonItem = nil
+            }
+        }
+    }
     
-    let userCardsRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid).child("cards")
+    var userCardsRef: DatabaseReference? {
+        guard let user = self.user else {
+            return nil
+        }
+        
+        return Database.database().reference(withPath: "users").child(user.uid).child("cards")
+    }
     let cardsRef = Database.database().reference(withPath: "cards")
-    
-    var dataManager: UserDataManager!
     
     var cards: [Card] = []
     var cardIds: [String] = []
@@ -32,30 +53,26 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let headerView = ProfilePictureAndNameView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
-        headerView.nameLabel.text = currentUser.displayName
-        tableView.tableHeaderView = headerView
-        
-        dataManager = UserDataManager(user: currentUser)
-        
         tableView.separatorColor = .clear
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
-        
-        userCardsRef.observe(.value) { [weak self] (snapshot) in
+    }
+    
+    func observeCards() {
+        userCardsRef?.observe(.value) { [weak self] (snapshot) in
             var newCardIds: [String] = []
             for child in snapshot.children {
                 if let snapshot = child as? DataSnapshot, let cardId = snapshot.key as String? {
                     newCardIds.append(cardId)
                 }
             }
-
+            
             self?.cardIds = newCardIds
             
             self!.cardsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
                 var newCards: [Card] = []
                 for cardId in (self?.cardIds)! {
-                    if let child = snapshot.childSnapshot(forPath: cardId) as DataSnapshot?, let card = Card(snapshot: child), card.userId == self?.currentUser.uid {
+                    if let child = snapshot.childSnapshot(forPath: cardId) as DataSnapshot?, let card = Card(snapshot: child), card.userId == self?.user?.uid {
                         newCards.append(card)
                     }
                 }
@@ -68,30 +85,36 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        addProfileButtonAndSearchBarToNavigationBar()
-        navigationItem.leftBarButtonItem = nil // remove the profile button since we're already at the profile screen
+    func headerView(name: String?) -> UIView {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
+        headerView.backgroundColor = .clear
         
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped(_:))),
-                                              UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))]
+        let profileButtonView = ProfileButtonView()
+        headerView.addSubview(profileButtonView)
+        
+        profileButtonView.translatesAutoresizingMaskIntoConstraints = false
+        profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
+        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
+        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16).isActive = true
+        profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
+        
+        let nameLabel = UILabel()
+        nameLabel.text = name
+        nameLabel.font = UIFont.systemFont(ofSize: 31, weight: .bold)
+        headerView.addSubview(nameLabel)
+        
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        nameLabel.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16).isActive = true
+        nameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        
+        return headerView
     }
     
     @objc func settingsTapped(_ sender: Any?) {
-        var contact: CNContact?
-        if let currentUserData = currentUserData {
-            do {
-                contact = try CNContactVCardSerialization.contacts(with: currentUserData).first
-            } catch let error {
-                print("error while deserializing local currentUserData:", error)
-            }
-        }
-        
-        let contactVC = CNContactViewController(forNewContact: contact)
-        contactVC.delegate = self
-        contactVC.allowsActions = false
-        present(UINavigationController(rootViewController: contactVC), animated: true, completion: nil)
+        // TODO: show settings screen
     }
     
     @objc func addTapped(_ sender: Any?) {
@@ -111,43 +134,7 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
         let cardRef = cardsRef.child(card.identifier)
         cardRef.setValue(card.toAnyObject())
         
-        userCardsRef.child(card.identifier).setValue(true)
-    }
-    
-    // MARK: - CNContactViewControllerDelegate
-    
-    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?) {
-        viewController.dismiss(animated: true, completion: nil)
-        
-        guard let contact = contact else {
-            return
-        }
-        
-        let headerView = ProfilePictureAndNameView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
-        headerView.nameLabel.text = "\(contact.givenName) \(contact.familyName)"
-        tableView.tableHeaderView = headerView
-        
-        let oldUserData = currentUserData
-        
-        dataManager.upload(contact) { [weak self] (error) in
-            if let error = error {
-                let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                self?.present(alertController, animated: true, completion: nil)
-                
-                currentUserData = oldUserData
-                
-                return
-            }
-            
-            do {
-                currentUserData = try CNContactVCardSerialization.data(with: [contact])
-            } catch let e {
-                print("error caching currentUserData:", e)
-            }
-            
-            self?.currentUser.reload(completion: nil)
-        }
+        userCardsRef?.child(card.identifier).setValue(true)
     }
 
     // MARK: - Table view data source
@@ -183,5 +170,5 @@ class ProfileViewController: UITableViewController, CNContactViewControllerDeleg
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-    
+ 
 }
