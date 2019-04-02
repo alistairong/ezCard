@@ -20,14 +20,9 @@ class Transaction {
     
     let createdAt: Date
     
-    var description: String?
-    var cardId: String?
+    var cardId: String
     
-    var isValid: Bool {
-        return ((description?.count ?? 0) > 0 && cardId != nil)
-    }
-    
-    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), description: String? = nil, cardId: String? = nil) {
+    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), cardId: String) {
         self.ref = ref
         self.key = key
         
@@ -37,7 +32,6 @@ class Transaction {
         
         self.createdAt = createdAt
         
-        self.description = description
         self.cardId = cardId
     }
     
@@ -47,21 +41,19 @@ class Transaction {
             let identifier = value["identifier"] as? String,
             let createdAtRaw = value["createdAt"] as? Double,
             let userId = value["userId"] as? String,
-            let description = value["description"] as? String,
             let cardId = value["cardId"] as? String else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), description: description, cardId: cardId)
+        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), cardId: cardId)
     }
     
-    func toAnyObject() -> Any {
+    func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,
             "createdAt" : createdAt.timeIntervalSince1970,
             "userId": userId,
-            "description": description ?? "",
-            "cardId": cardId ?? ""
+            "cardId": cardId
         ]
     }
     

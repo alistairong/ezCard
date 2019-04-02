@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 class ScanConfirmationViewController: UITableViewController {
     
@@ -22,10 +24,20 @@ class ScanConfirmationViewController: UITableViewController {
         static let footerBottomPadding = CGFloat(75)
     }
     
+
+    
     var separatorColor: UIColor?
     
     var card: Card!
-    var sharingUserName: String!
+    var sharingUser: User!
+    
+    var transactionDescription: String? {
+        guard let sharingUser = self.sharingUser, let card = self.card else {
+            return nil
+        }
+        
+        return "\(sharingUser.displayName) would like to share \(card.name == nil ? "a card" : "their \"\(card.name!)\" card") with you."
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +50,30 @@ class ScanConfirmationViewController: UITableViewController {
     }
     
     func acceptTransaction() {
-        // TODO: accept the transaction (add contact to current user's contact list)
+        let userRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid)
+
+        // write to transactions list
+        let transactionsRef = Database.database().reference(withPath: "transactions")
+        let transaction = Transaction(userId: Auth.auth().currentUser!.uid, cardId: card.identifier)
+        transactionsRef.child(transaction.identifier).setValue(transaction.dictionaryRepresentation())
+
+        // write transaction id to user's transaction list
+        userRef.child("transactions").child(transaction.identifier).setValue(true)
+        
+        // write to contacts list
+        let contactsRef = Database.database().reference(withPath: "contacts")
+        
+        let contactIdentifier = Auth.auth().currentUser!.uid + "-" + sharingUser.uid
+        
+        let contactRef = contactsRef.child(contactIdentifier)
+        
+        contactRef.child("holdingUserId").setValue(Auth.auth().currentUser!.uid)
+        contactRef.child("actualUserId").setValue(sharingUser.uid)
+        contactRef.child("sharedCardIds").updateChildValues([card.identifier: true])
+        contactRef.child("allSharedFields").updateChildValues(card.fields)
+        
+        // write contact id to user's contact list
+        userRef.child("contacts").child(sharingUser.uid).setValue(true)
         
         dismiss(animated: true, completion: nil)
     }
@@ -113,11 +148,11 @@ class ScanConfirmationViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        guard let sharingUserName = self.sharingUserName, let card = self.card, section == 0 else {
+        guard section == 0 else {
             return nil
         }
         
-        return "\(sharingUserName) would like to share \(card.name == nil ? "a card" : "their \"\(card.name!)\" card") with you."
+        return transactionDescription
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

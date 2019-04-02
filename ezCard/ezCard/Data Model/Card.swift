@@ -55,7 +55,7 @@ class Card {
         self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), name: name, fields: fields)
     }
     
-    func toAnyObject() -> Any {
+    func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,
             "createdAt" : createdAt.timeIntervalSince1970,

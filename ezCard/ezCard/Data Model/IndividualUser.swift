@@ -14,15 +14,15 @@ class IndividualUser: User {
     let firstName: String
     let lastName: String
     
-    var cardIds: [String]?
-    var transactionIds: [String]?
-    var contactIds: [String]?
+    var cardIds: [String: Bool]?
+    var transactionIds: [String: Bool]?
+    var contactIds: [String: Bool]?
     
     override var displayName: String {
         return firstName + " " + lastName
     }
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String]? = [], transactionIds: [String]? = [], contactIds: [String]? = []) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, email: String, firstName: String, lastName: String, cardIds: [String: Bool]? = [:], transactionIds: [String: Bool]? = [:], contactIds: [String: Bool]? = [:]) {
         self.firstName = firstName
         self.lastName = lastName
         
@@ -44,20 +44,20 @@ class IndividualUser: User {
                 return nil
         }
         
-        let cardIds = value["cardIds"] as? [String]
-        let transactionIds = value["transactionIds"] as? [String]
-        let contactIds = value["contactIds"] as? [String]
+        let cardIds = value["cards"] as? [String: Bool]
+        let transactionIds = value["transactions"] as? [String: Bool]
+        let contactIds = value["contacts"] as? [String: Bool]
         
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, firstName: firstName, lastName: lastName, cardIds: cardIds, transactionIds: transactionIds, contactIds: contactIds)
     }
     
-    override func toAnyObject() -> Any {
-        var ret = super.toAnyObject() as! [String: Any]
+    override func dictionaryRepresentation() -> [String: Any] {
+        var ret = super.dictionaryRepresentation()
         ret["firstName"] = firstName
         ret["lastName"] = lastName
-        ret["cardIds"] = cardIds ?? []
-        ret["transactionIds"] = transactionIds ?? []
-        ret["contactIds"] = contactIds ?? []
+        ret["cards"] = cardIds ?? []
+        ret["transactions"] = transactionIds ?? []
+        ret["contacts"] = contactIds ?? []
         return ret
     }
     

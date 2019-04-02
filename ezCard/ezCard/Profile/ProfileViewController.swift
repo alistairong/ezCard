@@ -49,8 +49,7 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
     let cardsRef = Database.database().reference(withPath: "cards")
     
     var cards: [Card] = []
-    var cardIds: [String] = []
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,13 +66,12 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
                     newCardIds.append(cardId)
                 }
             }
-            
-            self?.cardIds = newCardIds
-            
-            self!.cardsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+
+            self?.cardsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
                 var newCards: [Card] = []
-                for cardId in (self?.cardIds)! {
-                    if let child = snapshot.childSnapshot(forPath: cardId) as DataSnapshot?, let card = Card(snapshot: child), card.userId == self?.user?.uid {
+                for cardId in newCardIds {
+                    let child = snapshot.childSnapshot(forPath: cardId)
+                    if let card = Card(snapshot: child), card.userId == self?.user?.uid {
                         newCards.append(card)
                     }
                 }
@@ -148,7 +146,7 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         }
         
         let cardRef = cardsRef.child(card.identifier)
-        cardRef.setValue(card.toAnyObject())
+        cardRef.setValue(card.dictionaryRepresentation())
         
         userCardsRef?.child(card.identifier).setValue(true)
     }

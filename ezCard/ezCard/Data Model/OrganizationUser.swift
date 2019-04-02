@@ -51,8 +51,8 @@ class OrganizationUser: User {
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, email: email, name: name, members: members, cardIds: cardIds, transactionIds: transactionIds, contactIds: contactIds)
     }
     
-    override func toAnyObject() -> Any {
-        var ret = super.toAnyObject() as! [String: Any]
+    override func dictionaryRepresentation() -> [String: Any] {
+        var ret = super.dictionaryRepresentation()
         ret["organizationName"] = name
         ret["members"] = members ?? []
         ret["cardIds"] = cardIds ?? []

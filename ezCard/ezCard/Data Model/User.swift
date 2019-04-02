@@ -78,7 +78,7 @@ class User {
         })
     }
     
-    func toAnyObject() -> Any {
+    func dictionaryRepresentation() -> [String: Any] {
         return [
             "type": type.rawValue,
             "email": email,

@@ -14,58 +14,42 @@ class Contact {
     let ref: DatabaseReference?
     let key: String
     
-    let userId: String
+    let actualUserId: String
+    let holdingUserId: String
     
-    let identifier: String
-    
-    let createdAt: Date
-    
-    var name: String?
-    var cardIds: [String]
-    var fields: [String: String]
-    
-    var isValid: Bool {
-        return ((name?.count ?? 0) > 0 && cardIds.count > 0 && fields.count > 0)
-    }
-    
-    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), name: String? = nil, cardIds: [String] = [], fields: [String: String] = [:]) {
+    var sharedCardIds: [String: Bool]
+    var allSharedFields: [String: String]
+
+    init(ref: DatabaseReference? = nil, key: String = "", holdingUserId: String, actualUserId: String, sharedCardIds: [String: Bool] = [:], allSharedFields: [String: String] = [:]) {
         self.ref = ref
         self.key = key
         
-        self.userId = userId
-        
-        self.identifier = identifier
-        
-        self.createdAt = createdAt
-        
-        self.name = name
-        self.cardIds = cardIds
-        self.fields = fields
+        self.holdingUserId = holdingUserId
+        self.actualUserId = actualUserId
+
+        self.sharedCardIds = sharedCardIds
+        self.allSharedFields = allSharedFields
     }
     
     convenience init?(snapshot: DataSnapshot) {
         guard
             let value = snapshot.value as? [String: AnyObject],
-            let identifier = value["identifier"] as? String,
-            let createdAtRaw = value["createdAt"] as? Double,
-            let name = value["name"] as? String,
-            let userId = value["userId"] as? String,
-            let cardIds = value["cardIds"] as? [String],
-            let fields = value["fields"] as? [String: String] else {
+            let holdingUserId = value["holdingUserId"] as? String,
+            let actualUserId = value["actualUserId"] as? String,
+            let sharedCardIds = value["sharedCardIds"] as? [String: Bool],
+            let allSharedFields = value["allSharedFields"] as? [String: String] else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), name: name, cardIds: cardIds, fields: fields)
+        self.init(ref: snapshot.ref, key: snapshot.key, holdingUserId: holdingUserId, actualUserId: actualUserId, sharedCardIds: sharedCardIds, allSharedFields: allSharedFields)
     }
     
-    func toAnyObject() -> Any {
+    func dictionaryRepresentation() -> [String: Any] {
         return [
-            "identifier" : identifier,
-            "createdAt" : createdAt.timeIntervalSince1970,
-            "name": name ?? "",
-            "userId": userId,
-            "cardIds": cardIds,
-            "fields": fields
+            "actualUserId": actualUserId,
+            "holdingUserId": holdingUserId,
+            "sharedCardIds": sharedCardIds,
+            "allSharedFields": allSharedFields
         ]
     }
     
