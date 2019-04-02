@@ -14,7 +14,7 @@ import FirebaseDatabase
 class ContactsViewController: UITableViewController {
     
     var userContactsRef: DatabaseReference? {
-        guard let currentUser = Auth.auth().currentUser else {
+        guard let currentUser = User.current else {
             return nil
         }
         

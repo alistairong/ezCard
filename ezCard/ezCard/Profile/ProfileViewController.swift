@@ -9,7 +9,6 @@
 import UIKit
 import ContactsUI
 import FirebaseAuth
-import FirebaseStorage
 import FirebaseDatabase
 
 class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate {
@@ -28,8 +27,10 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
             tableView.tableHeaderView = headerView(name: user?.displayName)
             observeCards()
             
-            if user?.uid == Auth.auth().currentUser?.uid {
-                navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))
+            if user?.uid == User.current?.uid {
+                let signOutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
+                signOutButton.tintColor = .red
+                navigationItem.leftBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:))), signOutButton]
                 navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped(_:)))
             } else {
                 navigationItem.leftBarButtonItem = nil
@@ -111,6 +112,21 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         nameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
         return headerView
+    }
+    
+    @objc func signOut() {
+        do {
+            try Auth.auth().signOut()
+            
+            tabBarController?.selectedIndex = 0
+            
+            let loginViewController = LoginViewController()
+            present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
+        } catch {
+            let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alertController, animated: true, completion: nil)
+        }
     }
     
     @objc func settingsTapped(_ sender: Any?) {

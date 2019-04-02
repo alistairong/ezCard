@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 protocol ManageCardViewControllerDelegate: class {
     func manageCardViewController(_ manageCardViewController: ManageCardViewController, didFinishWithCard card: Card?)
@@ -37,7 +36,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         if let card = self.card {
             scratchPadCard = Card(ref: card.ref, key: card.key, userId: card.userId, identifier: card.identifier, createdAt: card.createdAt, name: card.name, fields: card.fields)
         } else {
-            scratchPadCard = Card(userId: Auth.auth().currentUser!.uid)
+            scratchPadCard = Card(userId: User.current!.uid)
         }
         
         title = (isEditingCard ? "Edit " : "Add ") + "Card"

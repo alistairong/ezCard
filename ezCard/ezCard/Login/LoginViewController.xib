@@ -34,7 +34,7 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <textInputTraits key="textInputTraits" textContentType="username"/>
+                                    <textInputTraits key="textInputTraits" textContentType="email"/>
                                     <connections>
                                         <outlet property="delegate" destination="-1" id="TEW-wX-THd"/>
                                     </connections>

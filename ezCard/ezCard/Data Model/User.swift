@@ -19,6 +19,8 @@ enum UserType: String, CaseIterable {
 
 class User {
     
+    static var current: User?
+    
     let ref: DatabaseReference?
     let key: String
     

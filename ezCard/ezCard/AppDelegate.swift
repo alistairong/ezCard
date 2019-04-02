@@ -19,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
+        UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)
+        
+        // configure the window
         window = UIWindow(frame: UIScreen.main.bounds)
         
         let homeViewController = FeedViewController(style: .grouped)
@@ -32,11 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let profileViewController = ProfileViewController(style: .grouped)
         profileViewController.title = "Profile"
-        if let currentUser = Auth.auth().currentUser {
-            User.fetchUser(with: currentUser.uid) { (user) in
-                profileViewController.user = user
-            }
-        }
         profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: #imageLiteral(resourceName: "profile"), tag: 3)
         
         let tabBarController = UITabBarController()
@@ -49,12 +47,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         window!.makeKeyAndVisible()
         
-        if Auth.auth().currentUser == nil { // TODO: check if user exists in database too
+        // initial current user config
+        if let currentUser = Auth.auth().currentUser {
+            User.fetchUser(with: currentUser.uid) { (user) in
+                User.current = user
+                profileViewController.user = user
+            }
+        } else {
             let loginViewController = LoginViewController()
             tabBarController.viewControllers!.first!.present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
         }
         
-        UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)
+        // always listen for user change hereafter
+        Auth.auth().addStateDidChangeListener { (auth, user) in
+            guard let user = user else {
+                return
+            }
+            
+            User.fetchUser(with: user.uid) { (user) in
+                User.current = user
+                profileViewController.user = user
+            }
+        }
         
         return true
     }

@@ -13,15 +13,6 @@ import FirebaseDatabase
 
 class ContactViewController: UITableViewController {
     
-    let currentUser = Auth.auth().currentUser!
-    
-    let userCardsRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid).child("cards")
-    let userContactsRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid).child("contacts")
-    let cardsRef = Database.database().reference(withPath: "cards")
-    let contactsRef = Database.database().reference(withPath: "contacts")
-    
-    var contacts: [Contact] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
