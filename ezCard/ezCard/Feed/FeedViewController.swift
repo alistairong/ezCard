@@ -28,6 +28,13 @@ class FeedViewController: UITableViewController {
         super.viewDidLoad()
         
         title = "Feed"
+        print("hi")
+        /*let a  = userTransactionsRef?.parent?.observeSingleEvent(of: .value, with: {(snapshot) in
+            let snapshot = snapshot.value as? NSDictionary
+            print("Transactions:  \(snapshot)")
+        })*/
+        print(userTransactionsRef)
+        print("bye")
     }
 
     /*
@@ -48,7 +55,7 @@ class FeedViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return transactions.count
     }
 
     /*
