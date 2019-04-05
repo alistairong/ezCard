@@ -236,6 +236,7 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
                 self?.navigationController?.pushViewController(qrCodeViewController, animated: true)
             }
             
+            //can test expanded view here/ inital commit
             cell.cardView.moreButtonTappedCallback = { [weak self] in
                 let manageCardViewController = ManageCardViewController(style: .grouped)
                 manageCardViewController.delegate = self
