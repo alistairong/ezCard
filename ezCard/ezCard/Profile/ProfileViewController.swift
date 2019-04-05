@@ -11,21 +11,24 @@ import ContactsUI
 import FirebaseAuth
 import FirebaseDatabase
 
-class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate {
+class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate, OrganizationMemberSelectionViewControllerDelegate {
     
     private struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
+        static let basicTableViewCellReuseIdentifier = "Basic"
         static let tableViewHeaderHeight = CGFloat(117.0)
     }
     
     var user: User? {
         willSet {
-            userCardsRef?.removeAllObservers()
-            cardsRef.removeAllObservers()
+            userRelevantDataRef?.removeAllObservers()
+            relevantDataRef?.removeAllObservers()
         }
         didSet {
+            tableView.separatorColor = (user?.type == .individual) ? .clear : nil
+            
             tableView.tableHeaderView = headerView(name: user?.displayName)
-            observeCards()
+            observeData()
             
             if user?.uid == User.current?.uid {
                 let signOutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
@@ -39,46 +42,81 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         }
     }
     
-    var userCardsRef: DatabaseReference? {
+    var userRelevantDataRef: DatabaseReference? {
         guard let user = self.user else {
             return nil
         }
         
-        return Database.database().reference(withPath: "users").child(user.uid).child("cards")
+        var relevantDataPath: String!
+        switch user.type {
+        case .individual:
+            relevantDataPath = "cards"
+        case .organization:
+            relevantDataPath = "members"
+        case .unknown:
+            return nil // this shouldn't happen and we should probably investigate if it does, but just return nil so we don't crash for now
+        }
+        
+        return Database.database().reference(withPath: "users").child(user.uid).child(relevantDataPath)
     }
-    let cardsRef = Database.database().reference(withPath: "cards")
     
-    var cards: [Card] = []
+    var relevantDataRef: DatabaseReference? {
+        guard let user = self.user else {
+            return nil
+        }
+        
+        var relevantDataPath: String!
+        switch user.type {
+        case .individual:
+            relevantDataPath = "cards"
+        case .organization:
+            relevantDataPath = "users"
+        case .unknown:
+            return nil // this shouldn't happen and we should probably investigate if it does, but just return nil so we don't crash for now
+        }
+        
+        return Database.database().reference(withPath: relevantDataPath)
+    }
+    
+    var dataArr: [Any] = []
+    
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorColor = .clear
+        tableView.separatorColor = (user?.type == .individual) ? .clear : nil
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicTableViewCellReuseIdentifier)
     }
     
-    func observeCards() {
-        userCardsRef?.observe(.value) { [weak self] (snapshot) in
-            var newCardIds: [String] = []
+    func observeData() {
+        userRelevantDataRef?.observe(.value) { [weak self] (snapshot) in
+            var newIds: [String] = []
             for child in snapshot.children {
-                if let snapshot = child as? DataSnapshot, let cardId = snapshot.key as String? {
-                    newCardIds.append(cardId)
+                if let snapshot = child as? DataSnapshot, let id = snapshot.key as String? {
+                    newIds.append(id)
                 }
             }
-
-            self?.cardsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
-                var newCards: [Card] = []
-                for cardId in newCardIds {
-                    let child = snapshot.childSnapshot(forPath: cardId)
-                    if let card = Card(snapshot: child), card.userId == self?.user?.uid {
-                        newCards.append(card)
+            
+            self?.relevantDataRef?.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                var newData: [Any] = []
+                for id in newIds {
+                    let child = snapshot.childSnapshot(forPath: id)
+                    
+                    if self?.user?.type == .individual {
+                        if let card = Card(snapshot: child), card.userId == self?.user?.uid {
+                            newData.append(card)
+                        }
+                    } else if self?.user?.type == .organization {
+                        if let user = User(snapshot: child) {
+                            newData.append(user)
+                        }
                     }
                 }
                 
-                self?.cards = newCards.sorted(by: { (c1: Card, c2: Card) -> Bool in
-                    return c1.createdAt.compare(c2.createdAt) == ComparisonResult.orderedAscending
-                })
+                self?.dataArr = newData
                 self?.tableView.reloadData()
             }
         }
@@ -132,9 +170,27 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
     }
     
     @objc func addTapped(_ sender: Any?) {
-        let manageCardViewController = ManageCardViewController(style: .grouped)
-        manageCardViewController.delegate = self
-        present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
+        if user?.type == .individual {
+            let manageCardViewController = ManageCardViewController(style: .grouped)
+            manageCardViewController.delegate = self
+            present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
+        } else if user?.type == .organization {
+            let organizationMemberSelectionViewController = OrganizationMemberSelectionViewController()
+            organizationMemberSelectionViewController.delegate = self
+            present(UINavigationController(rootViewController: organizationMemberSelectionViewController), animated: true, completion: nil)
+        }
+    }
+    
+    // MARK: - OrganizationMemberSelectionViewControllerDelegate
+    
+    //can point the orgData to array of emails coming in? when merging. might be an issue
+    func organizationMemberSelectionViewController(_ organizationCardViewController: OrganizationMemberSelectionViewController, didFinishWith uid: String?) {
+        guard let uid = uid else {
+            // user cancelled
+            return
+        }
+        
+        userRelevantDataRef?.child(uid).setValue(true)
     }
     
     // MARK: - ManageCardViewControllerDelegate
@@ -145,37 +201,51 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
             return
         }
         
-        let cardRef = cardsRef.child(card.identifier)
-        cardRef.setValue(card.dictionaryRepresentation())
+        let cardRef = relevantDataRef?.child(card.identifier)
+        cardRef?.setValue(card.dictionaryRepresentation())
         
-        userCardsRef?.child(card.identifier).setValue(true)
+        userRelevantDataRef?.child(card.identifier).setValue(true)
     }
 
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return cards.count
+        return dataArr.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cardTableViewCellReuseIdentifier, for: indexPath) as! CardTableViewCell
-
-        let card = cards[indexPath.row]
-
-        cell.cardView.configure(with: card)
-        
-        cell.cardView.qrCodeButtonTappedCallback = { [weak self] in
-            let qrCodeViewController = QRCodeViewController()
-            qrCodeViewController.card =  card
-            self?.navigationController?.pushViewController(qrCodeViewController, animated: true)
+        var reuseIdentifier = Constants.cardTableViewCellReuseIdentifier
+        if user?.type == .organization {
+            reuseIdentifier = Constants.basicTableViewCellReuseIdentifier
         }
         
-        cell.cardView.moreButtonTappedCallback = { [weak self] in
-            let manageCardViewController = ManageCardViewController(style: .grouped)
-            manageCardViewController.delegate = self
-            manageCardViewController.card = card
-            self?.present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+
+        cell.selectionStyle = .none
+        
+        if user?.type == .individual {
+            let cell = cell as! CardTableViewCell
+            
+            let card = dataArr[indexPath.row] as! Card
+            
+            cell.cardView.configure(with: card)
+            
+            cell.cardView.qrCodeButtonTappedCallback = { [weak self] in
+                let qrCodeViewController = QRCodeViewController()
+                qrCodeViewController.card =  card
+                self?.navigationController?.pushViewController(qrCodeViewController, animated: true)
+            }
+            
+            cell.cardView.moreButtonTappedCallback = { [weak self] in
+                let manageCardViewController = ManageCardViewController(style: .grouped)
+                manageCardViewController.delegate = self
+                manageCardViewController.card = card
+                self?.present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
+            }
+        } else if user?.type == .organization {
+            let member = dataArr[indexPath.row] as! User
+            
+            cell.textLabel?.text = member.displayName
         }
 
         return cell

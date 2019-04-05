@@ -34,6 +34,7 @@
 		497B36FD2249E4600030FE9F /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36FC2249E4600030FE9F /* CardView.xib */; };
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
+		49EC4E9F2257F78100A3073B /* OrganizationMemberSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */; };
 		49F57C7C224AC25F000C365A /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7B224AC25F000C365A /* Card.swift */; };
 		49F57C80224AD6F2000C365A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7F224AD6F2000C365A /* User.swift */; };
 		49F57C82224B0483000C365A /* OrganizationUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C81224B0483000C365A /* OrganizationUser.swift */; };
@@ -76,6 +77,7 @@
 		497B36FC2249E4600030FE9F /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
+		49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationMemberSelectionViewController.swift; sourceTree = "<group>"; };
 		49F57C7B224AC25F000C365A /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		49F57C7F224AD6F2000C365A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		49F57C81224B0483000C365A /* OrganizationUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationUser.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
+				49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */,
 				4903B2FC223092510022F040 /* ManageCardViewController.swift */,
 				4903B2FE223093A60022F040 /* QRCodeViewController.swift */,
 				4903B2FF223093A60022F040 /* QRCodeViewController.xib */,
@@ -398,6 +401,7 @@
 				49F57C7C224AC25F000C365A /* Card.swift in Sources */,
 				4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
+				49EC4E9F2257F78100A3073B /* OrganizationMemberSelectionViewController.swift in Sources */,
 				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,
 				49F57C84224B0494000C365A /* IndividualUser.swift in Sources */,
 			);
