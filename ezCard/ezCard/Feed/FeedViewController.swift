@@ -110,6 +110,7 @@ class FeedViewController: UITableViewController {
         
         title = "Feed"
         
+/*<<<<<<< HEAD
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             guard let user = user else {
                 return
@@ -126,6 +127,50 @@ class FeedViewController: UITableViewController {
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicTableViewCellReuseIdentifier)
+=======*/
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserWillChange(_:)), name: .currentUserWillChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserDidChange(_:)), name: .currentUserDidChange, object: nil)
+        
+        userTransactionsRef?.removeAllObservers()
+        transactionsRef.removeAllObservers()
+        observeTransactions()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func currentUserWillChange(_ notification: Notification) {
+        userTransactionsRef?.removeAllObservers()
+        transactionsRef.removeAllObservers()
+    }
+    
+    @objc func currentUserDidChange(_ notification: Notification) {
+        observeTransactions()
+    }
+    
+    func observeTransactions() {
+        userTransactionsRef?.observe(.value) { [weak self] (snapshot) in
+            var newIds: [String] = []
+            for child in snapshot.children {
+                if let snapshot = child as? DataSnapshot, let id = snapshot.key as String? {
+                    newIds.append(id)
+                }
+            }
+            
+            self?.transactionsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                var newTransactions: [Transaction] = []
+                for id in newIds {
+                    let child = snapshot.childSnapshot(forPath: id)
+                    if let transaction = Transaction(snapshot: child), transaction.userId == User.current?.uid {
+                        newTransactions.append(transaction)
+                    }
+                }
+                
+                self?.transactions = newTransactions.sorted(by: { $0.createdAt > $1.createdAt })
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     /*

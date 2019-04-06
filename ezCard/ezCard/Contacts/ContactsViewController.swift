@@ -28,14 +28,57 @@ class ContactsViewController: UITableViewController {
         super.viewDidLoad()
         
         title = "Contacts"
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserWillChange(_:)), name: .currentUserWillChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserDidChange(_:)), name: .currentUserDidChange, object: nil)
+        
+        userContactsRef?.removeAllObservers()
+        contactsRef.removeAllObservers()
+        observeContacts()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func currentUserWillChange(_ notification: Notification) {
+        userContactsRef?.removeAllObservers()
+        contactsRef.removeAllObservers()
+    }
+    
+    @objc func currentUserDidChange(_ notification: Notification) {
+        observeContacts()
+    }
+    
+    func observeContacts() {
+        guard let currentUser = User.current else {
+            return
+        }
+        
+        userContactsRef?.observe(.value) { [weak self] (snapshot) in
+            var newIds: [String] = []
+            for child in snapshot.children {
+                if let snapshot = child as? DataSnapshot, let id = snapshot.key as String? {
+                    newIds.append(currentUser.uid + "-" + id)
+                }
+            }
+            
+            self?.contactsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                var newContacts: [Contact] = []
+                for id in newIds {
+                    let child = snapshot.childSnapshot(forPath: id)
+                    if let contact = Contact(snapshot: child), contact.holdingUserId == currentUser.uid {
+                        newContacts.append(contact)
+                    }
+                }
+                
+                self?.contacts = newContacts
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
