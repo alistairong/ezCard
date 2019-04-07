@@ -11,7 +11,9 @@ import ContactsUI
 import FirebaseAuth
 import FirebaseDatabase
 
-class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate, OrganizationMemberSelectionViewControllerDelegate {
+class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate, OrganizationMemberSelectionViewControllerDelegate, ExpandCardViewControllerDelegate {
+ 
+    
     
     private struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
@@ -193,6 +195,22 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         userRelevantDataRef?.child(uid).setValue(true)
     }
     
+    func expandCardViewController(_ expandCardViewController: ExpandCardViewController, didFinishWithCard card: Card?) {
+        
+        guard let card = card else {
+            // user cancelled
+            return
+        }
+        
+        let cardRef = relevantDataRef?.child(card.identifier)
+        cardRef?.setValue(card.dictionaryRepresentation())
+        
+        userRelevantDataRef?.child(card.identifier).setValue(true)
+        
+    }
+    
+
+    
     // MARK: - ManageCardViewControllerDelegate
     
     func manageCardViewController(_ manageCardViewController: ManageCardViewController, didFinishWithCard card: Card?) {
@@ -236,7 +254,6 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
                 self?.navigationController?.pushViewController(qrCodeViewController, animated: true)
             }
             
-            //can test expanded view here/ inital commit
             cell.cardView.moreButtonTappedCallback = { [weak self] in
                 let manageCardViewController = ManageCardViewController(style: .grouped)
                 manageCardViewController.delegate = self
