@@ -26,6 +26,7 @@ class FeedViewController: UITableViewController {
         
         return Database.database().reference(withPath: "users").child(currentUser.uid).child("transactions")
     }
+    
     let transactionsRef = Database.database().reference(withPath: "transactions")
     
     var transactions: [Transaction] = []

@@ -13,6 +13,17 @@ import FirebaseDatabase
 
 class ContactViewController: UITableViewController {
     
+    private struct Constants {
+        static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
+        static let basicTableViewCellReuseIdentifier = "Basic"
+        static let tableViewHeaderHeight = CGFloat(117.0)
+    }
+    
+    var cardIds:[String]?
+    var sharedFields:Dictionary<String, String>?
+    let usersRef = Database.database().reference(withPath: "users")
+    let cardsRef = Database.database().reference(withPath: "cards")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,6 +32,7 @@ class ContactViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
     }
     
     /*
@@ -33,25 +45,29 @@ class ContactViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return cardIds!.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cardTableViewCellReuseIdentifier, for: indexPath) as!CardTableViewCell
+        
+        cell.selectionStyle = .none
+        
+        let contact = cardIds?[indexPath.row]
+        
+        cardsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+            let child = snapshot.childSnapshot(forPath: contact!)
+            if let card = Card(snapshot: child) {
+                cell.cardView.configure(with: card)
+            }
+        }
 
         return cell
     }
-    */
+ 
 
     /*
     // Override to support conditional editing of the table view.
