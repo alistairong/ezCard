@@ -106,7 +106,6 @@ class ContactsViewController: UITableViewController {
         let contact = contacts[indexPath.row]
         
         let contactId = contact.actualUserId//contactsRef.child(contact)//.value(forKey: "actualUserId") as! String
-        print(contactId)
         
         usersRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
             let child = snapshot.childSnapshot(forPath: contactId)
