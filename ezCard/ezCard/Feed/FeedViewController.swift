@@ -28,6 +28,50 @@ class FeedViewController: UITableViewController {
         super.viewDidLoad()
         
         title = "Feed"
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserWillChange(_:)), name: .currentUserWillChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserDidChange(_:)), name: .currentUserDidChange, object: nil)
+        
+        userTransactionsRef?.removeAllObservers()
+        transactionsRef.removeAllObservers()
+        observeTransactions()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func currentUserWillChange(_ notification: Notification) {
+        userTransactionsRef?.removeAllObservers()
+        transactionsRef.removeAllObservers()
+    }
+    
+    @objc func currentUserDidChange(_ notification: Notification) {
+        observeTransactions()
+    }
+    
+    func observeTransactions() {
+        userTransactionsRef?.observe(.value) { [weak self] (snapshot) in
+            var newIds: [String] = []
+            for child in snapshot.children {
+                if let snapshot = child as? DataSnapshot, let id = snapshot.key as String? {
+                    newIds.append(id)
+                }
+            }
+            
+            self?.transactionsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                var newTransactions: [Transaction] = []
+                for id in newIds {
+                    let child = snapshot.childSnapshot(forPath: id)
+                    if let transaction = Transaction(snapshot: child), transaction.userId == User.current?.uid {
+                        newTransactions.append(transaction)
+                    }
+                }
+                
+                self?.transactions = newTransactions.sorted(by: { $0.createdAt > $1.createdAt })
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     /*
@@ -41,13 +85,7 @@ class FeedViewController: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return 0
     }
 

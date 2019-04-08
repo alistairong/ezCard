@@ -9,6 +9,11 @@
 import Foundation
 import FirebaseDatabase
 
+extension Notification.Name {
+    static let currentUserWillChange = Notification.Name("currentUserWillChange")
+    static let currentUserDidChange = Notification.Name("currentUserDidChange")
+}
+
 enum UserType: String, CaseIterable {
     case individual
     case organization
@@ -19,7 +24,14 @@ enum UserType: String, CaseIterable {
 
 class User {
     
-    static var current: User?
+    static var current: User? {
+        willSet {
+            NotificationCenter.default.post(name: .currentUserWillChange, object: nil)
+        }
+        didSet {
+            NotificationCenter.default.post(name: .currentUserDidChange, object: nil)
+        }
+    }
     
     let ref: DatabaseReference?
     let key: String
