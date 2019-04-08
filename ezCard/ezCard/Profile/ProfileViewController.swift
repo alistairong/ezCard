@@ -11,9 +11,7 @@ import ContactsUI
 import FirebaseAuth
 import FirebaseDatabase
 
-class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate, OrganizationMemberSelectionViewControllerDelegate, ExpandCardViewControllerDelegate {
- 
-    
+class ProfileViewController: UITableViewController, ManageCardViewControllerDelegate, OrganizationMemberSelectionViewControllerDelegate {
     
     private struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
@@ -194,22 +192,6 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         
         userRelevantDataRef?.child(uid).setValue(true)
     }
-    
-    func expandCardViewController(_ expandCardViewController: ExpandCardViewController, didFinishWithCard card: Card?) {
-        
-        guard let card = card else {
-            // user cancelled
-            return
-        }
-        
-        let cardRef = relevantDataRef?.child(card.identifier)
-        cardRef?.setValue(card.dictionaryRepresentation())
-        
-        userRelevantDataRef?.child(card.identifier).setValue(true)
-        
-    }
-    
-
     
     // MARK: - ManageCardViewControllerDelegate
     
