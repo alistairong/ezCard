@@ -24,9 +24,9 @@
 		494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0022307D4400B5A7E1 /* ContactViewController.swift */; };
 		494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */; };
 		494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */; };
-		49563D04225AE486006A2C7B /* ExpandCardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49563D03225AE486006A2C7B /* ExpandCardTableViewController.swift */; };
 		49563D01225AE074006A2C7B /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49563CFF225AE074006A2C7B /* ContactTableViewCell.xib */; };
 		49563D02225AE074006A2C7B /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49563D00225AE074006A2C7B /* ContactTableViewCell.swift */; };
+		49563D04225AE486006A2C7B /* ExpandedCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */; };
 		495CF42A224AA526008CDB58 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495CF429224AA526008CDB58 /* GlobalConstants.swift */; };
 		497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */; };
 		497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */; };
@@ -70,9 +70,9 @@
 		494E8D0022307D4400B5A7E1 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		494E8D0422307EBA00B5A7E1 /* ScanConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationViewController.swift; sourceTree = "<group>"; };
 		494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		49563D03225AE486006A2C7B /* ExpandCardTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandCardTableViewController.swift; sourceTree = "<group>"; };
 		49563CFF225AE074006A2C7B /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTableViewCell.xib; sourceTree = "<group>"; };
 		49563D00225AE074006A2C7B /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
+		49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCardViewController.swift; sourceTree = "<group>"; };
 		495CF429224AA526008CDB58 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
@@ -186,7 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
-				49563D03225AE486006A2C7B /* ExpandCardTableViewController.swift */,
+				49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */,
 				49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */,
 				4903B2FC223092510022F040 /* ManageCardViewController.swift */,
 				4903B2FE223093A60022F040 /* QRCodeViewController.swift */,
@@ -413,7 +413,7 @@
 				4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
 				49EC4E9F2257F78100A3073B /* OrganizationMemberSelectionViewController.swift in Sources */,
-				49563D04225AE486006A2C7B /* ExpandCardTableViewController.swift in Sources */,
+				49563D04225AE486006A2C7B /* ExpandedCardViewController.swift in Sources */,
 				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,
 				49F57C84224B0494000C365A /* IndividualUser.swift in Sources */,
 			);

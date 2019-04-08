@@ -94,6 +94,14 @@ class ContactViewController: UITableViewController {
                 let child = snapshot.childSnapshot(forPath: contact!)
                 if let card = Card(snapshot: child) {
                     cell.cardView.configure(with: card)
+                    
+                    cell.cardView.moreButtonTappedCallback = { [weak self] in
+                        guard let self = self else { return }
+                        
+                        let expandedCardViewController = ExpandedCardViewController(style: .grouped)
+                        expandedCardViewController.card = card
+                        self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
+                    }
                 }
             }
         }
