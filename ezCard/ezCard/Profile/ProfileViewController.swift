@@ -91,6 +91,14 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicTableViewCellReuseIdentifier)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        userRelevantDataRef?.removeAllObservers()
+        relevantDataRef?.removeAllObservers()
+        observeData()
+    }
+    
     func observeData() {
         userRelevantDataRef?.observe(.value) { [weak self] (snapshot) in
             var newIds: [String] = []
