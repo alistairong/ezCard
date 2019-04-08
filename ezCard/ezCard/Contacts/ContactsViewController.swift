@@ -7,17 +7,16 @@
 //
 
 import UIKit
-import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
 
 class ContactsViewController: UITableViewController {
     
     private struct Constants {
-        static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
-        static let basicTableViewCellReuseIdentifier = "Basic"
-        static let tableViewHeaderHeight = CGFloat(117.0)
+        static let contactTableViewCellReuseIdentifier = "ContactTableViewCell"
     }
+    
+    let profileImgsRef = Storage.storage().reference().child("profile_images")
     
     var userContactsRef: DatabaseReference? {
         guard let currentUser = User.current else {
@@ -26,24 +25,29 @@ class ContactsViewController: UITableViewController {
         
         return Database.database().reference(withPath: "users").child(currentUser.uid).child("contacts")
     }
+    
     let contactsRef = Database.database().reference(withPath: "contacts")
-    let usersRef = Database.database().reference(withPath: "users")
     
     var contacts: [Contact] = []
+    
+    let usersRef = Database.database().reference(withPath: "users")
+    
+    var users: [String: User] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Contacts"
         
+        tableView.separatorInset = .zero
+        tableView.tableFooterView = UIView() // hide extra separators
+        
+        tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.contactTableViewCellReuseIdentifier)
+        
+        observeContacts()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(currentUserWillChange(_:)), name: .currentUserWillChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(currentUserDidChange(_:)), name: .currentUserDidChange, object: nil)
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicTableViewCellReuseIdentifier)
-        
-        userContactsRef?.removeAllObservers()
-        contactsRef.removeAllObservers()
-        observeContacts()
     }
     
     deinit {
@@ -65,74 +69,90 @@ class ContactsViewController: UITableViewController {
         }
         
         userContactsRef?.observe(.value) { [weak self] (snapshot) in
+            guard let self = self else { return }
+            
             var newIds: [String] = []
-            for child in snapshot.children {
-                if let snapshot = child as? DataSnapshot, let id = snapshot.key as String? {
-                    newIds.append(currentUser.uid + "-" + id)
-                }
+            let enumerator = snapshot.children
+            while let child = enumerator.nextObject() as? DataSnapshot {
+                newIds.append(currentUser.uid + "-" + child.key)
             }
             
-            self?.contactsRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+            self.contactsRef.observeSingleEvent(of: .value) { (snapshot) in
                 var newContacts: [Contact] = []
                 for id in newIds {
                     let child = snapshot.childSnapshot(forPath: id)
+                    
                     if let contact = Contact(snapshot: child), contact.holdingUserId == currentUser.uid {
                         newContacts.append(contact)
                     }
                 }
                 
-                self?.contacts = newContacts
-                self?.tableView.reloadData()
+                self.contacts = newContacts
+                
+                self.usersRef.observeSingleEvent(of: .value) { (snapshot) in
+                    var invalidContactKeys: Set<String> = []
+                    for contact in self.contacts {
+                        let userSnapshot = snapshot.childSnapshot(forPath: contact.actualUserId)
+                        if let baseUser = User(snapshot: userSnapshot) {
+                            switch baseUser.type {
+                            case .individual:
+                                self.users[contact.actualUserId] = IndividualUser(snapshot: userSnapshot)
+                            case .organization:
+                                self.users[contact.actualUserId] = OrganizationUser(snapshot: userSnapshot)
+                            case .unknown:
+                                self.users[contact.actualUserId] = baseUser
+                            }
+                        } else {
+                            invalidContactKeys.insert(contact.key)
+                        }
+                    }
+                    
+                    self.contacts.removeAll(where: { invalidContactKeys.contains($0.key) })
+                    
+                    self.tableView.reloadData()
+                }
             }
         }
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return contacts.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let reuseIdentifier = Constants.basicTableViewCellReuseIdentifier
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
-
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.contactTableViewCellReuseIdentifier, for: indexPath) as! ContactTableViewCell
         
-        cell.selectionStyle = .none
+        cell.accessoryType = .disclosureIndicator
         
         let contact = contacts[indexPath.row]
+        let user = users[contact.actualUserId]!
         
-        let contactId = contact.actualUserId//contactsRef.child(contact)//.value(forKey: "actualUserId") as! String
+        cell.nameLabel.text = user.displayName
         
-        usersRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
-            let child = snapshot.childSnapshot(forPath: contactId)
-            if let user = User(snapshot: child) {
-                cell.textLabel?.text = user.displayName
+        let cacheKey = "profile_image_\(contact.actualUserId)"
+        
+        if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage {
+            cell.profileImageView.image = imageFromCache
+        } else {
+            let profileImgRef = profileImgsRef.child("\(contact.actualUserId).jpg")
+            
+            // limit profile images to 2MB (2 * 1024 * 1024 bytes)
+            profileImgRef.getData(maxSize: 2 * 1024 * 1024) { (data, error) in
+                if let error = error {
+                    print("Error fetching profile image:", error)
+                } else {
+                    let image = UIImage(data: data!)!
+                    profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
+                    cell.profileImageView.image = image
+                }
             }
         }
         
-        /*print(usersRef.child(contactId).value(forKey: "firstName"))
-        let fullName = "\(usersRef.child(contactId).value(forKey: "firstName") as! String) \(usersRef.child(contactId).value(forKey: "lastName") as! String)"
-        cell.textLabel?.text = fullName*/
-
         return cell
     }
- 
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
     
     // MARK : - Table view delegate
     
@@ -145,15 +165,5 @@ class ContactsViewController: UITableViewController {
         
         navigationController?.pushViewController(contactViewController, animated: true)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
 }

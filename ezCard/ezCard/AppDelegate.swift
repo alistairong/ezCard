@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let scanViewController = ScanViewController()
         scanViewController.tabBarItem = UITabBarItem(title: "Scan", image: #imageLiteral(resourceName: "qrCode"), tag: 1)
         
-        let contactsViewController = ContactsViewController(style: .grouped)
+        let contactsViewController = ContactsViewController(style: .plain)
         contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
         
         let profileViewController = ProfileViewController(style: .grouped)
