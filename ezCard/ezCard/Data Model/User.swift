@@ -33,6 +33,17 @@ class User {
         }
     }
     
+    var displayName: String {
+        switch type {
+        case .individual:
+            return firstName! + " " + lastName!
+        case .organization:
+            return organizationName!
+        case .unknown:
+            return email
+        }
+    }
+    
     let ref: DatabaseReference?
     let key: String
     
@@ -41,12 +52,40 @@ class User {
     let uid: String
     
     let email: String
-    
-    var displayName: String {
-        return email
+
+    /*
+    {
+        "data" : {
+            "email" : {
+                35923592 : {
+                    "label" : "personal"
+                    "data" : "jdoe142@email.com"
+                }
+            }
+        }
     }
+    */
+    var data: [String: [String: [String : Any]]]
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String) {
+    var transactionIds: [String: Bool]?
+    
+    // MARK: - Individual
+    
+    var firstName: String?
+    var lastName: String?
+    
+    var cardIds: [String: Bool]?
+    var contactIds: [String: Bool]?
+    
+    // MARK: - Organization
+    
+    var organizationName: String?
+    
+    var members: [String]?
+    
+    // MARK: - Init
+    
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String, data: [String: [String: [String : Any]]] = [:], transactionIds: [String: Bool]? = nil, firstName: String? = nil, lastName: String? = nil, cardIds: [String: Bool]? = nil, contactIds: [String: Bool]? = nil, organizationName: String? = nil, members: [String]? = nil) {
         self.ref = ref
         self.key = key
         
@@ -55,6 +94,22 @@ class User {
         self.uid = uid
         
         self.email = email
+        
+        self.data = data
+        
+        // individual
+        
+        self.firstName = firstName
+        self.lastName = lastName
+        
+        self.cardIds = cardIds
+        self.contactIds = contactIds
+        
+        // organization
+        
+        self.organizationName = organizationName
+        
+        self.members = members
     }
     
     convenience init?(snapshot: DataSnapshot) {
@@ -66,36 +121,81 @@ class User {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email)
+        let data = value["data"] as? [String: [String: [String : Any]]]
+        
+        let transactionIds = value["transactions"] as? [String: Bool]
+        
+        // individual
+        
+        let firstName = value["firstName"] as? String
+        let lastName = value["lastName"] as? String
+        
+        let cardIds = value["cards"] as? [String: Bool]
+        let contactIds = value["contactIds"] as? [String: Bool]
+        
+        // organization
+        
+        let organizationName = value["organizationName"] as? String
+        
+        let members = value["members"] as? [String]
+        
+        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email, data: data ?? [:], transactionIds: transactionIds, firstName: firstName, lastName: lastName, cardIds: cardIds, contactIds: contactIds, organizationName: organizationName, members: members)
     }
     
     static func fetchUser(with uid: String, completion: ((User?) -> Void)?) {
         let usersRef = Database.database().reference(withPath: "users")
         usersRef.child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let baseUser = User(snapshot: snapshot) else {
+            guard let user = User(snapshot: snapshot) else {
                 completion?(nil)
                 return
             }
             
-            switch baseUser.type {
-            case .individual:
-                let user = IndividualUser(snapshot: snapshot)
-                completion?(user)
-            case .organization:
-                let user = OrganizationUser(snapshot: snapshot)
-                completion?(user)
-            case .unknown:
-                completion?(baseUser)
-            }
+            completion?(user)
         })
     }
     
     func dictionaryRepresentation() -> [String: Any] {
-        return [
+        var dict: [String: Any] = [
             "type": type.rawValue,
             "email": email,
-            "uid": uid
+            "uid": uid,
         ]
+        
+        dict["data"] = data
+        
+        if let transactionIds = self.transactionIds {
+            dict["transactions"] = transactionIds
+        }
+        
+        // individual
+        
+        if let firstName = self.firstName {
+            dict["firstName"] = firstName
+        }
+        
+        if let lastName = self.lastName {
+            dict["lastName"] = lastName
+        }
+        
+        if let cardIds = self.cardIds {
+            dict["cards"] = cardIds
+        }
+        
+        if let contactIds = self.contactIds {
+            dict["contacts"] = contactIds
+        }
+        
+        // organization
+        
+        if let organizationName = self.organizationName {
+            dict["organizationName"] = organizationName
+        }
+        
+        if let members = self.members {
+            dict["members"] = members
+        }
+        
+        return dict
     }
     
 }

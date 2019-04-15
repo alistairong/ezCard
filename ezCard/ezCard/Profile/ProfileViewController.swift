@@ -27,13 +27,11 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         didSet {
             tableView.separatorColor = (user?.type == .individual) ? .clear : nil
             
-            tableView.tableHeaderView = headerView(name: user?.displayName)
+            tableView.tableHeaderView = headerView(name: Auth.auth().currentUser?.displayName ?? user?.displayName)
             observeData()
             
             if user?.uid == User.current?.uid {
-                let signOutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
-                signOutButton.tintColor = .red
-                navigationItem.leftBarButtonItems = [UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:))), signOutButton]
+                navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear"), style: .plain, target: self, action: #selector(settingsTapped(_:)))
                 navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped(_:)))
             } else {
                 navigationItem.leftBarButtonItem = nil
@@ -89,14 +87,30 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicTableViewCellReuseIdentifier)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(currentUserInfoDidChange), name: .currentUserInfoDidChange, object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+        refreshUI()
+    }
+    
+    func refreshUI() {
         userRelevantDataRef?.removeAllObservers()
         relevantDataRef?.removeAllObservers()
         observeData()
+        
+        tableView.tableHeaderView = headerView(name: Auth.auth().currentUser?.displayName ?? user?.displayName)
+    }
+    
+    @objc func currentUserInfoDidChange() {
+        refreshUI()
     }
     
     func observeData() {
@@ -158,23 +172,10 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         return headerView
     }
     
-    @objc func signOut() {
-        do {
-            try Auth.auth().signOut()
-            
-            tabBarController?.selectedIndex = 0
-            
-            let loginViewController = LoginViewController()
-            present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
-        } catch {
-            let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            present(alertController, animated: true, completion: nil)
-        }
-    }
-    
     @objc func settingsTapped(_ sender: Any?) {
-        // TODO: show settings screen
+        let settingsViewController = SettingsViewController(style: .grouped)
+        settingsViewController.user = user
+        navigationController?.pushViewController(settingsViewController, animated: true)
     }
     
     @objc func addTapped(_ sender: Any?) {

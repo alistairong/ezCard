@@ -93,15 +93,8 @@ class ContactsViewController: UITableViewController {
                     var invalidContactKeys: Set<String> = []
                     for contact in self.contacts {
                         let userSnapshot = snapshot.childSnapshot(forPath: contact.actualUserId)
-                        if let baseUser = User(snapshot: userSnapshot) {
-                            switch baseUser.type {
-                            case .individual:
-                                self.users[contact.actualUserId] = IndividualUser(snapshot: userSnapshot)
-                            case .organization:
-                                self.users[contact.actualUserId] = OrganizationUser(snapshot: userSnapshot)
-                            case .unknown:
-                                self.users[contact.actualUserId] = baseUser
-                            }
+                        if let user = User(snapshot: userSnapshot) {
+                            self.users[contact.actualUserId] = user
                         } else {
                             invalidContactKeys.insert(contact.key)
                         }

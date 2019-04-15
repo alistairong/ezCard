@@ -249,10 +249,10 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 // create the user's entry in the database
                 switch strongSelf.type {
                 case .individual:
-                    let user = IndividualUser(uid: newUser.uid, email: email, firstName: strongSelf.firstName!, lastName: strongSelf.lastName!)
+                    let user = User(uid: newUser.uid, type: strongSelf.type, email: email, firstName: strongSelf.firstName!, lastName: strongSelf.lastName!)
                     userRef.setValue(user.dictionaryRepresentation())
                 case .organization:
-                    let user = OrganizationUser(uid: newUser.uid, email: email, name: strongSelf.organizationName!)
+                    let user = User(uid: newUser.uid, type: strongSelf.type, email: email, organizationName: strongSelf.organizationName!)
                     userRef.setValue(user.dictionaryRepresentation())
                 case .unknown:
                     fatalError("UserType was unknown.")

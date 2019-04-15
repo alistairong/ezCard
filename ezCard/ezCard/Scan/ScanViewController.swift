@@ -120,26 +120,11 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
                     scanConfirmationViewController.card = card
                     
                     strongSelf.usersRef.child(card.userId).observeSingleEvent(of: .value, with: { (snapshot) in
-                        guard let baseUser = User(snapshot: snapshot) else {
+                        guard let user = User(snapshot: snapshot) else {
                             return
                         }
                         
-                        switch baseUser.type {
-                        case .individual:
-                            guard let individualUser = IndividualUser(snapshot: snapshot) else {
-                                break
-                            }
-                            
-                            scanConfirmationViewController.sharingUser = individualUser
-                        case .organization:
-                            guard let organizationUser = OrganizationUser(snapshot: snapshot) else {
-                                break
-                            }
-                            
-                            scanConfirmationViewController.sharingUser = organizationUser
-                        case .unknown:
-                            scanConfirmationViewController.sharingUser = baseUser
-                        }
+                        scanConfirmationViewController.sharingUser = user
                         
                         strongSelf.present(scanConfirmationViewController, animated: true, completion: nil)
                     })

@@ -37,11 +37,12 @@
 		497B36FD2249E4600030FE9F /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36FC2249E4600030FE9F /* CardView.xib */; };
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
+		49E37E302264C4E000F0A2AA /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */; };
+		49E37E332264CC5C00F0A2AA /* DataFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */; };
+		49E37E342264CC5C00F0A2AA /* DataFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */; };
 		49EC4E9F2257F78100A3073B /* OrganizationMemberSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */; };
 		49F57C7C224AC25F000C365A /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7B224AC25F000C365A /* Card.swift */; };
 		49F57C80224AD6F2000C365A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C7F224AD6F2000C365A /* User.swift */; };
-		49F57C82224B0483000C365A /* OrganizationUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C81224B0483000C365A /* OrganizationUser.swift */; };
-		49F57C84224B0494000C365A /* IndividualUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C83224B0494000C365A /* IndividualUser.swift */; };
 		49F57C87224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F57C85224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift */; };
 		49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */; };
 		F34CE4F3224D99E30075A23F /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CE4F2224D99E30075A23F /* Transaction.swift */; };
@@ -83,11 +84,12 @@
 		497B36FC2249E4600030FE9F /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
+		49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFieldTableViewCell.swift; sourceTree = "<group>"; };
+		49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DataFieldTableViewCell.xib; sourceTree = "<group>"; };
 		49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationMemberSelectionViewController.swift; sourceTree = "<group>"; };
 		49F57C7B224AC25F000C365A /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		49F57C7F224AD6F2000C365A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		49F57C81224B0483000C365A /* OrganizationUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationUser.swift; sourceTree = "<group>"; };
-		49F57C83224B0494000C365A /* IndividualUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualUser.swift; sourceTree = "<group>"; };
 		49F57C85224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectTextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoundedRectTextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		59506B0FA1DB936E64A2E2C2 /* Pods-ezCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.release.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.release.xcconfig"; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 		494E8D0B22307F3900B5A7E1 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */,
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
 				49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */,
 				49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */,
@@ -218,6 +221,8 @@
 				49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */,
 				497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */,
 				497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */,
+				49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */,
+				49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */,
 			);
 			path = "Table View Cells";
 			sourceTree = "<group>";
@@ -229,8 +234,6 @@
 				F34CE4F2224D99E30075A23F /* Transaction.swift */,
 				F34CE4F4224D9A320075A23F /* Contact.swift */,
 				49F57C7F224AD6F2000C365A /* User.swift */,
-				49F57C81224B0483000C365A /* OrganizationUser.swift */,
-				49F57C83224B0494000C365A /* IndividualUser.swift */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				497B36FD2249E4600030FE9F /* CardView.xib in Resources */,
 				493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */,
 				49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */,
+				49E37E342264CC5C00F0A2AA /* DataFieldTableViewCell.xib in Resources */,
 				497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */,
 				49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */,
 				494E8CF52230691800B5A7E1 /* ScanViewController.xib in Resources */,
@@ -395,8 +399,8 @@
 				495CF42A224AA526008CDB58 /* GlobalConstants.swift in Sources */,
 				493C0D492226E31B00DF2482 /* AppDelegate.swift in Sources */,
 				494E8D0222307D4400B5A7E1 /* ContactViewController.swift in Sources */,
-				49F57C82224B0483000C365A /* OrganizationUser.swift in Sources */,
 				497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */,
+				49E37E332264CC5C00F0A2AA /* DataFieldTableViewCell.swift in Sources */,
 				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
 				497B36FB2249E3B40030FE9F /* CardView.swift in Sources */,
@@ -412,10 +416,10 @@
 				49F57C7C224AC25F000C365A /* Card.swift in Sources */,
 				4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,
+				49E37E302264C4E000F0A2AA /* SettingsViewController.swift in Sources */,
 				49EC4E9F2257F78100A3073B /* OrganizationMemberSelectionViewController.swift in Sources */,
 				49563D04225AE486006A2C7B /* ExpandedCardViewController.swift in Sources */,
 				49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */,
-				49F57C84224B0494000C365A /* IndividualUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
