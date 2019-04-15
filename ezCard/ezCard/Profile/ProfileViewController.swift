@@ -27,7 +27,9 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         didSet {
             tableView.separatorColor = (user?.type == .individual) ? .clear : nil
             
-            tableView.tableHeaderView = headerView(name: Auth.auth().currentUser?.displayName ?? user?.displayName)
+            profileButtonView.user = user
+            nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
+            
             observeData()
             
             if user?.uid == User.current?.uid {
@@ -78,6 +80,9 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
     
     var dataArr: [Any] = []
     
+    let nameLabel = UILabel()
+    let profileButtonView = ProfileButtonView()
+    
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -87,6 +92,30 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicTableViewCellReuseIdentifier)
+        
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
+        headerView.backgroundColor = .clear
+        
+        headerView.addSubview(profileButtonView)
+        
+        profileButtonView.translatesAutoresizingMaskIntoConstraints = false
+        profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
+        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
+        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16).isActive = true
+        profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
+        
+        nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
+        nameLabel.font = UIFont.systemFont(ofSize: 31, weight: .bold)
+        headerView.addSubview(nameLabel)
+        
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        nameLabel.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16).isActive = true
+        nameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        
+        tableView.tableHeaderView = headerView
         
         NotificationCenter.default.addObserver(self, selector: #selector(currentUserInfoDidChange), name: .currentUserInfoDidChange, object: nil)
     }
@@ -106,7 +135,8 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         relevantDataRef?.removeAllObservers()
         observeData()
         
-        tableView.tableHeaderView = headerView(name: Auth.auth().currentUser?.displayName ?? user?.displayName)
+        profileButtonView.user = user
+        nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
     }
     
     @objc func currentUserInfoDidChange() {
@@ -144,34 +174,6 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         }
     }
     
-    func headerView(name: String?) -> UIView {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
-        headerView.backgroundColor = .clear
-        
-        let profileButtonView = ProfileButtonView()
-        headerView.addSubview(profileButtonView)
-        
-        profileButtonView.translatesAutoresizingMaskIntoConstraints = false
-        profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
-        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
-        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16).isActive = true
-        profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
-        
-        let nameLabel = UILabel()
-        nameLabel.text = name
-        nameLabel.font = UIFont.systemFont(ofSize: 31, weight: .bold)
-        headerView.addSubview(nameLabel)
-        
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        nameLabel.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        
-        return headerView
-    }
-    
     @objc func settingsTapped(_ sender: Any?) {
         let settingsViewController = SettingsViewController(style: .grouped)
         settingsViewController.user = user
@@ -182,6 +184,7 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         if user?.type == .individual {
             let manageCardViewController = ManageCardViewController(style: .grouped)
             manageCardViewController.delegate = self
+            manageCardViewController.user = user
             present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
         } else if user?.type == .organization {
             let organizationMemberSelectionViewController = OrganizationMemberSelectionViewController()

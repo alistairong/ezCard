@@ -19,6 +19,8 @@ class ProfileButtonView: UIView {
         static let defaultImage = #imageLiteral(resourceName: "person")
     }
     
+    private var containerView: UIView!
+    private var defaultProfileImageView: UIImageView!
     private var profileImageView: UIImageView!
     private var profileButton: UIButton!
     
@@ -34,7 +36,7 @@ class ProfileButtonView: UIView {
         self.init(buttonSize: ProfileButtonView.defaultSize)
     }
 
-    init(user: User? = nil, buttonSize: CGFloat) {
+    init(user: User? = User.current, buttonSize: CGFloat) {
         super.init(frame: CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize))
         
         commonInit()
@@ -56,45 +58,66 @@ class ProfileButtonView: UIView {
     }
     
     private func commonInit() {
-        profileButton = UIButton(frame: CGRect(x: 0, y: -Constants.shadowOffset, width: frame.width, height: frame.height))
+        containerView = UIView(frame: CGRect(x: 0, y: -Constants.shadowOffset, width: frame.width, height: frame.height))
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .lightGray
+        containerView.layer.cornerRadius = containerView.bounds.width / 2
+        containerView.layer.borderWidth = 3.0
+        containerView.layer.borderColor = UIColor.white.cgColor
+        containerView.clipsToBounds = false
+        containerView.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
+        containerView.layer.shadowRadius = 2.0
+        containerView.layer.shadowOpacity = 0.5
+        addSubview(containerView)
+        
+        containerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        containerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        defaultProfileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height))
+        defaultProfileImageView.translatesAutoresizingMaskIntoConstraints = false
+        defaultProfileImageView.clipsToBounds = true
+        defaultProfileImageView.layer.cornerRadius = (containerView.bounds.width - 2 * Constants.imageViewPadding) / 2
+        defaultProfileImageView.tintColor = .darkGray
+        defaultProfileImageView.image = Constants.defaultImage
+        defaultProfileImageView.contentMode = .scaleAspectFit
+        containerView.addSubview(defaultProfileImageView)
+
+        defaultProfileImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.imageViewPadding).isActive = true
+        defaultProfileImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.imageViewPadding).isActive = true
+        defaultProfileImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: Constants.imageViewPadding).isActive = true
+        defaultProfileImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        
+        profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height))
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.clipsToBounds = true
+        profileImageView.layer.cornerRadius = containerView.bounds.width / 2
+        profileImageView.contentMode = .scaleAspectFill
+        containerView.addSubview(profileImageView)
+        
+        profileImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0).isActive = true
+        profileImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0).isActive = true
+        profileImageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 0).isActive = true
+        profileImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        
+        profileButton = UIButton(frame: containerView.frame)
         profileButton.translatesAutoresizingMaskIntoConstraints = false
-        profileButton.backgroundColor = .lightGray
-        profileButton.layer.cornerRadius = profileButton.bounds.width / 2
-        profileButton.layer.borderWidth = 3.0
-        profileButton.layer.borderColor = UIColor.white.cgColor
-        profileButton.clipsToBounds = false
-        profileButton.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
-        profileButton.layer.shadowRadius = 2.0
-        profileButton.layer.shadowOpacity = 0.5
         profileButton.addTarget(self, action: #selector(profileButtonTapped(_:)), for: .touchUpInside)
         addSubview(profileButton)
         
-        profileButton.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        profileButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        profileButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        profileButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        
-        profileImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: profileButton.frame.width, height: profileButton.frame.height))
-        profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.clipsToBounds = true
-        profileImageView.layer.cornerRadius = (profileButton.bounds.width - 2 * Constants.imageViewPadding) / 2
-        profileImageView.tintColor = .darkGray
-        profileImageView.image = Constants.defaultImage
-        profileImageView.contentMode = .scaleAspectFit
-        profileButton.addSubview(profileImageView)
-        
-        profileImageView.leadingAnchor.constraint(equalTo: profileButton.leadingAnchor, constant: Constants.imageViewPadding).isActive = true
-        profileImageView.trailingAnchor.constraint(equalTo: profileButton.trailingAnchor, constant: -Constants.imageViewPadding).isActive = true
-        profileImageView.topAnchor.constraint(greaterThanOrEqualTo: profileButton.topAnchor, constant: Constants.imageViewPadding).isActive = true
-        profileImageView.bottomAnchor.constraint(equalTo: profileButton.bottomAnchor).isActive = true
-        profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor, multiplier: 1.0).isActive = true
+        profileButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+        profileButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        profileButton.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        profileButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        profileButton?.layer.cornerRadius = profileButton.bounds.width / 2
-        profileImageView?.layer.cornerRadius = (profileButton.bounds.width - 2 * Constants.imageViewPadding) / 2
+        containerView?.layer.cornerRadius = containerView.bounds.width / 2
+        profileImageView?.layer.cornerRadius = containerView.bounds.width / 2
+        defaultProfileImageView?.layer.cornerRadius = (profileButton.bounds.width - 2 * Constants.imageViewPadding) / 2
     }
     
     @objc private func profileButtonTapped(_ sender: Any?) {
@@ -102,13 +125,8 @@ class ProfileButtonView: UIView {
     }
     
     func refresh(forceRefetch: Bool = false) {
-        guard let user = self.user else {
-            profileImageView.image = Constants.defaultImage
-            return
-        }
-        
         weak var weakProfileImageView = profileImageView
-        fetchProfileImage(for: user) { (image, error) in
+        fetchProfileImage(forceRefetch: forceRefetch) { (image, error) in
             guard let profileImage = image else {
                 weakProfileImageView?.image = Constants.defaultImage
                 return
@@ -118,8 +136,11 @@ class ProfileButtonView: UIView {
         }
     }
     
-    private func fetchProfileImage(for user: User, forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
-        self.user = user
+    private func fetchProfileImage(forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
+        guard let user = self.user else {
+            completion(Constants.defaultImage, nil)
+            return
+        }
         
         let cacheKey = "profile_image_\(user.uid)"
         

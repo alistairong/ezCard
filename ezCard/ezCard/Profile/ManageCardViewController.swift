@@ -21,7 +21,8 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     
     weak var delegate: ManageCardViewControllerDelegate?
     
-    var availableFields = ["phone", "email", "github"]
+    var user: User!
+    var dataItems: [(key: String, value: [String: Any])] = []
     
     var card: Card? // IMPORTANT: this is only used in viewDidLoad to create a copy in scratchPadCard
     private var scratchPadCard: Card!
@@ -31,12 +32,18 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for (field, dataArr) in user.data {
+            for data in dataArr {
+                dataItems.append((key: field, value: data))
+            }
+        }
+        
         isEditingCard = (card != nil)
         
         if let card = self.card {
             scratchPadCard = Card(ref: card.ref, key: card.key, userId: card.userId, identifier: card.identifier, createdAt: card.createdAt, name: card.name, fields: card.fields)
         } else {
-            scratchPadCard = Card(userId: User.current!.uid)
+            scratchPadCard = Card(userId: user.uid)
         }
         
         title = (isEditingCard ? "Edit " : "Add ") + "Card"
@@ -45,7 +52,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         navigationItem.rightBarButtonItem?.isEnabled = scratchPadCard.isValid
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "x"), style: .plain, target: self, action: #selector(cancelTapped(_:)))
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: ReuseIdentifiers.basic)
+        tableView.register(SubtitleTableViewCell.self, forCellReuseIdentifier: ReuseIdentifiers.basic)
         tableView.register(UINib(nibName: "TextFieldTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.textField)
     }
     
@@ -66,12 +73,12 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (section == 0) ? 1 : availableFields.count
+        return (section == 0) ? 1 : dataItems.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.section == 0) ? ReuseIdentifiers.textField : ReuseIdentifiers.basic, for: indexPath)
-
+        
         cell.selectionStyle = .none
         
         if indexPath.section == 0 { // card name
@@ -92,10 +99,18 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
                 strongSelf.navigationItem.rightBarButtonItem?.isEnabled = strongSelf.scratchPadCard.isValid
             }
         } else if indexPath.section == 1 { // data fields
-            let field = availableFields[indexPath.row]
+            let dataItem = dataItems[indexPath.row]
             
-            cell.accessoryType = scratchPadCard.fields.keys.contains(field) ? .checkmark : .none
-            cell.textLabel?.text = field
+            cell.accessoryType = scratchPadCard.fields.keys.contains(dataItem.key) ? .checkmark : .none
+            
+            if let label = dataItem.value["label"] as? String {
+                cell.textLabel?.text = dataItem.key.capitalized + " (\(label))"
+            } else {
+                cell.textLabel?.text = dataItem.key.capitalized
+            }
+            
+            cell.detailTextLabel?.text = dataItem.value["data"] as? String
+            cell.detailTextLabel?.textColor = .lightGray
         }
 
         return cell
@@ -115,16 +130,16 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
-        let field = availableFields[indexPath.row]
+        let dataItem = dataItems[indexPath.row]
         
         var fields = scratchPadCard.fields
-        if fields.keys.contains(field) {
-            fields.removeValue(forKey: field)
+        if fields.keys.contains(dataItem.key) {
+            fields.removeValue(forKey: dataItem.key)
         } else {
-            fields[field] = "..." // TODO: set card field to user data
+            fields[dataItem.key] = dataItem.value["data"] as? String
         }
         
-        cell.accessoryType = fields.keys.contains(field) ? .checkmark : .none
+        cell.accessoryType = fields.keys.contains(dataItem.key) ? .checkmark : .none
         
         scratchPadCard.fields = fields
         
@@ -139,4 +154,16 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         return true
     }
 
+}
+
+private class SubtitleTableViewCell: UITableViewCell {
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
 }

@@ -18,7 +18,6 @@ enum DataField: String, CaseIterable {
     case title
     case company
     case website
-    case birthday
     case socialProfile = "social profile"
 }
 
@@ -26,7 +25,7 @@ extension Notification.Name {
     static let currentUserInfoDidChange = Notification.Name("currentUserInfoDidChange")
 }
 
-class SettingsViewController: UITableViewController, UITextFieldDelegate {
+class SettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     private struct Constants {
         static let basicCellReuseIdentifier = "basic"
@@ -39,6 +38,10 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
     var user: User!
     
     var signingOut = false
+    
+    let imagePickerController = UIImagePickerController()
+    
+    let profileButtonView = ProfileButtonView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,9 +59,14 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
         headerView.backgroundColor = .clear
         
-        let profileButtonView = ProfileButtonView()
-        profileButtonView.tappedCallback = {
-            // TODO: select profile image
+        profileButtonView.tappedCallback = { [weak self] in
+            guard let self = self else { return }
+            
+            self.imagePickerController.sourceType = .photoLibrary
+            self.imagePickerController.delegate = self
+            self.imagePickerController.allowsEditing = true
+            
+            self.present(self.imagePickerController, animated: true)
         }
         headerView.addSubview(profileButtonView)
         
@@ -155,6 +163,51 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
     @objc func lastNameValueChanged(_ sender: UITextField) {
         user.lastName = sender.text ?? ""
     }
+    
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let currentUser = Auth.auth().currentUser else {
+            print("uid was nil")
+            return
+        }
+        
+        guard let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage, let imageData = image.jpegData(compressionQuality: 0.3) else {
+            print("Image was nil")
+            return
+        }
+        
+        let profileImgRef = Storage.storage().reference().child("profile_images").child("\(currentUser.uid).jpg")
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        profileImgRef.putData(imageData, metadata: metadata) { [weak self] (metadata, error) in
+            profileImgRef.downloadURL(completion: { (url, error) in
+                if let error = error {
+                    let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self?.present(alertController, animated: true, completion: nil)
+                    
+                    return
+                }
+                
+                let changeRequest = currentUser.createProfileChangeRequest()
+                changeRequest.photoURL = url
+                changeRequest.commitChanges { (error) in
+                    if let error = error {
+                        let alertController = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                        self?.present(alertController, animated: true, completion: nil)
+                        
+                        return
+                    }
+                    
+                    self?.profileButtonView.refresh(forceRefetch: true)
+                }
+            })
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
 
     // MARK: - Table view data source
 
@@ -169,7 +222,7 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let dataField = DataField.allCases[indexPath.section]
-        let fieldData = (user.data[dataField.rawValue] ?? [:]).sorted(by: { $0.key < $1.key })
+        let fieldData = user.data[dataField.rawValue] ?? []
         
         let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.row < fieldData.count) ? Constants.dataCellReuseIdentifier : Constants.basicCellReuseIdentifier, for: indexPath)
         
@@ -177,15 +230,14 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
             // data cell
             let cell = cell as! DataFieldTableViewCell
             
-            //let index = fieldData[indexPath.row].key
-            let dataDict = fieldData[indexPath.row].value // ["label": String, "data" : Any]
+            let dataDict = fieldData[indexPath.row] // ["label": String, "data" : Any]
             
             cell.textField.delegate = self
             
             cell.textField.placeholder = dataField.rawValue
             
             cell.textFieldEditedAction = { [weak self] (textField) in
-                self?.user.data[dataField.rawValue]?[String(indexPath.row)]?["data"] = textField.text
+                self?.user.data[dataField.rawValue]?[indexPath.row]["data"] = textField.text
             }
             
             cell.button.setTitle((dataDict["label"] as! String), for: .normal)
@@ -208,7 +260,7 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let dataField = DataField.allCases[indexPath.section]
-        let fieldData = user.data[dataField.rawValue] ?? [:]
+        let fieldData = user.data[dataField.rawValue] ?? []
         return (indexPath.row < fieldData.count) ? .delete : .insert
     }
     
@@ -216,10 +268,7 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
         if editingStyle == .delete {
             let dataField = DataField.allCases[indexPath.section]
             
-            let fieldData = user.data[dataField.rawValue]!.sorted(by: { $0.key < $1.key })
-            
-            let entry = fieldData[indexPath.row]
-            user.data[dataField.rawValue]!.removeValue(forKey: entry.key)
+            user.data[dataField.rawValue]!.remove(at: indexPath.row)
             
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -237,12 +286,10 @@ class SettingsViewController: UITableViewController, UITextFieldDelegate {
         
         let defaultDataDict = ["label" : "personal", "data": ""]
         
-        let newKey = String(user.data[dataField.rawValue]?.count ?? 0)
-        
         if user.data[dataField.rawValue] != nil {
-            user.data[dataField.rawValue]![newKey] = defaultDataDict
+            user.data[dataField.rawValue]!.append(defaultDataDict)
         } else {
-            user.data[dataField.rawValue] = [newKey : defaultDataDict]
+            user.data[dataField.rawValue] = [defaultDataDict]
         }
         
         tableView.insertRows(at: [IndexPath(row: user.data[dataField.rawValue]!.count - 1, section: section)], with: .automatic)
