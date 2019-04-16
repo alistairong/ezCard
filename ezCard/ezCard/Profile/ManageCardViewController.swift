@@ -38,6 +38,14 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
             }
         }
         
+        if let company = user.company {
+            dataItems.append((key: "company", value: ["data": company]))
+        }
+        
+        if let jobTitle = user.jobTitle {
+            dataItems.append((key: "job title", value: ["data": jobTitle]))
+        }
+        
         isEditingCard = (card != nil)
         
         if let card = self.card {

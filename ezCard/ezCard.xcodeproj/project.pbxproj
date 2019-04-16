@@ -28,6 +28,7 @@
 		49563D02225AE074006A2C7B /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49563D00225AE074006A2C7B /* ContactTableViewCell.swift */; };
 		49563D04225AE486006A2C7B /* ExpandedCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */; };
 		495CF42A224AA526008CDB58 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495CF429224AA526008CDB58 /* GlobalConstants.swift */; };
+		495EC36222655E6F0040676C /* LabelSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495EC36122655E6F0040676C /* LabelSelectionViewController.swift */; };
 		497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */; };
 		497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */; };
 		497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497B36F22249B96D0030FE9F /* RegisterViewController.swift */; };
@@ -75,6 +76,7 @@
 		49563D00225AE074006A2C7B /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCardViewController.swift; sourceTree = "<group>"; };
 		495CF429224AA526008CDB58 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		495EC36122655E6F0040676C /* LabelSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSelectionViewController.swift; sourceTree = "<group>"; };
 		497B36EE2249B7BD0030FE9F /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		497B36EF2249B7BD0030FE9F /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		497B36F22249B96D0030FE9F /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */,
+				495EC36122655E6F0040676C /* LabelSelectionViewController.swift */,
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
 				49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */,
 				49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */,
@@ -403,6 +406,7 @@
 				49E37E332264CC5C00F0A2AA /* DataFieldTableViewCell.swift in Sources */,
 				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
+				495EC36222655E6F0040676C /* LabelSelectionViewController.swift in Sources */,
 				497B36FB2249E3B40030FE9F /* CardView.swift in Sources */,
 				494E8CF0223068DA00B5A7E1 /* FeedViewController.swift in Sources */,
 				49F57C80224AD6F2000C365A /* User.swift in Sources */,

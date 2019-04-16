@@ -12,4 +12,10 @@ class DataFieldTableViewCell: TextFieldTableViewCell {
 
     @IBOutlet weak var button: UIButton!
     
+    var buttonAction: (() -> Void)?
+    
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        buttonAction?()
+    }
+    
 }

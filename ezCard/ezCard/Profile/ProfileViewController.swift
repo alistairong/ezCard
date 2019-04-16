@@ -168,6 +168,16 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
                     }
                 }
                 
+                if self?.user?.type == .individual {
+                    var tempData = newData as! [Card]
+                    tempData.sort(by: { $0.createdAt > $1.createdAt }) // sort by most recently created
+                    newData = tempData
+                } else if self?.user?.type == .organization {
+                    var tempData = newData as! [User]
+                    tempData.sort(by: { $0.displayName > $1.displayName }) // sort by user display name
+                    newData = tempData
+                }
+                
                 self?.dataArr = newData
                 self?.tableView.reloadData()
             }
@@ -249,10 +259,13 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
             }
             
             cell.cardView.moreButtonTappedCallback = { [weak self] in
+                guard let self = self else { return }
+                
                 let manageCardViewController = ManageCardViewController(style: .grouped)
                 manageCardViewController.delegate = self
                 manageCardViewController.card = card
-                self?.present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
+                manageCardViewController.user = self.user
+                self.present(UINavigationController(rootViewController: manageCardViewController), animated: true, completion: nil)
             }
         } else if user?.type == .organization {
             let member = dataArr[indexPath.row] as! User

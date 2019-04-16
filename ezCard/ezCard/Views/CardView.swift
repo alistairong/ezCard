@@ -123,8 +123,10 @@ class CardView: UIView {
         detailLabel4.text = nil
         dataLabel4.text = nil
         
+        let sortedFields = card.fields.sorted(by: { $0.key < $1.key })
+        
         var counter = 1
-        for (key, value) in card.fields {
+        for (key, value) in sortedFields {
             if counter > Constants.numFieldsShown {
                 break
             }

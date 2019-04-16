@@ -62,6 +62,9 @@ class User {
     var firstName: String?
     var lastName: String?
     
+    var company: String?
+    var jobTitle: String?
+    
     var cardIds: [String: Bool]?
     var contactIds: [String: Bool]?
     
@@ -73,7 +76,7 @@ class User {
     
     // MARK: - Init
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String, data: [String: [[String : Any]]] = [:], transactionIds: [String: Bool]? = nil, firstName: String? = nil, lastName: String? = nil, cardIds: [String: Bool]? = nil, contactIds: [String: Bool]? = nil, organizationName: String? = nil, members: [String]? = nil) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String, data: [String: [[String : Any]]] = [:], transactionIds: [String: Bool]? = nil, firstName: String? = nil, lastName: String? = nil, company: String? = nil, jobTitle: String? = nil, cardIds: [String: Bool]? = nil, contactIds: [String: Bool]? = nil, organizationName: String? = nil, members: [String]? = nil) {
         self.ref = ref
         self.key = key
         
@@ -89,6 +92,9 @@ class User {
         
         self.firstName = firstName
         self.lastName = lastName
+        
+        self.company = company
+        self.jobTitle = jobTitle
         
         self.cardIds = cardIds
         self.contactIds = contactIds
@@ -118,6 +124,9 @@ class User {
         let firstName = value["firstName"] as? String
         let lastName = value["lastName"] as? String
         
+        let company = value["company"] as? String
+        let jobTitle = value["jobTitle"] as? String
+        
         let cardIds = value["cards"] as? [String: Bool]
         let contactIds = value["contactIds"] as? [String: Bool]
         
@@ -127,7 +136,7 @@ class User {
         
         let members = value["members"] as? [String]
         
-        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email, data: data ?? [:], transactionIds: transactionIds, firstName: firstName, lastName: lastName, cardIds: cardIds, contactIds: contactIds, organizationName: organizationName, members: members)
+        self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email, data: data ?? [:], transactionIds: transactionIds, firstName: firstName, lastName: lastName, company: company, jobTitle: jobTitle, cardIds: cardIds, contactIds: contactIds, organizationName: organizationName, members: members)
     }
     
     static func fetchUser(with uid: String, completion: ((User?) -> Void)?) {
@@ -163,6 +172,14 @@ class User {
         
         if let lastName = self.lastName {
             dict["lastName"] = lastName
+        }
+        
+        if let company = self.company {
+            dict["company"] = company
+        }
+        
+        if let jobTitle = self.jobTitle {
+            dict["jobTitle"] = jobTitle
         }
         
         if let cardIds = self.cardIds {
