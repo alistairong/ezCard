@@ -10,6 +10,13 @@ import UIKit
 import FirebaseStorage
 import FirebaseDatabase
 
+extension ContactsViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
+
 class ContactsViewController: UITableViewController {
     
     private struct Constants {
@@ -29,6 +36,9 @@ class ContactsViewController: UITableViewController {
     let contactsRef = Database.database().reference(withPath: "contacts")
     
     var contacts: [Contact] = []
+    var filteredContacts: [Contact] = []
+    
+    let contactSearchController = UISearchController(searchResultsController: nil)
     
     let usersRef = Database.database().reference(withPath: "users")
     
@@ -43,6 +53,8 @@ class ContactsViewController: UITableViewController {
         tableView.tableFooterView = UIView() // hide extra separators
         
         tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.contactTableViewCellReuseIdentifier)
+        
+        setUpContactSearchBar()
         
         observeContacts()
         
@@ -108,10 +120,33 @@ class ContactsViewController: UITableViewController {
         }
     }
     
+    // MARK: - Search Bar Functions
+    
+    func setUpContactSearchBar() {
+        SearchUtil.setUpSearchBar(viewController: self, searchResultsUpdater: self,
+                                  searchController: contactSearchController, placeholder: "Search Contacts")
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        filteredContacts = contacts.filter({ (contact : Contact) -> Bool in
+            return contact.actualUserId.lowercased().contains(searchText.lowercased())
+        })
+        
+        tableView.reloadData()
+    }
+    
+    func isFiltering() -> Bool {
+        return SearchUtil.isFiltering(searchController: contactSearchController)
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contacts.count
+        if (isFiltering()) {
+            return filteredContacts.count
+        } else {
+            return contacts.count
+        }
     }
     
     
@@ -120,7 +155,7 @@ class ContactsViewController: UITableViewController {
         
         cell.accessoryType = .disclosureIndicator
         
-        let contact = contacts[indexPath.row]
+        let contact = (isFiltering() ? filteredContacts[indexPath.row] : contacts[indexPath.row])
         let user = users[contact.actualUserId]!
         
         cell.nameLabel.text = user.displayName

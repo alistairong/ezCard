@@ -48,6 +48,7 @@
 		49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */; };
 		F34CE4F3224D99E30075A23F /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CE4F2224D99E30075A23F /* Transaction.swift */; };
 		F34CE4F5224D9A320075A23F /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CE4F4224D9A320075A23F /* Contact.swift */; };
+		F3F4E21D226AA94D0074F58A /* SearchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F4E21C226AA94D0074F58A /* SearchUtil.swift */; };
 		FC9F44353E4F40C261D9928C /* Pods_ezCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
 		F34CE4F2224D99E30075A23F /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		F34CE4F4224D9A320075A23F /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		F3F4E21C226AA94D0074F58A /* SearchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				493C0D472226E31B00DF2482 /* ezCard */,
+				F3F4E21B226AA9260074F58A /* Utility */,
 				493C0D462226E31B00DF2482 /* Products */,
 				F50D26C39B5F3F2E2FD89E05 /* Pods */,
 				00B4EF6F75182624479A6A57 /* Frameworks */,
@@ -249,6 +252,14 @@
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		F3F4E21B226AA9260074F58A /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F3F4E21C226AA94D0074F58A /* SearchUtil.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		F50D26C39B5F3F2E2FD89E05 /* Pods */ = {
@@ -411,6 +422,7 @@
 				494E8CF0223068DA00B5A7E1 /* FeedViewController.swift in Sources */,
 				49F57C80224AD6F2000C365A /* User.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
+				F3F4E21D226AA94D0074F58A /* SearchUtil.swift in Sources */,
 				49F57C87224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
 				497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */,

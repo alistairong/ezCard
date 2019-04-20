@@ -9,6 +9,13 @@
 import UIKit
 import FirebaseDatabase
 
+extension FeedViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
+
 class FeedViewController: UITableViewController {
     
     private struct Constants {
@@ -25,6 +32,9 @@ class FeedViewController: UITableViewController {
     
     let transactionsRef = Database.database().reference(withPath: "transactions")
     var transactions: [Transaction] = []
+    var filteredTransactions: [Transaction] = []
+    
+    let transactionSearchController = UISearchController(searchResultsController: nil)
     
     let cardsRef = Database.database().reference(withPath: "cards")
     var cards: [String: Card] = [:]
@@ -36,6 +46,8 @@ class FeedViewController: UITableViewController {
         
         tableView.separatorColor = .clear
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
+        
+        setUpTransactionSearchBar()
         
         observeTransactions()
         
@@ -96,10 +108,33 @@ class FeedViewController: UITableViewController {
         }
     }
     
+    // MARK: - Search Bar Functions
+    
+    func setUpTransactionSearchBar() {
+        SearchUtil.setUpSearchBar(viewController: self, searchResultsUpdater: self,
+                                  searchController: transactionSearchController, placeholder: "Search Feed")
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        filteredTransactions = transactions.filter({ (transaction : Transaction) -> Bool in
+            return transaction.identifier.lowercased().contains(searchText.lowercased())
+        })
+        
+        tableView.reloadData()
+    }
+    
+    func isFiltering() -> Bool {
+        return SearchUtil.isFiltering(searchController: transactionSearchController)
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return transactions.count
+        if (isFiltering()) {
+            return filteredTransactions.count
+        } else {
+            return transactions.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,7 +143,7 @@ class FeedViewController: UITableViewController {
         
         cell.selectionStyle = .none
         
-        let transaction = transactions[indexPath.row]
+        let transaction = (isFiltering() ? filteredTransactions[indexPath.row] : transactions[indexPath.row])
         let card = cards[transaction.key]!
         
         cell.cardView.configure(with: card)
