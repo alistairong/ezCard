@@ -88,6 +88,8 @@ class User {
         
         self.data = data
         
+        self.transactionIds = transactionIds
+        
         // individual
         
         self.firstName = firstName
@@ -128,7 +130,7 @@ class User {
         let jobTitle = value["jobTitle"] as? String
         
         let cardIds = value["cards"] as? [String: Bool]
-        let contactIds = value["contactIds"] as? [String: Bool]
+        let contactIds = value["contacts"] as? [String: Bool]
         
         // organization
         
