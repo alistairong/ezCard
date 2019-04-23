@@ -126,7 +126,6 @@
 			isa = PBXGroup;
 			children = (
 				493C0D472226E31B00DF2482 /* ezCard */,
-				F3F4E21B226AA9260074F58A /* Utility */,
 				493C0D462226E31B00DF2482 /* Products */,
 				F50D26C39B5F3F2E2FD89E05 /* Pods */,
 				00B4EF6F75182624479A6A57 /* Frameworks */,
@@ -155,6 +154,7 @@
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
 				49F35F622253F74800A03772 /* Views */,
 				49B5E05522497C9400D3F739 /* Table View Cells */,
+				F3F4E21B226AA9260074F58A /* Utility */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
 				493C0D5A2226E3AB00DF2482 /* GoogleService-Info.plist */,
