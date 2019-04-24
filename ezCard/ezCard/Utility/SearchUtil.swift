@@ -39,20 +39,6 @@ class SearchUtil {
         return card.name!.lowercased().contains(name.lowercased())
     }
     
-//    static func containsCardPhoneNumber(card: Card, phoneNumber: String) -> Bool {
-//        guard let cardPhoneNumber = card.fields["phone"] else {
-//            return false
-//        }
-//        return cardPhoneNumber.lowercased().contains(phoneNumber.lowercased())
-//    }
-//
-//    static func containsCardEmail(card: Card, email: String) -> Bool {
-//        guard let cardEmail = card.fields["email"] else {
-//            return false
-//        }
-//        return cardEmail.lowercased().contains(email.lowercased())
-//    }
-    
     /// Returns whether there is such a value stored in the card
     static func containsCardValue(card: Card, fieldValue: String) -> Bool {
         for (_, value) in card.fields {
