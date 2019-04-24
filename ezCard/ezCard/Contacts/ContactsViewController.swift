@@ -10,6 +10,7 @@ import UIKit
 import FirebaseStorage
 import FirebaseDatabase
 
+/// Makes 'ContactsViewController' compatible with UISearchResultsUpdating to use itself to update search results
 extension ContactsViewController: UISearchResultsUpdating {
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
@@ -17,6 +18,7 @@ extension ContactsViewController: UISearchResultsUpdating {
     }
 }
 
+/// ContactsViewController controls what is being populated and shown in the page listing all contacts.
 class ContactsViewController: UITableViewController {
     
     private struct Constants {
@@ -127,9 +129,15 @@ class ContactsViewController: UITableViewController {
                                   searchController: contactSearchController, placeholder: "Search Contacts")
     }
     
+    /// Filters contacts by whether contact has any field value searched.
+    /// If no such contact, returns false.
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         filteredContacts = contacts.filter({ (contact : Contact) -> Bool in
-            return contact.actualUserId.lowercased().contains(searchText.lowercased())
+            guard let user = users[contact.actualUserId] else {
+                return false
+            }
+            return SearchUtil.containsContactName(user: user, name: searchText) ||
+                   SearchUtil.containsContactValue(contact: contact, fieldValue: searchText)
         })
         
         tableView.reloadData()

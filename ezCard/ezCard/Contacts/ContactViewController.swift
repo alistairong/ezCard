@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseDatabase
 
+/// ContactViewController controls what is being populated and shown in the page showing a single contact.
 class ContactViewController: UITableViewController {
     
     private struct Constants {

@@ -145,7 +145,7 @@
 			children = (
 				493C0D482226E31B00DF2482 /* AppDelegate.swift */,
 				495CF429224AA526008CDB58 /* GlobalConstants.swift */,
-				49F35F612253F71D00A03772 /* Data Model */,
+				49F35F612253F71D00A03772 /* Data_Model */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
 				494E8D0A22307EFB00B5A7E1 /* Feed */,
@@ -153,7 +153,7 @@
 				494E8D0822307EE800B5A7E1 /* Contacts */,
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
 				49F35F622253F74800A03772 /* Views */,
-				49B5E05522497C9400D3F739 /* Table View Cells */,
+				49B5E05522497C9400D3F739 /* Table_View_Cells */,
 				F3F4E21B226AA9260074F58A /* Utility */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
@@ -214,7 +214,7 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
-		49B5E05522497C9400D3F739 /* Table View Cells */ = {
+		49B5E05522497C9400D3F739 /* Table_View_Cells */ = {
 			isa = PBXGroup;
 			children = (
 				49563D00225AE074006A2C7B /* ContactTableViewCell.swift */,
@@ -230,10 +230,10 @@
 				49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */,
 				49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */,
 			);
-			path = "Table View Cells";
+			path = Table_View_Cells;
 			sourceTree = "<group>";
 		};
-		49F35F612253F71D00A03772 /* Data Model */ = {
+		49F35F612253F71D00A03772 /* Data_Model */ = {
 			isa = PBXGroup;
 			children = (
 				49F57C7B224AC25F000C365A /* Card.swift */,
@@ -241,7 +241,7 @@
 				F34CE4F4224D9A320075A23F /* Contact.swift */,
 				49F57C7F224AD6F2000C365A /* User.swift */,
 			);
-			path = "Data Model";
+			path = Data_Model;
 			sourceTree = "<group>";
 		};
 		49F35F622253F74800A03772 /* Views */ = {
