@@ -9,6 +9,8 @@
 import Foundation
 import FirebaseDatabase
 
+/// Contact class stores all information of a Contact, which is an aggregation of all contact Cards
+/// scanned and saved from a specific User.
 class Contact {
     
     let ref: DatabaseReference?
@@ -44,6 +46,7 @@ class Contact {
         self.init(ref: snapshot.ref, key: snapshot.key, holdingUserId: holdingUserId, actualUserId: actualUserId, sharedCardIds: sharedCardIds, allSharedFields: allSharedFields)
     }
     
+    /// For conversion of a Contact to Firebase dictionary representation for storage in database.
     func dictionaryRepresentation() -> [String: Any] {
         return [
             "actualUserId": actualUserId,

@@ -9,6 +9,7 @@
 import Foundation
 import FirebaseDatabase
 
+/// Card class stores all information that is found in a single contact Card made by a User.
 class Card {
     
     let ref: DatabaseReference?
@@ -55,6 +56,7 @@ class Card {
         self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), name: name, fields: fields)
     }
     
+    /// For conversion of a Card to Firebase dictionary representation for storage in database.
     func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,

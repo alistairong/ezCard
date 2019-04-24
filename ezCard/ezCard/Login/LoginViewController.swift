@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 
+/// LoginViewController controls what is being populated and shown on the login page.
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var usernameTextField: UITextField?

@@ -9,6 +9,9 @@
 import Foundation
 import FirebaseDatabase
 
+/// Transaction class stores all the data associated with a particular transaction, which encompasses
+/// the scanning of cards.
+/// Transactions will be shown on the home feed.
 class Transaction {
     
     let ref: DatabaseReference?
@@ -48,6 +51,7 @@ class Transaction {
         self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), cardId: cardId)
     }
     
+    /// For conversion of a Transaction to Firebase dictionary representation for storage in database.
     func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,

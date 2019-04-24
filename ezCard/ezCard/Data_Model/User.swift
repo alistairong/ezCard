@@ -22,6 +22,7 @@ enum UserType: String, CaseIterable {
     static let allQuantifiableCases: [UserType] = [.individual, .organization]
 }
 
+/// User class stores all information that is input by the current logged in User from the settings page.
 class User {
     
     static var current: User? {
@@ -153,6 +154,7 @@ class User {
         })
     }
     
+    /// For conversion of a User to Firebase dictionary representation for storage in database.
     func dictionaryRepresentation() -> [String: Any] {
         var dict: [String: Any] = [
             "type": type.rawValue,
