@@ -9,6 +9,15 @@
 import UIKit
 import FirebaseDatabase
 
+/// Makes 'FeedViewController' compatible with UISearchResultsUpdating to use itself to update search results
+extension FeedViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
+
+/// FeedViewController controls what is being populated and shown in the home feed.
 class FeedViewController: UITableViewController {
     
     private struct Constants {
@@ -23,8 +32,12 @@ class FeedViewController: UITableViewController {
         return Database.database().reference(withPath: "users").child(currentUser.uid).child("transactions")
     }
     
+    // transactions being kept to access cards associated with it
     let transactionsRef = Database.database().reference(withPath: "transactions")
     var transactions: [Transaction] = []
+    var filteredTransactions: [Transaction] = []
+    
+    let transactionSearchController = UISearchController(searchResultsController: nil)
     
     let cardsRef = Database.database().reference(withPath: "cards")
     var cards: [String: Card] = [:]
@@ -36,6 +49,8 @@ class FeedViewController: UITableViewController {
         
         tableView.separatorColor = .clear
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
+        
+        setUpTransactionSearchBar()
         
         observeTransactions()
         
@@ -56,6 +71,7 @@ class FeedViewController: UITableViewController {
         observeTransactions()
     }
     
+    /// Fetching card from firebase based on transactions stored and observing if there is a change thereafter.
     func observeTransactions() {
         userTransactionsRef?.observe(.value) { [weak self] (snapshot) in
             guard let self = self else { return }
@@ -82,7 +98,7 @@ class FeedViewController: UITableViewController {
                     for transaction in self.transactions {
                         let cardSnapshot = snapshot.childSnapshot(forPath: transaction.cardId)
                         if let card = Card(snapshot: cardSnapshot) {
-                            self.cards[transaction.key] = card
+                            self.cards[transaction.cardId] = card
                         } else {
                             invalidTransactionKeys.insert(transaction.key)
                         }
@@ -96,10 +112,39 @@ class FeedViewController: UITableViewController {
         }
     }
     
+    // MARK: - Search Bar Functions
+    
+    func setUpTransactionSearchBar() {
+        SearchUtil.setUpSearchBar(viewController: self, searchResultsUpdater: self,
+                                  searchController: transactionSearchController, placeholder: "Search Feed")
+    }
+    
+    /// Filters transactions by whether card linked to transaction has any field value of card searched.
+    /// If no such card, returns false.
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        filteredTransactions = transactions.filter({ (transaction : Transaction) -> Bool in
+            guard let card = cards[transaction.cardId] else {
+                return false
+            }
+            return SearchUtil.containsCardName(card: card, name: searchText) ||
+                   SearchUtil.containsCardValue(card: card, fieldValue: searchText)
+        })
+
+        tableView.reloadData()
+    }
+    
+    func isFiltering() -> Bool {
+        return SearchUtil.isFiltering(searchController: transactionSearchController)
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return transactions.count
+        if (isFiltering()) {
+            return filteredTransactions.count
+        } else {
+            return transactions.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,8 +153,8 @@ class FeedViewController: UITableViewController {
         
         cell.selectionStyle = .none
         
-        let transaction = transactions[indexPath.row]
-        let card = cards[transaction.key]!
+        let transaction = (isFiltering() ? filteredTransactions[indexPath.row] : transactions[indexPath.row])
+        let card = cards[transaction.cardId]!
         
         cell.cardView.configure(with: card)
         

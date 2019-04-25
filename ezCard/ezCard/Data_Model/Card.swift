@@ -1,15 +1,16 @@
 //
-//  Transaction.swift
+//  Card.swift
 //  ezCard
 //
-//  Created by Alistair Ong on 3/28/19.
+//  Created by Andrew Whitehead on 3/26/19.
 //  Copyright © 2019 Andrew Whitehead. All rights reserved.
 //
 
 import Foundation
 import FirebaseDatabase
 
-class Transaction {
+/// Card class stores all information that is found in a single contact Card made by a User.
+class Card {
     
     let ref: DatabaseReference?
     let key: String
@@ -20,9 +21,14 @@ class Transaction {
     
     let createdAt: Date
     
-    var cardId: String
+    var name: String?
+    var fields: [String: String]
     
-    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), cardId: String) {
+    var isValid: Bool {
+        return ((name?.count ?? 0) > 0 && fields.count > 0)
+    }
+    
+    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), name: String? = nil, fields: [String: String] = [:]) {
         self.ref = ref
         self.key = key
         
@@ -32,7 +38,8 @@ class Transaction {
         
         self.createdAt = createdAt
         
-        self.cardId = cardId
+        self.name = name
+        self.fields = fields
     }
     
     convenience init?(snapshot: DataSnapshot) {
@@ -40,20 +47,23 @@ class Transaction {
             let value = snapshot.value as? [String: AnyObject],
             let identifier = value["identifier"] as? String,
             let createdAtRaw = value["createdAt"] as? Double,
+            let name = value["name"] as? String,
             let userId = value["userId"] as? String,
-            let cardId = value["cardId"] as? String else {
+            let fields = value["fields"] as? [String: String] else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), cardId: cardId)
+        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), name: name, fields: fields)
     }
     
+    /// For conversion of a Card to Firebase dictionary representation for storage in database.
     func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,
             "createdAt" : createdAt.timeIntervalSince1970,
+            "name": name ?? "",
             "userId": userId,
-            "cardId": cardId
+            "fields": fields
         ]
     }
     

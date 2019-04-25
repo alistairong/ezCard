@@ -23,6 +23,7 @@ extension Notification.Name {
     static let currentUserInfoDidChange = Notification.Name("currentUserInfoDidChange")
 }
 
+/// SettingsViewController controls what is being populated and shown on the settings page, accessible from the profile page.
 class SettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, LabelSelectionViewControllerDelegate {
     
     private struct Constants {
@@ -48,99 +49,17 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let signOutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
-        signOutButton.tintColor = .red
-        navigationItem.rightBarButtonItem = signOutButton
+        setUpSignOutButton()
+        setUpTableView()
+
+        let headerView = setUpHeaderView()
         
-        tableView.allowsSelectionDuringEditing = true
-        tableView.setEditing(true, animated: false)
+        setUpProfileButtonView(withHeaderView: headerView)
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicCellReuseIdentifier)
-        tableView.register(UINib(nibName: "DataFieldTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.dataCellReuseIdentifier)
-        
-        let headerViewHeight = Constants.headerViewPadding * 2 + (CGFloat(Constants.numTextFields) * Constants.textFieldHeight) + (Constants.textFieldSpacing * CGFloat(Constants.numTextFields - 1))
-        
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: headerViewHeight))
-        headerView.backgroundColor = .clear
-        
-        profileButtonView.tappedCallback = { [weak self] in
-            guard let self = self else { return }
-            
-            self.imagePickerController.sourceType = .photoLibrary
-            self.imagePickerController.delegate = self
-            self.imagePickerController.allowsEditing = true
-            
-            self.present(self.imagePickerController, animated: true)
-        }
-        headerView.addSubview(profileButtonView)
-        
-        profileButtonView.translatesAutoresizingMaskIntoConstraints = false
-        profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        profileButtonView.heightAnchor.constraint(lessThanOrEqualToConstant: Constants.profileImageMaxHeight).isActive = true
-        profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
-        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: Constants.headerViewPadding).isActive = true
-        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: Constants.headerViewPadding).isActive = true
-        
-        let firstNameTextField = UITextField()
-        firstNameTextField.delegate = self
-        firstNameTextField.addTarget(self, action: #selector(firstNameValueChanged(_:)), for: .editingChanged)
-        firstNameTextField.borderStyle = .roundedRect
-        firstNameTextField.placeholder = "First Name"
-        firstNameTextField.text = user.firstName
-        firstNameTextField.font = UIFont.systemFont(ofSize: 17)
-        headerView.addSubview(firstNameTextField)
-        
-        firstNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        firstNameTextField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        firstNameTextField.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
-        firstNameTextField.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -Constants.headerViewPadding).isActive = true
-        firstNameTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight).isActive = true
-        firstNameTextField.topAnchor.constraint(equalTo: profileButtonView.topAnchor).isActive = true
-        
-        let lastNameTextField = UITextField()
-        lastNameTextField.delegate = self
-        lastNameTextField.addTarget(self, action: #selector(lastNameValueChanged(_:)), for: .editingChanged)
-        lastNameTextField.borderStyle = .roundedRect
-        lastNameTextField.placeholder = "Last Name"
-        lastNameTextField.text = user.lastName
-        lastNameTextField.font = UIFont.systemFont(ofSize: 17)
-        headerView.addSubview(lastNameTextField)
-        
-        lastNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        lastNameTextField.leadingAnchor.constraint(equalTo: firstNameTextField.leadingAnchor).isActive = true
-        lastNameTextField.trailingAnchor.constraint(equalTo: firstNameTextField.trailingAnchor).isActive = true
-        lastNameTextField.heightAnchor.constraint(equalTo: firstNameTextField.heightAnchor).isActive = true
-        lastNameTextField.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: Constants.textFieldSpacing).isActive = true
-        
-        let companyTextField = UITextField()
-        companyTextField.delegate = self
-        companyTextField.addTarget(self, action: #selector(companyValueChanged(_:)), for: .editingChanged)
-        companyTextField.borderStyle = .roundedRect
-        companyTextField.placeholder = "Company"
-        companyTextField.text = user.company
-        companyTextField.font = UIFont.systemFont(ofSize: 17)
-        headerView.addSubview(companyTextField)
-        
-        companyTextField.translatesAutoresizingMaskIntoConstraints = false
-        companyTextField.leadingAnchor.constraint(equalTo: firstNameTextField.leadingAnchor).isActive = true
-        companyTextField.trailingAnchor.constraint(equalTo: firstNameTextField.trailingAnchor).isActive = true
-        companyTextField.heightAnchor.constraint(equalTo: firstNameTextField.heightAnchor).isActive = true
-        companyTextField.topAnchor.constraint(equalTo: lastNameTextField.bottomAnchor, constant: Constants.textFieldSpacing).isActive = true
-        
-        let jobTitleTextField = UITextField()
-        jobTitleTextField.delegate = self
-        jobTitleTextField.addTarget(self, action: #selector(jobTitleValueChanged(_:)), for: .editingChanged)
-        jobTitleTextField.borderStyle = .roundedRect
-        jobTitleTextField.placeholder = "Job Title"
-        jobTitleTextField.text = user.jobTitle
-        jobTitleTextField.font = UIFont.systemFont(ofSize: 17)
-        headerView.addSubview(jobTitleTextField)
-        
-        jobTitleTextField.translatesAutoresizingMaskIntoConstraints = false
-        jobTitleTextField.leadingAnchor.constraint(equalTo: firstNameTextField.leadingAnchor).isActive = true
-        jobTitleTextField.trailingAnchor.constraint(equalTo: firstNameTextField.trailingAnchor).isActive = true
-        jobTitleTextField.heightAnchor.constraint(equalTo: firstNameTextField.heightAnchor).isActive = true
-        jobTitleTextField.topAnchor.constraint(equalTo: companyTextField.bottomAnchor, constant: Constants.textFieldSpacing).isActive = true
+        setUpFirstNameTextField(withHeaderView: headerView)
+        setUpLastNameTextField(withHeaderView: headerView)
+        setUpCompanyTextField(withHeaderView: headerView)
+        setUpJobTitleTextField(withHeaderView: headerView)
         
         tableView.tableHeaderView = headerView
     }
@@ -172,6 +91,119 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         }
     }
     
+    // MARK: - Set-up Functions
+    
+    func setUpSignOutButton() {
+        let signOutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
+        signOutButton.tintColor = .red
+        navigationItem.rightBarButtonItem = signOutButton
+    }
+    
+    /// Sets up table view showing all fields that user can fill in about oneself.
+    func setUpTableView() {
+        tableView.allowsSelectionDuringEditing = true
+        tableView.setEditing(true, animated: false)
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.basicCellReuseIdentifier)
+        tableView.register(UINib(nibName: "DataFieldTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.dataCellReuseIdentifier)
+    }
+    
+    func setUpHeaderView() -> UIView {
+        let headerViewHeight = Constants.headerViewPadding * 2 + (CGFloat(Constants.numTextFields) * Constants.textFieldHeight) + (Constants.textFieldSpacing * CGFloat(Constants.numTextFields - 1))
+        
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: headerViewHeight))
+        headerView.backgroundColor = .clear
+        
+        return headerView
+    }
+    
+    func setUpProfileButtonView(withHeaderView headerView: UIView) {
+        profileButtonView.tappedCallback = { [weak self] in
+            guard let self = self else { return }
+            
+            self.imagePickerController.sourceType = .photoLibrary
+            self.imagePickerController.delegate = self
+            self.imagePickerController.allowsEditing = true
+            
+            self.present(self.imagePickerController, animated: true)
+        }
+        headerView.addSubview(profileButtonView)
+        
+        profileButtonView.translatesAutoresizingMaskIntoConstraints = false
+        profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        profileButtonView.heightAnchor.constraint(lessThanOrEqualToConstant: Constants.profileImageMaxHeight).isActive = true
+        profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
+        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: Constants.headerViewPadding).isActive = true
+        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: Constants.headerViewPadding).isActive = true
+    }
+    
+    /// Aids in setting up the required textfields in settings view.
+    ///
+    /// - Parameters:
+    ///   - withHeaderView: Specifies the view to place textfield in.
+    ///   - selectorFunc: Specifies which function to call when textfield is selected.
+    ///   - placeholder: Specifies placeholder text in textfield
+    ///   - text: Specifies where to obtain textfield text if field is already filled in previously.
+    ///   - topAnchorConstant: Specifies how far from top of profile button view that text field is.
+    func setUpTextField(withHeaderView headerView: UIView, selectorFunc: Selector,
+                        placeholder: String, text: String, topAnchorConstant: Int) {
+        let textField = UITextField()
+        textField.delegate = self
+        textField.addTarget(self, action: selectorFunc, for: .editingChanged)
+        textField.borderStyle = .roundedRect
+        textField.placeholder = placeholder
+        textField.text = text
+        textField.font = UIFont.systemFont(ofSize: 17)
+        headerView.addSubview(textField)
+        
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        textField.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
+        textField.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -Constants.headerViewPadding).isActive = true
+        textField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight).isActive = true
+        textField.topAnchor.constraint(equalTo: profileButtonView.topAnchor, constant: CGFloat(topAnchorConstant)).isActive = true
+    }
+    
+    func setUpFirstNameTextField(withHeaderView headerView: UIView) {
+        setUpTextField(withHeaderView: headerView, selectorFunc: #selector(firstNameValueChanged(_:)),
+                       placeholder: "First Name", text: user.firstName!, topAnchorConstant: 0)
+    }
+    
+    func setUpLastNameTextField(withHeaderView headerView: UIView) {
+        setUpTextField(withHeaderView: headerView, selectorFunc: #selector(lastNameValueChanged(_:)),
+                       placeholder: "Last Name", text: user.lastName!, topAnchorConstant: 40)
+    }
+    
+    func setUpCompanyTextField(withHeaderView headerView: UIView) {
+        setUpTextField(withHeaderView: headerView, selectorFunc: #selector(companyValueChanged(_:)),
+                       placeholder: "Company", text: user.company!, topAnchorConstant: 80)
+    }
+    
+    func setUpJobTitleTextField(withHeaderView headerView: UIView) {
+        setUpTextField(withHeaderView: headerView, selectorFunc: #selector(jobTitleValueChanged(_:)),
+                       placeholder: "Job Title", text: user.jobTitle!, topAnchorConstant: 120)
+    }
+    
+    // MARK: - Selector Functions
+    
+    @objc func firstNameValueChanged(_ sender: UITextField) {
+        user.firstName = sender.text ?? ""
+    }
+    
+    @objc func lastNameValueChanged(_ sender: UITextField) {
+        user.lastName = sender.text ?? ""
+    }
+    
+    @objc func companyValueChanged(_ sender: UITextField) {
+        user.company = sender.text ?? ""
+    }
+    
+    @objc func jobTitleValueChanged(_ sender: UITextField) {
+        user.jobTitle = sender.text ?? ""
+    }
+    
+    // MARK: -
+    
     @objc func signOut() {
         signingOut = true
         
@@ -188,22 +220,6 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
             alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             present(alertController, animated: true, completion: nil)
         }
-    }
-    
-    @objc func firstNameValueChanged(_ sender: UITextField) {
-        user.firstName = sender.text ?? ""
-    }
-    
-    @objc func lastNameValueChanged(_ sender: UITextField) {
-        user.lastName = sender.text ?? ""
-    }
-
-    @objc func companyValueChanged(_ sender: UITextField) {
-        user.company = sender.text ?? ""
-    }
-    
-    @objc func jobTitleValueChanged(_ sender: UITextField) {
-        user.jobTitle = sender.text ?? ""
     }
     
     func labelSelectionViewController(_ labelSelectionViewController: LabelSelectionViewController, didFinishWithLabel label: String, for field: String?, at row: Int?) {

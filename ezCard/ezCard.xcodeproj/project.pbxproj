@@ -48,6 +48,7 @@
 		49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49F57C86224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib */; };
 		F34CE4F3224D99E30075A23F /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CE4F2224D99E30075A23F /* Transaction.swift */; };
 		F34CE4F5224D9A320075A23F /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CE4F4224D9A320075A23F /* Contact.swift */; };
+		F3F4E21D226AA94D0074F58A /* SearchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F4E21C226AA94D0074F58A /* SearchUtil.swift */; };
 		FC9F44353E4F40C261D9928C /* Pods_ezCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 116E5B6C87EA1460F675F528 /* Pods_ezCard.framework */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		BBF0EEEF4A7B367ECD1ED5FB /* Pods-ezCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ezCard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ezCard/Pods-ezCard.debug.xcconfig"; sourceTree = "<group>"; };
 		F34CE4F2224D99E30075A23F /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		F34CE4F4224D9A320075A23F /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		F3F4E21C226AA94D0074F58A /* SearchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +145,7 @@
 			children = (
 				493C0D482226E31B00DF2482 /* AppDelegate.swift */,
 				495CF429224AA526008CDB58 /* GlobalConstants.swift */,
-				49F35F612253F71D00A03772 /* Data Model */,
+				49F35F612253F71D00A03772 /* Data_Model */,
 				494E8D0C22307F4500B5A7E1 /* Login */,
 				494E8D0B22307F3900B5A7E1 /* Profile */,
 				494E8D0A22307EFB00B5A7E1 /* Feed */,
@@ -151,7 +153,8 @@
 				494E8D0822307EE800B5A7E1 /* Contacts */,
 				493C0D4F2226E31D00DF2482 /* Assets.xcassets */,
 				49F35F622253F74800A03772 /* Views */,
-				49B5E05522497C9400D3F739 /* Table View Cells */,
+				49B5E05522497C9400D3F739 /* Table_View_Cells */,
+				F3F4E21B226AA9260074F58A /* Utility */,
 				493C0D512226E31D00DF2482 /* LaunchScreen.storyboard */,
 				493C0D542226E31D00DF2482 /* Info.plist */,
 				493C0D5A2226E3AB00DF2482 /* GoogleService-Info.plist */,
@@ -211,7 +214,7 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
-		49B5E05522497C9400D3F739 /* Table View Cells */ = {
+		49B5E05522497C9400D3F739 /* Table_View_Cells */ = {
 			isa = PBXGroup;
 			children = (
 				49563D00225AE074006A2C7B /* ContactTableViewCell.swift */,
@@ -227,10 +230,10 @@
 				49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */,
 				49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */,
 			);
-			path = "Table View Cells";
+			path = Table_View_Cells;
 			sourceTree = "<group>";
 		};
-		49F35F612253F71D00A03772 /* Data Model */ = {
+		49F35F612253F71D00A03772 /* Data_Model */ = {
 			isa = PBXGroup;
 			children = (
 				49F57C7B224AC25F000C365A /* Card.swift */,
@@ -238,7 +241,7 @@
 				F34CE4F4224D9A320075A23F /* Contact.swift */,
 				49F57C7F224AD6F2000C365A /* User.swift */,
 			);
-			path = "Data Model";
+			path = Data_Model;
 			sourceTree = "<group>";
 		};
 		49F35F622253F74800A03772 /* Views */ = {
@@ -249,6 +252,14 @@
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		F3F4E21B226AA9260074F58A /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F3F4E21C226AA94D0074F58A /* SearchUtil.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		F50D26C39B5F3F2E2FD89E05 /* Pods */ = {
@@ -411,6 +422,7 @@
 				494E8CF0223068DA00B5A7E1 /* FeedViewController.swift in Sources */,
 				49F57C80224AD6F2000C365A /* User.swift in Sources */,
 				494E8CF42230691800B5A7E1 /* ScanViewController.swift in Sources */,
+				F3F4E21D226AA94D0074F58A /* SearchUtil.swift in Sources */,
 				49F57C87224B1B79000C365A /* RoundedRectTextFieldTableViewCell.swift in Sources */,
 				494E8D0622307EBA00B5A7E1 /* ScanConfirmationViewController.swift in Sources */,
 				497B36F62249BF890030FE9F /* CenteredTextTableViewCell.swift in Sources */,

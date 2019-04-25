@@ -1,15 +1,18 @@
 //
-//  Card.swift
+//  Transaction.swift
 //  ezCard
 //
-//  Created by Andrew Whitehead on 3/26/19.
+//  Created by Alistair Ong on 3/28/19.
 //  Copyright © 2019 Andrew Whitehead. All rights reserved.
 //
 
 import Foundation
 import FirebaseDatabase
 
-class Card {
+/// Transaction class stores all the data associated with a particular transaction, which encompasses
+/// the scanning of cards.
+/// Transactions will be shown on the home feed.
+class Transaction {
     
     let ref: DatabaseReference?
     let key: String
@@ -20,14 +23,9 @@ class Card {
     
     let createdAt: Date
     
-    var name: String?
-    var fields: [String: String]
+    var cardId: String
     
-    var isValid: Bool {
-        return ((name?.count ?? 0) > 0 && fields.count > 0)
-    }
-    
-    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), name: String? = nil, fields: [String: String] = [:]) {
+    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), cardId: String) {
         self.ref = ref
         self.key = key
         
@@ -37,8 +35,7 @@ class Card {
         
         self.createdAt = createdAt
         
-        self.name = name
-        self.fields = fields
+        self.cardId = cardId
     }
     
     convenience init?(snapshot: DataSnapshot) {
@@ -46,22 +43,21 @@ class Card {
             let value = snapshot.value as? [String: AnyObject],
             let identifier = value["identifier"] as? String,
             let createdAtRaw = value["createdAt"] as? Double,
-            let name = value["name"] as? String,
             let userId = value["userId"] as? String,
-            let fields = value["fields"] as? [String: String] else {
+            let cardId = value["cardId"] as? String else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), name: name, fields: fields)
+        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), cardId: cardId)
     }
     
+    /// For conversion of a Transaction to Firebase dictionary representation for storage in database.
     func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,
             "createdAt" : createdAt.timeIntervalSince1970,
-            "name": name ?? "",
             "userId": userId,
-            "fields": fields
+            "cardId": cardId
         ]
     }
     

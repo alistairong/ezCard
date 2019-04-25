@@ -12,6 +12,7 @@ import FirebaseStorage
 import FirebaseAuth
 import FirebaseDatabase
 
+/// RegisterViewController controls what is being populated and shown on the sign up / register page.
 class RegisterViewController: UITableViewController, UITextFieldDelegate {
     
     private struct Constants {
