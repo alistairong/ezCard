@@ -36,10 +36,10 @@ class ProfileButtonView: UIView {
     var tappedCallback: (() -> Void)?
     
     convenience init() {
-        self.init(buttonSize: ProfileButtonView.defaultSize)
+        self.init(userId: User.current?.uid, buttonSize: ProfileButtonView.defaultSize)
     }
 
-    init(userId: String? = User.current?.uid, buttonSize: CGFloat) {
+    init(userId: String? = nil, buttonSize: CGFloat) {
         super.init(frame: CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize))
         
         commonInit()
@@ -150,12 +150,20 @@ class ProfileButtonView: UIView {
         let cacheKey = "profile_image_\(userId)"
         
         if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage, !forceRefetch {
+            guard userId == self.userId else {
+                return
+            }
+            
             completion(imageFromCache, nil)
         } else {
             let profileImgRef = Storage.storage().reference().child("profile_images").child("\(userId).jpg")
             
             // limit profile images to 2MB (2 * 1024 * 1024 bytes)
             profileImgRef.getData(maxSize: 2 * 1024 * 1024) { data, error in
+                guard userId == self.userId else {
+                    return
+                }
+                
                 if let error = error {
                     let storageError = StorageErrorCode(rawValue: (error as NSError).code)
                     

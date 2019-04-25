@@ -19,30 +19,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28u-e0-xce">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28u-e0-xce" customClass="ProfileButtonView" customModule="ezCard" customModuleProvider="target">
                         <rect key="frame" x="16" y="10" width="40" height="40"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person" translatesAutoresizingMaskIntoConstraints="NO" id="5FN-DR-5tV">
-                                <rect key="frame" x="5" y="10" width="30" height="30"/>
-                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="5FN-DR-5tV" secondAttribute="height" multiplier="1:1" id="4fu-Mc-Rs4"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="15"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="5FN-DR-5tV" secondAttribute="bottom" id="MxZ-Ul-hwI"/>
-                            <constraint firstItem="5FN-DR-5tV" firstAttribute="leading" secondItem="28u-e0-xce" secondAttribute="leading" constant="5" id="PRl-Sj-TAs"/>
-                            <constraint firstItem="5FN-DR-5tV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="28u-e0-xce" secondAttribute="top" constant="5" id="X3b-4r-V7E"/>
                             <constraint firstAttribute="width" constant="40" id="iBL-3E-SZJ"/>
                             <constraint firstAttribute="width" secondItem="28u-e0-xce" secondAttribute="height" multiplier="1:1" id="m6u-9D-1wQ"/>
-                            <constraint firstAttribute="trailing" secondItem="5FN-DR-5tV" secondAttribute="trailing" constant="5" id="y5r-s9-Bwa"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -71,13 +53,9 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="nameLabel" destination="hfJ-lm-7Es" id="PxU-FM-vOe"/>
-                <outlet property="profileImageContainerView" destination="28u-e0-xce" id="gmR-fp-h0D"/>
-                <outlet property="profileImageView" destination="5FN-DR-5tV" id="3MI-3k-7JW"/>
+                <outlet property="profileButtonView" destination="28u-e0-xce" id="Eeb-Zx-bbc"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="156.02678571428569"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="person" width="30" height="31"/>
-    </resources>
 </document>

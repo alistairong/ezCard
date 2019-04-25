@@ -168,24 +168,7 @@ class ContactsViewController: UITableViewController {
         
         cell.nameLabel.text = user.displayName
         
-        let cacheKey = "profile_image_\(contact.actualUserId)"
-        
-        if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage {
-            cell.profileImageView.image = imageFromCache
-        } else {
-            let profileImgRef = profileImgsRef.child("\(contact.actualUserId).jpg")
-            
-            // limit profile images to 2MB (2 * 1024 * 1024 bytes)
-            profileImgRef.getData(maxSize: 2 * 1024 * 1024) { (data, error) in
-                if let error = error {
-                    print("Error fetching profile image:", error)
-                } else {
-                    let image = UIImage(data: data!)!
-                    profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
-                    cell.profileImageView.image = image
-                }
-            }
-        }
+        cell.profileButtonView.userId = contact.actualUserId
         
         return cell
     }

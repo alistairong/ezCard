@@ -22,7 +22,7 @@ class ExpandedCardViewController: UITableViewController {
     var availableFields = ["phone", "email", "github", "facebook", "snapchat"]
     var availableData = ["555-555-5555" , "name@gmail.com", "github.com", "facebook.com", "snapchat.com"]
     
-    var card: Card?
+    var card: Card!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +49,7 @@ class ExpandedCardViewController: UITableViewController {
         headerView.backgroundColor = .clear
         
         let profileButtonView = ProfileButtonView()
+        profileButtonView.userId = card.userId
         headerView.addSubview(profileButtonView)
         
         profileButtonView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +60,7 @@ class ExpandedCardViewController: UITableViewController {
         profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
         
         let nameLabel = UILabel()
-        nameLabel.text = card?.name
+        nameLabel.text = card.name
         nameLabel.font = UIFont.systemFont(ofSize: 31, weight: .bold)
         headerView.addSubview(nameLabel)
         
