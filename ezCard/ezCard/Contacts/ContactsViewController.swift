@@ -136,8 +136,8 @@ class ContactsViewController: UITableViewController {
             guard let user = users[contact.actualUserId] else {
                 return false
             }
-            return SearchUtil.containsContactName(user: user, name: searchText) ||
-                   SearchUtil.containsContactValue(contact: contact, fieldValue: searchText)
+            return SearchUtil.containsContactName(user: user, name: searchText)
+                //|| SearchUtil.containsContactValue(contact: contact, fieldValue: searchText)
         })
         
         tableView.reloadData()
@@ -194,10 +194,10 @@ class ContactsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let contactViewController = ContactViewController(style: .grouped)
-        //contactViewController.contact =  // TODO: set contact on ContactViewController
+        
         let contact = contacts[indexPath.row]
-        contactViewController.cardIds = Array(contact.sharedCardIds.keys)
-        contactViewController.sharedFields = contact.allSharedFields
+        contactViewController.contact = contact
+        contactViewController.title = users[contact.actualUserId]!.displayName
         
         navigationController?.pushViewController(contactViewController, animated: true)
     }

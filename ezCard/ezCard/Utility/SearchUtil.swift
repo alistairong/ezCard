@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FirebaseDatabase
 
 /// SearchUtil is a class of functions to help in the search bar set up and tool.
 class SearchUtil {
@@ -58,13 +59,36 @@ class SearchUtil {
         return user.displayName.lowercased().contains(name.lowercased())
     }
     
-    /// Returns whether contact contains given value.
-    static func containsContactValue(contact: Contact, fieldValue: String) -> Bool {
-        for (_, value) in contact.allSharedFields {
-            return value.lowercased().contains(fieldValue.lowercased())
-        }
-        
-        return false
-    }
+//    /// Returns whether contact contains given value.
+//    static func containsContactValue(contact: Contact, fieldValue: String, completion: @escaping (Bool) -> Void) {
+//        let cardsFetchGroup = DispatchGroup()
+//
+//        var allSharedFieldValues: [String] = []
+//
+//        let cardsRef = Database.database().reference(withPath: "cards")
+//        let cardRefs = contact.sharedCardIds.keys.map { (cardId) -> DatabaseReference in
+//            return cardsRef.child(cardId)
+//        }
+//
+//        for cardRef in cardRefs {
+//            // lock the group
+//            cardsFetchGroup.enter()
+//
+//            cardRef.observeSingleEvent(of: .value) { (snapshot) in
+//                if let card = Card(snapshot: snapshot) {
+//                    allSharedFieldValues.append(contentsOf: card.fields.map { $0.value })
+//                }
+//
+//                // after the async work has been completed, unlock the group
+//                cardsFetchGroup.leave()
+//            }
+//        }
+//
+//        // this block will be called after the final cardsFetchGroup.leave() of the looped async functions complete
+//        cardsFetchGroup.notify(queue: .main) {
+//            let matches = allSharedFieldValues.contains(where: { $0 == fieldValue.lowercased() })
+//            completion(matches)
+//        }
+//    }
     
 }

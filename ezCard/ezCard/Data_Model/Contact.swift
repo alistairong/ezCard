@@ -20,9 +20,8 @@ class Contact {
     let holdingUserId: String
     
     var sharedCardIds: [String: Bool]
-    var allSharedFields: [String: String]
-
-    init(ref: DatabaseReference? = nil, key: String = "", holdingUserId: String, actualUserId: String, sharedCardIds: [String: Bool] = [:], allSharedFields: [String: String] = [:]) {
+    
+    init(ref: DatabaseReference? = nil, key: String = "", holdingUserId: String, actualUserId: String, sharedCardIds: [String: Bool] = [:]) {
         self.ref = ref
         self.key = key
         
@@ -30,7 +29,6 @@ class Contact {
         self.actualUserId = actualUserId
 
         self.sharedCardIds = sharedCardIds
-        self.allSharedFields = allSharedFields
     }
     
     convenience init?(snapshot: DataSnapshot) {
@@ -38,12 +36,12 @@ class Contact {
             let value = snapshot.value as? [String: AnyObject],
             let holdingUserId = value["holdingUserId"] as? String,
             let actualUserId = value["actualUserId"] as? String,
-            let sharedCardIds = value["sharedCardIds"] as? [String: Bool],
-            let allSharedFields = value["allSharedFields"] as? [String: String] else {
+            let sharedCardIds = value["sharedCardIds"] as? [String: Bool]
+        else {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, holdingUserId: holdingUserId, actualUserId: actualUserId, sharedCardIds: sharedCardIds, allSharedFields: allSharedFields)
+        self.init(ref: snapshot.ref, key: snapshot.key, holdingUserId: holdingUserId, actualUserId: actualUserId, sharedCardIds: sharedCardIds)
     }
     
     /// For conversion of a Contact to Firebase dictionary representation for storage in database.
@@ -51,8 +49,7 @@ class Contact {
         return [
             "actualUserId": actualUserId,
             "holdingUserId": holdingUserId,
-            "sharedCardIds": sharedCardIds,
-            "allSharedFields": allSharedFields
+            "sharedCardIds": sharedCardIds
         ]
     }
     
