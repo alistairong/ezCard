@@ -58,10 +58,14 @@ class ContactsViewController: UITableViewController {
         
         setUpContactSearchBar()
         
-        observeContacts()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(currentUserWillChange(_:)), name: .currentUserWillChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(currentUserDidChange(_:)), name: .currentUserDidChange, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        observeContacts()
     }
     
     deinit {
@@ -78,6 +82,8 @@ class ContactsViewController: UITableViewController {
     }
     
     func observeContacts() {
+        userContactsRef?.removeAllObservers()
+        
         guard let currentUser = User.current else {
             return
         }
@@ -169,6 +175,13 @@ class ContactsViewController: UITableViewController {
         cell.nameLabel.text = user.displayName
         
         cell.profileButtonView.userId = contact.actualUserId
+        
+        // "pass through" the tap on the profile button
+        cell.profileButtonView.tappedCallback = { [weak self] in
+            guard let self = self else { return }
+            self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            self.tableView(tableView, didSelectRowAt: indexPath)
+        }
         
         return cell
     }
