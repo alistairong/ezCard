@@ -31,7 +31,7 @@ class ContactViewController: UITableViewController {
     }()
     
     private var cards: [Card] = []
-    private var allSharedFields: [[String: Any]] = []
+    private var allSharedFields: [[String: String]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,12 +74,16 @@ class ContactViewController: UITableViewController {
         
         // this block will be called after the final cardsFetchGroup.leave() of the looped async functions complete
         cardsFetchGroup.notify(queue: .main) { [weak self] in
-            self?.allSharedFields.sort { (d1, d2) -> Bool in
-                var ret = (d1["field"] as! String).compare(d2["field"] as! String)
-                if ret == .orderedSame, let l1 = d1["label"] as? String, let l2 = d2["label"] as? String {
-                    ret = l1.compare(l2)
+            if let self = self  {
+                self.allSharedFields = Array(Set(self.allSharedFields)) // remove duplicates
+                
+                self.allSharedFields.sort { (d1, d2) -> Bool in
+                    var ret = (d1["field"]!).compare(d2["field"]!)
+                    if ret == .orderedSame, let l1 = d1["label"], let l2 = d2["label"] {
+                        ret = l1.compare(l2)
+                    }
+                    return ret == .orderedAscending
                 }
-                return ret == .orderedAscending
             }
             
             completion()
@@ -126,10 +130,10 @@ class ContactViewController: UITableViewController {
             
             cell.detailTextLabel?.textColor = .lightGray
             
-            cell.textLabel?.text = field["data"] as? String
+            cell.textLabel?.text = field["data"]
             
-            var detailText = (field["field"] as! String)
-            if let label = field["label"] as? String {
+            var detailText = field["field"]!
+            if let label = field["label"] {
                 detailText += " (\(label))"
             }
             cell.detailTextLabel?.text = detailText
