@@ -131,7 +131,13 @@ class ScanConfirmationViewController: UITableViewController {
             
             cell.cardView.qrCodeButton.isHidden = true
             
-            // TODO: implement more button callback
+            cell.cardView.moreButtonTappedCallback = { [weak self] in
+                guard let self = self else { return }
+                
+                let expandedCardViewController = ExpandedCardViewController(style: .grouped)
+                expandedCardViewController.card = self.card
+                self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
+            }
         } else if indexPath.section == 1 { // accept
             let cell = cell as! CenteredTextTableViewCell
             
