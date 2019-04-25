@@ -101,18 +101,23 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         profileButtonView.translatesAutoresizingMaskIntoConstraints = false
         profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
-        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
-        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16).isActive = true
-        profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
+        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20).isActive = true
+        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20).isActive = true
+        profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -20).isActive = true
         
         nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
         nameLabel.font = UIFont.systemFont(ofSize: 31, weight: .bold)
         headerView.addSubview(nameLabel)
         
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.5
+        nameLabel.numberOfLines = 1
+        nameLabel.lineBreakMode = .byTruncatingTail
+        
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         nameLabel.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -20).isActive = true
         nameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
         tableView.tableHeaderView = headerView
