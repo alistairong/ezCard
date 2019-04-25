@@ -146,7 +146,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
     ///   - text: Specifies where to obtain textfield text if field is already filled in previously.
     ///   - topAnchorConstant: Specifies how far from top of profile button view that text field is.
     func setUpTextField(withHeaderView headerView: UIView, selectorFunc: Selector,
-                        placeholder: String, text: String, topAnchorConstant: Int) {
+                        placeholder: String, text: String?, topAnchorConstant: Int) {
         let textField = UITextField()
         textField.delegate = self
         textField.addTarget(self, action: selectorFunc, for: .editingChanged)
@@ -166,22 +166,22 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
     
     func setUpFirstNameTextField(withHeaderView headerView: UIView) {
         setUpTextField(withHeaderView: headerView, selectorFunc: #selector(firstNameValueChanged(_:)),
-                       placeholder: "First Name", text: user.firstName!, topAnchorConstant: 0)
+                       placeholder: "First Name", text: user.firstName, topAnchorConstant: 0)
     }
     
     func setUpLastNameTextField(withHeaderView headerView: UIView) {
         setUpTextField(withHeaderView: headerView, selectorFunc: #selector(lastNameValueChanged(_:)),
-                       placeholder: "Last Name", text: user.lastName!, topAnchorConstant: 40)
+                       placeholder: "Last Name", text: user.lastName, topAnchorConstant: 40)
     }
     
     func setUpCompanyTextField(withHeaderView headerView: UIView) {
         setUpTextField(withHeaderView: headerView, selectorFunc: #selector(companyValueChanged(_:)),
-                       placeholder: "Company", text: user.company!, topAnchorConstant: 80)
+                       placeholder: "Company", text: user.company, topAnchorConstant: 80)
     }
     
     func setUpJobTitleTextField(withHeaderView headerView: UIView) {
         setUpTextField(withHeaderView: headerView, selectorFunc: #selector(jobTitleValueChanged(_:)),
-                       placeholder: "Job Title", text: user.jobTitle!, topAnchorConstant: 120)
+                       placeholder: "Job Title", text: user.jobTitle, topAnchorConstant: 120)
     }
     
     // MARK: - Selector Functions

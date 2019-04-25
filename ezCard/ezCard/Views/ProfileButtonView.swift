@@ -128,7 +128,7 @@ class ProfileButtonView: UIView {
         weak var weakProfileImageView = profileImageView
         fetchProfileImage(forceRefetch: forceRefetch) { (image, error) in
             guard let profileImage = image else {
-                weakProfileImageView?.image = Constants.defaultImage
+                weakProfileImageView?.image = nil
                 return
             }
             
@@ -138,7 +138,7 @@ class ProfileButtonView: UIView {
     
     private func fetchProfileImage(forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
         guard let user = self.user else {
-            completion(Constants.defaultImage, nil)
+            completion(nil, nil)
             return
         }
         
