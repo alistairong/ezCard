@@ -227,9 +227,21 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
             return
         }
         
-        user.data[field]?[row]["label"] = label
+        var fieldData: [[String: Any]] = []
+        for (index, data) in user.data.enumerated() {
+            if data["field"]! == field {
+                var dataWithIndex: [String: Any] = data
+                dataWithIndex["index"] = index
+                fieldData.append(dataWithIndex)
+            }
+        }
         
-        tableView.reloadRows(at: [IndexPath(row: row, section: DataField.allCases.map({ $0.rawValue }).index(of: field)!)], with: .automatic)
+        let dataDict = fieldData[row]
+        let globalIndex = dataDict["index"] as! Int
+        
+        user.data[globalIndex]["label"] = label
+        
+        tableView.reloadData()
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -285,12 +297,20 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let dataField = DataField.allCases[section]
-        return (user.data[dataField.rawValue]?.count ?? 0) + 1
+        return user.data.filter { $0["field"]! == dataField.rawValue }.count + 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let dataField = DataField.allCases[indexPath.section]
-        let fieldData = user.data[dataField.rawValue] ?? []
+        
+        var fieldData: [[String: Any]] = []
+        for (index, data) in user.data.enumerated() {
+            if data["field"]! == dataField.rawValue {
+                var dataWithIndex: [String: Any] = data
+                dataWithIndex["index"] = index
+                fieldData.append(dataWithIndex)
+            }
+        }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.row < fieldData.count) ? Constants.dataCellReuseIdentifier : Constants.basicCellReuseIdentifier, for: indexPath)
         
@@ -304,8 +324,9 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
             
             cell.textField.placeholder = dataField.rawValue
             
+            let globalIndex = dataDict["index"] as! Int
             cell.textFieldEditedAction = { [weak self] (textField) in
-                self?.user.data[dataField.rawValue]?[indexPath.row]["data"] = textField.text
+                self?.user.data[globalIndex]["data"] = textField.text
             }
             
             cell.buttonAction = { [weak self] in
@@ -347,7 +368,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let dataField = DataField.allCases[indexPath.section]
-        let fieldData = user.data[dataField.rawValue] ?? []
+        let fieldData = user.data.filter { $0["field"]! == dataField.rawValue }
         return (indexPath.row < fieldData.count) ? .delete : .insert
     }
     
@@ -355,7 +376,18 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         if editingStyle == .delete {
             let dataField = DataField.allCases[indexPath.section]
             
-            user.data[dataField.rawValue]!.remove(at: indexPath.row)
+            var fieldData: [[String: Any]] = []
+            for (index, data) in user.data.enumerated() {
+                if data["field"]! == dataField.rawValue {
+                    var dataWithIndex: [String: Any] = data
+                    dataWithIndex["index"] = index
+                    fieldData.append(dataWithIndex)
+                }
+            }
+            
+            let dataDict = fieldData[indexPath.row]
+            let globalIndex = dataDict["index"] as! Int
+            user.data.remove(at: globalIndex)
             
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -371,15 +403,12 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
     func insertNewField(in section: Int) {
         let dataField = DataField.allCases[section]
         
-        let defaultDataDict = ["label" : (dataField == .socialProfile) ? DataLabel.defaultSocial.rawValue : DataLabel.default.rawValue, "data": ""]
+        let row = self.tableView(tableView, numberOfRowsInSection: section) - 1
         
-        if user.data[dataField.rawValue] != nil {
-            user.data[dataField.rawValue]!.append(defaultDataDict)
-        } else {
-            user.data[dataField.rawValue] = [defaultDataDict]
-        }
+        let defaultDataDict = ["field" : dataField.rawValue, "label" : (dataField == .socialProfile) ? DataLabel.defaultSocial.rawValue : DataLabel.default.rawValue, "data": ""]
+        user.data.append(defaultDataDict)
         
-        tableView.insertRows(at: [IndexPath(row: user.data[dataField.rawValue]!.count - 1, section: section)], with: .automatic)
+        tableView.insertRows(at: [IndexPath(row: row, section: section)], with: .automatic)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

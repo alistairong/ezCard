@@ -70,7 +70,6 @@ class ScanConfirmationViewController: UITableViewController {
         contactRef.child("holdingUserId").setValue(Auth.auth().currentUser!.uid)
         contactRef.child("actualUserId").setValue(sharingUser.uid)
         contactRef.child("sharedCardIds").updateChildValues([card.identifier: true])
-        contactRef.child("allSharedFields").updateChildValues(card.fields)
         
         // write contact id to user's contact list
         userRef.child("contacts").child(sharingUser.uid).setValue(true)

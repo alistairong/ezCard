@@ -88,25 +88,26 @@ class CardView: UIView {
         detailLabel4.text = nil
         dataLabel4.text = nil
         
-        let sortedFields = card.fields.sorted(by: { $0.key < $1.key })
-        
         var counter = 1
-        for (key, value) in sortedFields {
+        for data in card.fields {
             if counter > Constants.numFieldsShown {
                 break
             }
             
+            let field = data["field"]!
+            let value = data["data"]
+            
             if counter == 1 {
-                detailLabel1.text = key
+                detailLabel1.text = field
                 dataLabel1.text = value
             } else if counter == 2 {
-                detailLabel2.text = key
+                detailLabel2.text = field
                 dataLabel2.text = value
             } else if counter == 3 {
-                detailLabel3.text = key
+                detailLabel3.text = field
                 dataLabel3.text = value
             } else if counter == 4 {
-                detailLabel4.text = key
+                detailLabel4.text = field
                 dataLabel4.text = value
             }
             

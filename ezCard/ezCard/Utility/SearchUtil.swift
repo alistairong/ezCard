@@ -42,8 +42,9 @@ class SearchUtil {
     
     /// Returns whether there is such a value stored in the card
     static func containsCardValue(card: Card, fieldValue: String) -> Bool {
-        for (_, value) in card.fields {
-            return value.lowercased().contains(fieldValue.lowercased())
+        for data in card.fields {
+            let value = data["data"]
+            return value?.lowercased().contains(fieldValue.lowercased()) ?? false
         }
 
         return false

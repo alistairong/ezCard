@@ -31,7 +31,7 @@ class ContactViewController: UITableViewController {
     }()
     
     private var cards: [Card] = []
-    private var allSharedFields: [String: String] = [:]
+    private var allSharedFields: [[String: Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +64,7 @@ class ContactViewController: UITableViewController {
                 
                 if let card = Card(snapshot: snapshot) {
                     self.cards.append(card)
-                    
-                    self.allSharedFields.merge(card.fields, uniquingKeysWith: { (key1, key2) -> String in
-                        return key1 // TODO: implement proper uniquing once label conflicts are resolved
-                    })
+                    self.allSharedFields.append(contentsOf: card.fields)
                 }
                 
                 // after the async work has been completed, unlock the group
@@ -76,7 +73,15 @@ class ContactViewController: UITableViewController {
         }
         
         // this block will be called after the final cardsFetchGroup.leave() of the looped async functions complete
-        cardsFetchGroup.notify(queue: .main) {
+        cardsFetchGroup.notify(queue: .main) { [weak self] in
+            self?.allSharedFields.sort { (d1, d2) -> Bool in
+                var ret = (d1["field"] as! String).compare(d2["field"] as! String)
+                if ret == .orderedSame, let l1 = d1["label"] as? String, let l2 = d2["label"] as? String {
+                    ret = l1.compare(l2)
+                }
+                return ret == .orderedAscending
+            }
+            
             completion()
         }
     }
@@ -117,13 +122,17 @@ class ContactViewController: UITableViewController {
             cell.needsTopSeparator = (indexPath.row == 0)
             cell.separatorLeftConstraint?.constant = (indexPath.row == allSharedFields.count - 1) ? 0 : cell.layoutMargins.left
             
-            let sortedFields = allSharedFields.sorted(by: { $0.key < $1.key })
-            let field = sortedFields[indexPath.row]
+            let field = allSharedFields[indexPath.row]
             
             cell.detailTextLabel?.textColor = .lightGray
             
-            cell.textLabel?.text = field.value
-            cell.detailTextLabel?.text = field.key // TODO: add label string to this
+            cell.textLabel?.text = field["data"] as? String
+            
+            var detailText = (field["field"] as! String)
+            if let label = field["label"] as? String {
+                detailText += " (\(label))"
+            }
+            cell.detailTextLabel?.text = detailText
         } else if indexPath.section == 1 { // card
             let cell = cell as! CardTableViewCell
             

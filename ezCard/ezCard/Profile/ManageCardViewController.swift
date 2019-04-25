@@ -22,7 +22,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     weak var delegate: ManageCardViewControllerDelegate?
     
     var user: User!
-    var dataItems: [(key: String, value: [String: Any])] = []
+    var dataItems: [[String: String]] = []
     
     var card: Card? // IMPORTANT: this is only used in viewDidLoad to create a copy in scratchPadCard
     private var scratchPadCard: Card!
@@ -32,18 +32,22 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for (field, dataArr) in user.data {
-            for data in dataArr {
-                dataItems.append((key: field, value: data))
-            }
-        }
-        
         if let company = user.company {
-            dataItems.append((key: "company", value: ["data": company]))
+            dataItems.append(["field" : "company", "data": company])
         }
         
         if let jobTitle = user.jobTitle {
-            dataItems.append((key: "job title", value: ["data": jobTitle]))
+            dataItems.append(["field" : "job title", "data": jobTitle])
+        }
+        
+        dataItems.append(contentsOf: user.data)
+        
+        dataItems.sort { (d1, d2) -> Bool in
+            var ret = (d1["field"]!).compare(d2["field"]!)
+            if ret == .orderedSame, let l1 = d1["label"], let l2 = d2["label"] {
+                ret = l1.compare(l2)
+            }
+            return ret == .orderedAscending
         }
         
         isEditingCard = (card != nil)
@@ -109,15 +113,17 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         } else if indexPath.section == 1 { // data fields
             let dataItem = dataItems[indexPath.row]
             
-            cell.accessoryType = scratchPadCard.fields.keys.contains(dataItem.key) ? .checkmark : .none
+            cell.accessoryType = scratchPadCard.fields.contains(dataItem) ? .checkmark : .none
             
-            if let label = dataItem.value["label"] as? String {
-                cell.textLabel?.text = dataItem.key.capitalized + " (\(label))"
+            let field = dataItem["field"]!
+            
+            if let label = dataItem["label"] {
+                cell.textLabel?.text = field.capitalized + " (\(label))"
             } else {
-                cell.textLabel?.text = dataItem.key.capitalized
+                cell.textLabel?.text = field.capitalized
             }
             
-            cell.detailTextLabel?.text = dataItem.value["data"] as? String
+            cell.detailTextLabel?.text = dataItem["data"]
             cell.detailTextLabel?.textColor = .lightGray
         }
 
@@ -141,15 +147,17 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         let dataItem = dataItems[indexPath.row]
         
         var fields = scratchPadCard.fields
-        if fields.keys.contains(dataItem.key) {
-            fields.removeValue(forKey: dataItem.key)
+        if let index = fields.firstIndex(of: dataItem) {
+            fields.remove(at: index)
         } else {
-            fields[dataItem.key] = dataItem.value["data"] as? String
+            fields.append(dataItem)
         }
-        
-        cell.accessoryType = fields.keys.contains(dataItem.key) ? .checkmark : .none
-        
+
+        cell.accessoryType = fields.contains(dataItem) ? .checkmark : .none
+
         scratchPadCard.fields = fields
+        
+        tableView.reloadData()
         
         navigationItem.rightBarButtonItem?.isEnabled = scratchPadCard.isValid
     }
