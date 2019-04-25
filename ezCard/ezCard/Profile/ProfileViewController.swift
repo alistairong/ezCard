@@ -27,7 +27,7 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         didSet {
             tableView.separatorColor = (user?.type == .individual) ? .clear : nil
             
-            profileButtonView.user = user
+            profileButtonView.userId = user?.uid
             nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
             
             observeData()
@@ -135,7 +135,7 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         relevantDataRef?.removeAllObservers()
         observeData()
         
-        profileButtonView.user = user
+        profileButtonView.userId = user?.uid
         nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
     }
     

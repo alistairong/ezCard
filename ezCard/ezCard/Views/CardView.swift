@@ -7,32 +7,14 @@
 //
 
 import UIKit
-import FirebaseStorage
 
 class CardView: UIView {
     
     private struct Constants {
-        static let shadowOffset = CGFloat(2.0)
         static let numFieldsShown = 4
     }
     
-    let profileImgsRef = Storage.storage().reference().child("profile_images")
-    
-    @IBOutlet weak var profileImageContainerView: UIView! {
-        didSet {
-            profileImageContainerView.layer.borderWidth = 3.0
-            profileImageContainerView.layer.borderColor = UIColor.white.cgColor
-            profileImageContainerView.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
-            profileImageContainerView.layer.shadowRadius = 2.0
-            profileImageContainerView.layer.shadowOpacity = 0.5
-        }
-    }
-    @IBOutlet weak var profileImageView: UIImageView! {
-        didSet {
-            profileImageView.image = profileImageView.image?.withRenderingMode(.alwaysTemplate)
-            profileImageView.tintColor = .darkGray
-        }
-    }
+    @IBOutlet weak var profileButtonView: ProfileButtonView!
     
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -95,24 +77,7 @@ class CardView: UIView {
     func configure(with card: Card) {
         titleLabel.text = card.name
         
-        let cacheKey = "profile_image_\(card.userId)"
-        
-        if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage {
-            profileImageView.image = imageFromCache
-        } else {
-            let profileImgRef = profileImgsRef.child("\(card.userId).jpg")
-            
-            // limit profile images to 2MB (2 * 1024 * 1024 bytes)
-            profileImgRef.getData(maxSize: 2 * 1024 * 1024) { [weak self] (data, error) in
-                if let error = error {
-                    print("Error fetching profile image:", error)
-                } else {
-                    let image = UIImage(data: data!)!
-                    profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
-                    self?.profileImageView.image = image
-                }
-            }
-        }
+        profileButtonView.userId = card.userId
         
         detailLabel1.text = nil
         dataLabel1.text = nil

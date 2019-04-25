@@ -15,8 +15,11 @@ class ProfileButtonView: UIView {
     
     private struct Constants {
         static let shadowOffset = CGFloat(2.0)
-        static let imageViewPadding: CGFloat = CGFloat(5)
+        static let imageViewPadding = CGFloat(5)
         static let defaultImage = #imageLiteral(resourceName: "person")
+        static let borderWidthMultiplier = CGFloat(0.075)
+        static let shadowRadiusMultiplier = CGFloat(0.05)
+        static let shadowOpacity = Float(0.5)
     }
     
     private var containerView: UIView!
@@ -24,7 +27,7 @@ class ProfileButtonView: UIView {
     private var profileImageView: UIImageView!
     private var profileButton: UIButton!
     
-    var user: User? {
+    var userId: String? {
         didSet {
             refresh(forceRefetch: true)
         }
@@ -36,12 +39,12 @@ class ProfileButtonView: UIView {
         self.init(buttonSize: ProfileButtonView.defaultSize)
     }
 
-    init(user: User? = User.current, buttonSize: CGFloat) {
+    init(userId: String? = User.current?.uid, buttonSize: CGFloat) {
         super.init(frame: CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize))
         
         commonInit()
         
-        self.user = user
+        self.userId = userId
         refresh(forceRefetch: true)
     }
     
@@ -62,12 +65,12 @@ class ProfileButtonView: UIView {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .lightGray
         containerView.layer.cornerRadius = containerView.bounds.width / 2
-        containerView.layer.borderWidth = 3.0
+        containerView.layer.borderWidth = round(Constants.borderWidthMultiplier * containerView.bounds.width)
         containerView.layer.borderColor = UIColor.white.cgColor
         containerView.clipsToBounds = false
         containerView.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
-        containerView.layer.shadowRadius = 2.0
-        containerView.layer.shadowOpacity = 0.5
+        containerView.layer.shadowRadius = round(Constants.shadowRadiusMultiplier * containerView.bounds.width)
+        containerView.layer.shadowOpacity = Constants.shadowOpacity
         addSubview(containerView)
         
         containerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
@@ -115,6 +118,8 @@ class ProfileButtonView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        containerView?.layer.shadowRadius = round(Constants.shadowRadiusMultiplier * containerView.bounds.width)
+        containerView?.layer.borderWidth = round(Constants.borderWidthMultiplier * containerView.bounds.width)
         containerView?.layer.cornerRadius = containerView.bounds.width / 2
         profileImageView?.layer.cornerRadius = containerView.bounds.width / 2
         defaultProfileImageView?.layer.cornerRadius = (profileButton.bounds.width - 2 * Constants.imageViewPadding) / 2
@@ -137,17 +142,17 @@ class ProfileButtonView: UIView {
     }
     
     private func fetchProfileImage(forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
-        guard let user = self.user else {
+        guard let userId = self.userId else {
             completion(nil, nil)
             return
         }
         
-        let cacheKey = "profile_image_\(user.uid)"
+        let cacheKey = "profile_image_\(userId)"
         
         if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage, !forceRefetch {
             completion(imageFromCache, nil)
         } else {
-            let profileImgRef = Storage.storage().reference().child("profile_images").child("\(user.uid).jpg")
+            let profileImgRef = Storage.storage().reference().child("profile_images").child("\(userId).jpg")
             
             // limit profile images to 2MB (2 * 1024 * 1024 bytes)
             profileImgRef.getData(maxSize: 2 * 1024 * 1024) { data, error in
