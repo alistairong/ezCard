@@ -17,6 +17,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     private struct ReuseIdentifiers {
         static let basic = "BasicTableViewCell"
         static let textField = "TextFieldTableViewCell"
+        static let centeredText = "CenteredTextTableViewCell"
     }
     
     weak var delegate: ManageCardViewControllerDelegate?
@@ -66,6 +67,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         
         tableView.register(SubtitleTableViewCell.self, forCellReuseIdentifier: ReuseIdentifiers.basic)
         tableView.register(UINib(nibName: "TextFieldTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.textField)
+        tableView.register(UINib(nibName: "CenteredTextTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.centeredText)
     }
     
     @objc func saveTapped(_ sender: Any?) {
@@ -81,15 +83,36 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2 // one for card name, one for data fields
+        var numSections = 2 // one for card name, one for data fields
+        if isEditingCard {
+            numSections += 1 // if we're editing, a delete row
+        }
+        return numSections
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (section == 0) ? 1 : dataItems.count
+        if section == 0 {
+            return 1
+        } else if section == 1 {
+            return dataItems.count
+        } else if section == 2 {
+            return 1
+        } else {
+            return 0
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.section == 0) ? ReuseIdentifiers.textField : ReuseIdentifiers.basic, for: indexPath)
+        var reuseIdentifier: String!
+        if indexPath.section == 0 {
+            reuseIdentifier = ReuseIdentifiers.textField
+        } else if indexPath.section == 1 {
+            reuseIdentifier = ReuseIdentifiers.basic
+        } else if indexPath.section == 2 {
+            reuseIdentifier = ReuseIdentifiers.centeredText
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
         
         cell.selectionStyle = .none
         
@@ -125,6 +148,13 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
             
             cell.detailTextLabel?.text = dataItem["data"]
             cell.detailTextLabel?.textColor = .lightGray
+        } else if indexPath.section == 2 { // remove button
+            let cell = cell as! CenteredTextTableViewCell
+            
+            cell.selectionStyle = .default
+            
+            cell.titleLabel.textColor = .red
+            cell.titleLabel.text = "Delete Card"
         }
 
         return cell
@@ -135,31 +165,45 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) else {
-            return
-        }
         
         if indexPath.section == 0 {
-            (cell as! TextFieldTableViewCell).becomeFirstResponder()
-            return
+            guard let cell = tableView.cellForRow(at: indexPath) as? TextFieldTableViewCell else {
+                return
+            }
+            
+            cell.textField.becomeFirstResponder()
+        } else if indexPath.section == 1 {
+            guard let cell = tableView.cellForRow(at: indexPath) else {
+                return
+            }
+            
+            let dataItem = dataItems[indexPath.row]
+            
+            var fields = scratchPadCard.fields
+            if let index = fields.firstIndex(of: dataItem) {
+                fields.remove(at: index)
+            } else {
+                fields.append(dataItem)
+            }
+            
+            cell.accessoryType = fields.contains(dataItem) ? .checkmark : .none
+            
+            scratchPadCard.fields = fields
+            
+            tableView.reloadData()
+            
+            navigationItem.rightBarButtonItem?.isEnabled = scratchPadCard.isValid
+        } else if indexPath.section == 2 {
+            deleteCard()
         }
+    }
+    
+    private func deleteCard() {
+        print("Delete card tapped")
         
-        let dataItem = dataItems[indexPath.row]
+        // TODO: delete card from user card ids and cards top level
         
-        var fields = scratchPadCard.fields
-        if let index = fields.firstIndex(of: dataItem) {
-            fields.remove(at: index)
-        } else {
-            fields.append(dataItem)
-        }
-
-        cell.accessoryType = fields.contains(dataItem) ? .checkmark : .none
-
-        scratchPadCard.fields = fields
-        
-        tableView.reloadData()
-        
-        navigationItem.rightBarButtonItem?.isEnabled = scratchPadCard.isValid
+        dismiss(animated: true, completion: nil)
     }
 
     // MARK: - UITextFieldDelegate

@@ -151,6 +151,7 @@ class ContactViewController: UITableViewController {
                 
                 let expandedCardViewController = ExpandedCardViewController(style: .grouped)
                 expandedCardViewController.card = card
+                expandedCardViewController.shouldShowRemoveCardButton = true
                 self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
             }
         }

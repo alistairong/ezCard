@@ -53,8 +53,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             } catch {
                 print("Error initializing AVCaptureDeviceInput:", error)
             }
-        } else {
-            // TODO: show "cannot find camera" UI
         }
     }
     

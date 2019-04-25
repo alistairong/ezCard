@@ -73,7 +73,8 @@ class LabelSelectionViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2 // one for defaults, one for custom
+        // TODO: set to 2 after implementing ability to add custom labels
+        return 1 // one for defaults, one for custom
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
