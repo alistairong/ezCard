@@ -191,6 +191,11 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         }
         
         userRelevantDataRef?.child(uid).setValue(true)
+        
+        if user?.members == nil {
+            user?.members = [:]
+        }
+        user?.members?[uid] = true
     }
     
     // MARK: - ManageCardViewControllerDelegate
@@ -205,6 +210,11 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         cardRef?.setValue(card.dictionaryRepresentation())
         
         userRelevantDataRef?.child(card.identifier).setValue(true)
+        
+        if user?.cardIds == nil {
+            user?.cardIds = [:]
+        }
+        user?.cardIds?[card.identifier] = true
     }
 
     // MARK: - Table view data source

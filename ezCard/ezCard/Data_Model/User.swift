@@ -73,11 +73,11 @@ class User {
     
     var organizationName: String?
     
-    var members: [String]?
+    var members: [String: Bool]?
     
     // MARK: - Init
     
-    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String, data: [[String : String]] = [], transactionIds: [String: Bool]? = nil, firstName: String? = nil, lastName: String? = nil, company: String? = nil, jobTitle: String? = nil, cardIds: [String: Bool]? = nil, contactIds: [String: Bool]? = nil, organizationName: String? = nil, members: [String]? = nil) {
+    init(ref: DatabaseReference? = nil, key: String = "", uid: String, type: UserType, email: String, data: [[String : String]] = [], transactionIds: [String: Bool]? = nil, firstName: String? = nil, lastName: String? = nil, company: String? = nil, jobTitle: String? = nil, cardIds: [String: Bool]? = nil, contactIds: [String: Bool]? = nil, organizationName: String? = nil, members: [String: Bool]? = nil) {
         self.ref = ref
         self.key = key
         
@@ -137,7 +137,7 @@ class User {
         
         let organizationName = value["organizationName"] as? String
         
-        let members = value["members"] as? [String]
+        let members = value["members"] as? [String: Bool]
         
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email, data: data ?? [], transactionIds: transactionIds, firstName: firstName, lastName: lastName, company: company, jobTitle: jobTitle, cardIds: cardIds, contactIds: contactIds, organizationName: organizationName, members: members)
     }
