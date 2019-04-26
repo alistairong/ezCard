@@ -167,6 +167,7 @@
 			children = (
 				494E8CF82230701F00B5A7E1 /* ContactsViewController.swift */,
 				494E8D0022307D4400B5A7E1 /* ContactViewController.swift */,
+				49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -195,7 +196,6 @@
 				49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */,
 				495EC36122655E6F0040676C /* LabelSelectionViewController.swift */,
 				494E8D0D22307F6A00B5A7E1 /* ProfileViewController.swift */,
-				49563D03225AE486006A2C7B /* ExpandedCardViewController.swift */,
 				49EC4E9E2257F78100A3073B /* OrganizationMemberSelectionViewController.swift */,
 				4903B2FC223092510022F040 /* ManageCardViewController.swift */,
 				4903B2FE223093A60022F040 /* QRCodeViewController.swift */,

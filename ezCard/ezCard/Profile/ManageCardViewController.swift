@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 protocol ManageCardViewControllerDelegate: class {
     func manageCardViewController(_ manageCardViewController: ManageCardViewController, didFinishWithCard card: Card?)
@@ -21,6 +22,9 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     }
     
     weak var delegate: ManageCardViewControllerDelegate?
+    
+    let usersRef = Database.database().reference(withPath: "users")
+    let cardsRef = Database.database().reference(withPath: "cards")
     
     var user: User!
     var dataItems: [[String: String]] = []
@@ -199,9 +203,11 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     }
     
     private func deleteCard() {
-        print("Delete card tapped")
+        // delete card from user card ids
+        usersRef.child(user.key).child("cards").child(card!.key).removeValue()
         
-        // TODO: delete card from user card ids and cards top level
+        // delete card from cards top level
+        cardsRef.child(card!.key).removeValue()
         
         dismiss(animated: true, completion: nil)
     }

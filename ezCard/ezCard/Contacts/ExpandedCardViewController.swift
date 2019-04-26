@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CardRemovalDelegate: class {
+    func removeCard(_ card: Card)
+}
+
 class ExpandedCardViewController: UITableViewController {
     
     fileprivate struct Constants {
@@ -15,6 +19,8 @@ class ExpandedCardViewController: UITableViewController {
         static let subtitleTableViewCellReuseIdentifier = "Subtitle"
         static let tableViewHeaderHeight = CGFloat(117.0)
     }
+    
+    weak var removalDelegate: CardRemovalDelegate?
     
     var shouldShowRemoveCardButton = false
     
@@ -115,11 +121,7 @@ class ExpandedCardViewController: UITableViewController {
     }
     
     private func removeCard() {
-        print("Remove card tapped")
-        
-        // TODO: remove card from contact shared card ids
-        // TODO: check if there are no more shared card ids for this contact (if not, delete the whole contact)
-        
+        removalDelegate?.removeCard(card)
         dismiss(animated: true, completion: nil)
     }
   

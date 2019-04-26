@@ -128,6 +128,11 @@ class ContactsViewController: UITableViewController {
         }
     }
     
+    private func deleteContact(_ contact: Contact) {
+        usersRef.child(contact.holdingUserId).child("contacts").child(contact.actualUserId).removeValue()
+        contactsRef.child(contact.key).removeValue()
+    }
+    
     // MARK: - Search Bar Functions
     
     func setUpContactSearchBar() {
@@ -184,6 +189,20 @@ class ContactsViewController: UITableViewController {
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deleteContact(contacts[indexPath.row])
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
     // MARK : - Table view delegate
