@@ -25,7 +25,9 @@ class Transaction {
     
     var cardId: String
     
-    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), cardId: String) {
+    var otherUserDisplayName: String
+    
+    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), cardId: String, otherUserDisplayName: String) {
         self.ref = ref
         self.key = key
         
@@ -36,6 +38,8 @@ class Transaction {
         self.createdAt = createdAt
         
         self.cardId = cardId
+        
+        self.otherUserDisplayName = otherUserDisplayName
     }
     
     convenience init?(snapshot: DataSnapshot) {
@@ -48,7 +52,9 @@ class Transaction {
                 return nil
         }
         
-        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), cardId: cardId)
+        let otherUserDisplayName = value["otherUserDisplayName"] as? String ?? "Someone"
+        
+        self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), cardId: cardId, otherUserDisplayName: otherUserDisplayName)
     }
     
     /// For conversion of a Transaction to Firebase dictionary representation for storage in database.
@@ -57,7 +63,8 @@ class Transaction {
             "identifier" : identifier,
             "createdAt" : createdAt.timeIntervalSince1970,
             "userId": userId,
-            "cardId": cardId
+            "cardId": cardId,
+            "otherUserDisplayName": otherUserDisplayName
         ]
     }
     

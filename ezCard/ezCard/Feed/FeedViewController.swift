@@ -48,7 +48,7 @@ class FeedViewController: UITableViewController {
         title = "Feed"
         
         tableView.separatorColor = .clear
-        tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
+        tableView.register(UINib(nibName: "CardTableViewCellWithDescription", bundle: nil), forCellReuseIdentifier: Constants.cardTableViewCellReuseIdentifier)
         
         setUpTransactionSearchBar()
         
@@ -60,6 +60,12 @@ class FeedViewController: UITableViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
     }
     
     @objc func currentUserWillChange(_ notification: Notification) {
@@ -149,7 +155,7 @@ class FeedViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let reuseIdentifier = Constants.cardTableViewCellReuseIdentifier
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! CardTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! CardTableViewCellWithDescription
         
         cell.selectionStyle = .none
         
@@ -167,6 +173,32 @@ class FeedViewController: UITableViewController {
             expandedCardViewController.card = card
             self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
         }
+        
+        let numSecondsSince = Date().timeIntervalSince(transaction.createdAt)
+        
+        if numSecondsSince < 60 {
+            cell.timeElapsedLabel.text = "Less than a minute ago"
+        } else {
+            var allowedUnits: NSCalendar.Unit = [.second]
+            
+            if numSecondsSince >= 365.25 * 24 * 60 * 60 {
+                allowedUnits = [.year]
+            } else if numSecondsSince >= 24 * 60 * 60 {
+                allowedUnits = [.day]
+            } else if numSecondsSince >= 60 * 60 {
+                allowedUnits = [.hour]
+            } else if numSecondsSince >= 60 {
+                allowedUnits = [.minute]
+            }
+            
+            let timeComponentsFormatter = DateComponentsFormatter()
+            timeComponentsFormatter.unitsStyle = .full
+            timeComponentsFormatter.allowedUnits = allowedUnits
+            
+            cell.timeElapsedLabel.text = timeComponentsFormatter.string(from: numSecondsSince)!.lowercased() + " ago"
+        }
+        
+        cell.descriptionLabel.text = "\(transaction.otherUserDisplayName) exchanged their \"\(card.name!)\" card with you."
         
         return cell
     }

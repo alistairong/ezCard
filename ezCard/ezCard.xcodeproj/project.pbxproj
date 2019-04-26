@@ -38,6 +38,8 @@
 		497B36FD2249E4600030FE9F /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 497B36FC2249E4600030FE9F /* CardView.xib */; };
 		49B5E05822497D5700D3F739 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B5E05622497D5700D3F739 /* CardTableViewCell.swift */; };
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
+		49E0DE2622729F750088A3A3 /* CardTableViewCellWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E0DE2422729F740088A3A3 /* CardTableViewCellWithDescription.swift */; };
+		49E0DE2722729F750088A3A3 /* CardTableViewCellWithDescription.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E0DE2522729F750088A3A3 /* CardTableViewCellWithDescription.xib */; };
 		49E37E302264C4E000F0A2AA /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */; };
 		49E37E332264CC5C00F0A2AA /* DataFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */; };
 		49E37E342264CC5C00F0A2AA /* DataFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */; };
@@ -87,6 +89,8 @@
 		497B36FC2249E4600030FE9F /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		49B5E05622497D5700D3F739 /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
+		49E0DE2422729F740088A3A3 /* CardTableViewCellWithDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCellWithDescription.swift; sourceTree = "<group>"; };
+		49E0DE2522729F750088A3A3 /* CardTableViewCellWithDescription.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardTableViewCellWithDescription.xib; sourceTree = "<group>"; };
 		49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFieldTableViewCell.swift; sourceTree = "<group>"; };
 		49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DataFieldTableViewCell.xib; sourceTree = "<group>"; };
@@ -219,6 +223,8 @@
 			children = (
 				49563D00225AE074006A2C7B /* ContactTableViewCell.swift */,
 				49563CFF225AE074006A2C7B /* ContactTableViewCell.xib */,
+				49E0DE2422729F740088A3A3 /* CardTableViewCellWithDescription.swift */,
+				49E0DE2522729F750088A3A3 /* CardTableViewCellWithDescription.xib */,
 				49B5E05622497D5700D3F739 /* CardTableViewCell.swift */,
 				49B5E05722497D5700D3F739 /* CardTableViewCell.xib */,
 				497B36F42249BF890030FE9F /* CenteredTextTableViewCell.swift */,
@@ -337,6 +343,7 @@
 				497B36FD2249E4600030FE9F /* CardView.xib in Resources */,
 				493C0D5B2226E3AC00DF2482 /* GoogleService-Info.plist in Resources */,
 				49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */,
+				49E0DE2722729F750088A3A3 /* CardTableViewCellWithDescription.xib in Resources */,
 				49E37E342264CC5C00F0A2AA /* DataFieldTableViewCell.xib in Resources */,
 				497B36F12249B7BD0030FE9F /* TextFieldTableViewCell.xib in Resources */,
 				49F57C88224B1B79000C365A /* RoundedRectTextFieldTableViewCell.xib in Resources */,
@@ -429,6 +436,7 @@
 				494E8D0F22307F6A00B5A7E1 /* ProfileViewController.swift in Sources */,
 				F34CE4F3224D99E30075A23F /* Transaction.swift in Sources */,
 				494E8CFF22307ABD00B5A7E1 /* ProfileButtonView.swift in Sources */,
+				49E0DE2622729F750088A3A3 /* CardTableViewCellWithDescription.swift in Sources */,
 				49F57C7C224AC25F000C365A /* Card.swift in Sources */,
 				4903B2FD223092510022F040 /* ManageCardViewController.swift in Sources */,
 				494E8CFA2230701F00B5A7E1 /* ContactsViewController.swift in Sources */,

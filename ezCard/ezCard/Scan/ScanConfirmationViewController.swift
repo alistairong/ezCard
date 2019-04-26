@@ -54,9 +54,9 @@ class ScanConfirmationViewController: UITableViewController {
 
         // write to transactions list
         let transactionsRef = Database.database().reference(withPath: "transactions")
-        let transaction = Transaction(userId: Auth.auth().currentUser!.uid, cardId: card.identifier)
+        let transaction = Transaction(userId: Auth.auth().currentUser!.uid, cardId: card.identifier, otherUserDisplayName: sharingUser.displayName)
         transactionsRef.child(transaction.identifier).setValue(transaction.dictionaryRepresentation())
-
+        
         // write transaction id to user's transaction list
         userRef.child("transactions").child(transaction.identifier).setValue(true)
         
