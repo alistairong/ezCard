@@ -58,6 +58,18 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
         
         self.title = "Register"
         
+        tableView.tableHeaderView = createSegmentedControl()
+        
+        tableView.isScrollEnabled = false
+        
+        tableView.separatorColor = .clear
+        
+        tableView.register(UINib(nibName: "RoundedRectTextFieldTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.textField)
+        tableView.register(UINib(nibName: "CenteredTextTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.centeredText)
+    }
+    
+    /// create the segmented control to switch between individuals and organizations
+    func createSegmentedControl() -> UIView {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: Constants.segmentedControlHeight + Constants.tableViewHeaderPadding))
         containerView.clipsToBounds = true
         
@@ -71,14 +83,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
         typeSegmentedControl.addTarget(self, action: #selector(accountTypeValueChanged(_:)), for: .valueChanged)
         containerView.addSubview(typeSegmentedControl)
         
-        tableView.tableHeaderView = containerView
-        
-        tableView.isScrollEnabled = false
-        
-        tableView.separatorColor = .clear
-        
-        tableView.register(UINib(nibName: "RoundedRectTextFieldTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.textField)
-        tableView.register(UINib(nibName: "CenteredTextTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.centeredText)
+        return containerView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,12 +100,12 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
     }
     
     func clearText() {
-        self.organizationName = Optional.none
-        self.firstName = Optional.none
-        self.lastName = Optional.none
-        self.email = Optional.none
-        self.password = Optional.none
-        self.confirmPassword = Optional.none
+        organizationName = nil
+        firstName = nil
+        lastName = nil
+        email = nil
+        password = nil
+        confirmPassword = nil
     }
     
     // MARK: - UITextFieldDelegate
@@ -202,6 +207,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 { // register tapped
+            // check if fields are filled
             guard let email = self.email, let password = self.password, let confirmPassword = self.confirmPassword, email.count > 0, password.count > 0, confirmPassword.count > 0, ((organizationName?.count ?? 0) > 0) || (type == .individual && (firstName?.count ?? 0) > 0 && (lastName?.count ?? 0) > 0) else {
                 let alertController = UIAlertController(title: "Oops!", message: "It looks like one or more fields is empty. Make sure to fill out all the fields!", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -210,6 +216,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 return
             }
             
+            // check that confirm password matches password
             guard password == confirmPassword else {
                 let alertController = UIAlertController(title: "Oops!", message: "The password fields do not match.", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))

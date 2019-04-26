@@ -40,6 +40,7 @@
 		49B5E05922497D5700D3F739 /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49B5E05722497D5700D3F739 /* CardTableViewCell.xib */; };
 		49E0DE2622729F750088A3A3 /* CardTableViewCellWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E0DE2422729F740088A3A3 /* CardTableViewCellWithDescription.swift */; };
 		49E0DE2722729F750088A3A3 /* CardTableViewCellWithDescription.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E0DE2522729F750088A3A3 /* CardTableViewCellWithDescription.xib */; };
+		49E0DE29227366DC0088A3A3 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E0DE28227366DC0088A3A3 /* ProfileHeaderView.swift */; };
 		49E37E302264C4E000F0A2AA /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */; };
 		49E37E332264CC5C00F0A2AA /* DataFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */; };
 		49E37E342264CC5C00F0A2AA /* DataFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */; };
@@ -91,6 +92,7 @@
 		49B5E05722497D5700D3F739 /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
 		49E0DE2422729F740088A3A3 /* CardTableViewCellWithDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCellWithDescription.swift; sourceTree = "<group>"; };
 		49E0DE2522729F750088A3A3 /* CardTableViewCellWithDescription.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardTableViewCellWithDescription.xib; sourceTree = "<group>"; };
+		49E0DE28227366DC0088A3A3 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		49E37E2F2264C4E000F0A2AA /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		49E37E312264CC5C00F0A2AA /* DataFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFieldTableViewCell.swift; sourceTree = "<group>"; };
 		49E37E322264CC5C00F0A2AA /* DataFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DataFieldTableViewCell.xib; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				497B36FA2249E3B40030FE9F /* CardView.swift */,
 				497B36FC2249E4600030FE9F /* CardView.xib */,
 				494E8CFE22307ABD00B5A7E1 /* ProfileButtonView.swift */,
+				49E0DE28227366DC0088A3A3 /* ProfileHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				497B36F32249B96D0030FE9F /* RegisterViewController.swift in Sources */,
 				49E37E332264CC5C00F0A2AA /* DataFieldTableViewCell.swift in Sources */,
 				497B36F02249B7BD0030FE9F /* TextFieldTableViewCell.swift in Sources */,
+				49E0DE29227366DC0088A3A3 /* ProfileHeaderView.swift in Sources */,
 				4903B300223093A60022F040 /* QRCodeViewController.swift in Sources */,
 				495EC36222655E6F0040676C /* LabelSelectionViewController.swift in Sources */,
 				497B36FB2249E3B40030FE9F /* CardView.swift in Sources */,

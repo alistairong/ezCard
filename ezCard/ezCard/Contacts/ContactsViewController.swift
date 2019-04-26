@@ -212,7 +212,7 @@ class ContactsViewController: UITableViewController {
         
         let contact = contacts[indexPath.row]
         contactViewController.contact = contact
-        contactViewController.title = users[contact.actualUserId]!.displayName
+        contactViewController.contactName = users[contact.actualUserId]!.displayName
         
         navigationController?.pushViewController(contactViewController, animated: true)
     }

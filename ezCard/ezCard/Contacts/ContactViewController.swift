@@ -15,6 +15,7 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
     fileprivate struct Constants {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
         static let subtitleTableViewCellReuseIdentifier = "Subtitle"
+        static let tableViewHeaderHeight = CGFloat(117.0)
     }
     
     let activityIndicatorView = UIActivityIndicatorView(style: .gray)
@@ -23,6 +24,7 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
     let cardsRef = Database.database().reference(withPath: "cards")
     
     var contact: Contact!
+    var contactName: String!
     
     private var cards: [Card] = []
     private var allSharedFields: [[String: String]] = []
@@ -48,6 +50,13 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
             
             self.tableView.reloadData()
         }
+        
+        let profileButtonView = ProfileButtonView(userId: contact.actualUserId)
+        
+        let nameLabel = UILabel()
+        nameLabel.text = contactName
+        
+        tableView.tableHeaderView = ProfileHeaderView(width: tableView.bounds.width, height: Constants.tableViewHeaderHeight, yourProfileButtonView: profileButtonView, yourNameLabel: nameLabel)
     }
     
     func fetchCards(completion: @escaping ([Card], [[String: String]]) -> Void) {

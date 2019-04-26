@@ -10,6 +10,7 @@ import UIKit
 
 class QRCodeViewController: UIViewController {
     
+    // put the generated QR code into an ImageView
     @IBOutlet weak var imageView: UIImageView! {
         didSet {
             let qrData = GlobalConstants.QR_UUID + " " + card.identifier + " " + UUID().uuidString
@@ -25,6 +26,7 @@ class QRCodeViewController: UIViewController {
         title =  card.name
     }
     
+    // generate the QR code based on the card id
     // Source: https://www.hackingwithswift.com/example-code/media/how-to-create-a-qr-code
     func generateQRCode(with string: String, scale: (x: CGFloat, y: CGFloat) = (3, 3)) -> UIImage? {
         let data = string.data(using: String.Encoding.isoLatin1, allowLossyConversion: false)

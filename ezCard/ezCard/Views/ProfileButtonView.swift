@@ -38,6 +38,10 @@ class ProfileButtonView: UIView {
     convenience init() {
         self.init(userId: User.current?.uid, buttonSize: ProfileButtonView.defaultSize)
     }
+    
+    convenience init(userId: String) {
+        self.init(userId: userId, buttonSize: ProfileButtonView.defaultSize)
+    }
 
     init(userId: String? = nil, buttonSize: CGFloat) {
         super.init(frame: CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize))

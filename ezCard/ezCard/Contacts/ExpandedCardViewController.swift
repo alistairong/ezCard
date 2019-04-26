@@ -34,37 +34,12 @@ class ExpandedCardViewController: UITableViewController {
         tableView.register(SubtitleTableViewCell.self, forCellReuseIdentifier: Constants.subtitleTableViewCellReuseIdentifier)
         tableView.register(UINib(nibName: "CenteredTextTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.centeredTextTableViewCellReuseIdentifier)
         
-        tableView.tableHeaderView = headerView()
-    }
-
-    func headerView() -> UIView {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: Constants.tableViewHeaderHeight))
-        headerView.backgroundColor = .clear
-        
-        let profileButtonView = ProfileButtonView()
-        profileButtonView.userId = card.userId
-        headerView.addSubview(profileButtonView)
-        
-        profileButtonView.translatesAutoresizingMaskIntoConstraints = false
-        profileButtonView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        profileButtonView.widthAnchor.constraint(equalTo: profileButtonView.heightAnchor).isActive = true
-        profileButtonView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
-        profileButtonView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 16).isActive = true
-        profileButtonView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -16).isActive = true
+        let profileButtonView = ProfileButtonView(userId: card.userId)
         
         let nameLabel = UILabel()
-        nameLabel.text = card.name
-        nameLabel.font = UIFont.systemFont(ofSize: 31, weight: .bold)
-        headerView.addSubview(nameLabel)
+        nameLabel.text = card?.name
         
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        nameLabel.leadingAnchor.constraint(equalTo: profileButtonView.trailingAnchor, constant: 20).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        headerView.addSubview(nameLabel)
-    
-        return headerView
+        tableView.tableHeaderView = ProfileHeaderView(width: tableView.bounds.width, height: Constants.tableViewHeaderHeight, yourProfileButtonView: profileButtonView, yourNameLabel: nameLabel)
     }
     
     @objc func cancelTapped(_ sender: Any?) {
