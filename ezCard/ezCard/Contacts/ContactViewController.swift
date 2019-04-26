@@ -9,6 +9,10 @@
 import UIKit
 import FirebaseDatabase
 
+protocol ContactDeletionDelegate: class {
+    func contactViewController(_ contactViewController: ContactViewController, didDeleteContact contact: Contact)
+}
+
 /// ContactViewController controls what is being populated and shown in the page showing a single contact.
 class ContactViewController: UITableViewController, CardRemovalDelegate {
     
@@ -25,6 +29,8 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
     
     var contact: Contact!
     var contactName: String!
+    
+    weak var contactDeletionDelegate: ContactDeletionDelegate?
     
     private var cards: [Card] = []
     private var allSharedFields: [[String: String]] = []
@@ -57,6 +63,23 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
         nameLabel.text = contactName
         
         tableView.tableHeaderView = ProfileHeaderView(width: tableView.bounds.width, height: Constants.tableViewHeaderHeight, yourProfileButtonView: profileButtonView, yourNameLabel: nameLabel)
+        
+        contactsRef.child(contact.key).observe(.value) { [weak self] (snapshot) in
+            guard let self = self else { return }
+            
+            guard let newContact = Contact(snapshot: snapshot) else {
+                return
+            }
+            
+            self.contact = newContact
+            
+            self.fetchCards(completion: { (cards, allSharedFields) in
+                self.cards = cards
+                self.allSharedFields = allSharedFields
+                
+                self.tableView.reloadData()
+            })
+        }
     }
     
     func fetchCards(completion: @escaping ([Card], [[String: String]]) -> Void) {
@@ -95,6 +118,8 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
                 }
                 return ret == .orderedAscending
             }
+            
+            cards.sort(by: { $0.name! < $1.name! })
             
             completion(cards, allSharedFields)
         }
@@ -176,6 +201,9 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
         
         if contact.sharedCardIds.count == 0 { // if there are no more shared cards, delete the contact
             contactsRef.child(contact.key).removeValue()
+            
+            contactDeletionDelegate?.contactViewController(self, didDeleteContact: contact)
+            
             navigationController?.popViewController(animated: true)
         } else {
             contactsRef.child(contact.key).child("sharedCardIds").child(card.key).removeValue()

@@ -19,7 +19,7 @@ extension ContactsViewController: UISearchResultsUpdating {
 }
 
 /// ContactsViewController controls what is being populated and shown in the page listing all contacts.
-class ContactsViewController: UITableViewController {
+class ContactsViewController: UITableViewController, ContactDeletionDelegate {
     
     private struct Constants {
         static let contactTableViewCellReuseIdentifier = "ContactTableViewCell"
@@ -133,6 +133,12 @@ class ContactsViewController: UITableViewController {
         contactsRef.child(contact.key).removeValue()
     }
     
+    // MARK: - ContactDeletionDelegate
+    
+    func contactViewController(_ contactViewController: ContactViewController, didDeleteContact contact: Contact) {
+        deleteContact(contact)
+    }
+    
     // MARK: - Search Bar Functions
     
     func setUpContactSearchBar() {
@@ -211,6 +217,7 @@ class ContactsViewController: UITableViewController {
         let contactViewController = ContactViewController(style: .grouped)
         
         let contact = contacts[indexPath.row]
+        contactViewController.contactDeletionDelegate = self
         contactViewController.contact = contact
         contactViewController.contactName = users[contact.actualUserId]!.displayName
         

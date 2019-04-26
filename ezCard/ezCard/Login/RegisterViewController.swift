@@ -258,9 +258,11 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 switch strongSelf.type {
                 case .individual:
                     let user = User(uid: newUser.uid, type: strongSelf.type, email: email, firstName: strongSelf.firstName!, lastName: strongSelf.lastName!)
+                    user.data = [["data": email, "field": "email", "label": "personal"]]
                     userRef.setValue(user.dictionaryRepresentation())
                 case .organization:
                     let user = User(uid: newUser.uid, type: strongSelf.type, email: email, organizationName: strongSelf.organizationName!)
+                    user.data = [["data": email, "field": "email", "label": "personal"]]
                     userRef.setValue(user.dictionaryRepresentation())
                 case .unknown:
                     fatalError("UserType was unknown.")

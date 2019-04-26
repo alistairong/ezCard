@@ -162,6 +162,7 @@ class User {
             "uid": uid,
         ]
         
+        data = Array(NSOrderedSet(array: data)) as! [[String: String]]
         dict["data"] = data
         
         if let transactionIds = self.transactionIds {
