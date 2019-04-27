@@ -9,8 +9,6 @@
 import UIKit
 import Firebase
 
-var currentUserData: Data? //cache for the current user's vCard
-
 let profileImageCache = NSCache<AnyObject, AnyObject>() // global profile image cache
 
 @UIApplicationMain
@@ -21,38 +19,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
+        UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)
+        
+        // configure the window
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let homeViewController = HomeViewController(style: .grouped)
-        homeViewController.tabBarItem = UITabBarItem(title: "Home", image: #imageLiteral(resourceName: "home"), tag: 0)
+        let homeViewController = FeedViewController(style: .grouped)
+        homeViewController.tabBarItem = UITabBarItem(title: "Feed", image: #imageLiteral(resourceName: "home"), tag: 0)
         
         let scanViewController = ScanViewController()
         scanViewController.tabBarItem = UITabBarItem(title: "Scan", image: #imageLiteral(resourceName: "qrCode"), tag: 1)
         
-        let contactsViewController = ContactsViewController(style: .grouped)
+        let contactsViewController = ContactsViewController(style: .plain)
         contactsViewController.tabBarItem = UITabBarItem(title: "Contacts", image: #imageLiteral(resourceName: "people"), tag: 2)
+        
+        let profileViewController = ProfileViewController(style: .grouped)
+        profileViewController.title = "Profile"
+        profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: #imageLiteral(resourceName: "profile"), tag: 3)
         
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [UINavigationController(rootViewController: homeViewController),
                                             UINavigationController(rootViewController: scanViewController),
-                                            UINavigationController(rootViewController: contactsViewController)]
+                                            UINavigationController(rootViewController: contactsViewController),
+                                            UINavigationController(rootViewController: profileViewController)]
         
         window!.rootViewController = tabBarController
     
         window!.makeKeyAndVisible()
         
-        UITableView.appearance().backgroundColor = #colorLiteral(red: 0.9371625781, green: 0.9373195171, blue: 0.9371418357, alpha: 1)
+        // initial current user config
+        if let currentUser = Auth.auth().currentUser {
+            User.fetchUser(with: currentUser.uid) { (user) in
+                User.current = user
+                profileViewController.user = user
+            }
+        } else {
+            let loginViewController = LoginViewController()
+            tabBarController.viewControllers!.first!.present(UINavigationController(rootViewController: loginViewController), animated: false, completion: nil)
+        }
         
+        // always listen for user change hereafter
         Auth.auth().addStateDidChangeListener { (auth, user) in
             guard let user = user else {
-                currentUserData = nil
-                
                 return
             }
             
-            let vCardRemoteRef = Storage.storage().reference().child("users").child("\(user.uid).vcard")
-            vCardRemoteRef.getData(maxSize: Int64.max) { (data, error) in
-                currentUserData = data
+            User.fetchUser(with: user.uid) { (user) in
+                User.current = user
+                profileViewController.user = user
             }
         }
         

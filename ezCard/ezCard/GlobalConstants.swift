@@ -12,4 +12,6 @@ struct GlobalConstants {
 
     static let QR_UUID = "ezCard-ID"
     
+    static let customLabelsUserDefaultsKey = "customLabels"
+    
 }

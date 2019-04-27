@@ -7,31 +7,14 @@
 //
 
 import UIKit
-import FirebaseStorage
 
 class CardView: UIView {
     
     private struct Constants {
-        static let shadowOffset = CGFloat(2.0)
+        static let numFieldsShown = 4
     }
     
-    let profileImgsRef = Storage.storage().reference().child("profile_images")
-    
-    @IBOutlet weak var profileImageContainerView: UIView! {
-        didSet {
-            profileImageContainerView.layer.borderWidth = 3.0
-            profileImageContainerView.layer.borderColor = UIColor.white.cgColor
-            profileImageContainerView.layer.shadowOffset = CGSize(width: 0, height: Constants.shadowOffset)
-            profileImageContainerView.layer.shadowRadius = 2.0
-            profileImageContainerView.layer.shadowOpacity = 0.5
-        }
-    }
-    @IBOutlet weak var profileImageView: UIImageView! {
-        didSet {
-            profileImageView.image = profileImageView.image?.withRenderingMode(.alwaysTemplate)
-            profileImageView.tintColor = .darkGray
-        }
-    }
+    @IBOutlet weak var profileButtonView: ProfileButtonView!
     
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -94,29 +77,42 @@ class CardView: UIView {
     func configure(with card: Card) {
         titleLabel.text = card.name
         
-        let cacheKey = "profile_image_\(card.userId)"
+        profileButtonView.userId = card.userId
         
-        if let imageFromCache = profileImageCache.object(forKey: cacheKey as AnyObject) as? UIImage {
-            profileImageView.image = imageFromCache
-            profileImageView.contentMode = .scaleAspectFill
-        } else {
-            let profileImgRef = profileImgsRef.child("\(card.userId).jpg")
-            
-            // limit profile images to 2MB (2 * 1024 * 1024 bytes)
-            profileImgRef.getData(maxSize: 2 * 1024 * 1024) { [weak self] (data, error) in
-                if let error = error {
-                    print("Error fetching profile image:", error)
-                    self?.profileImageView.contentMode = .bottom
-                } else {
-                    let image = UIImage(data: data!)!
-                    profileImageCache.setObject(image, forKey: cacheKey as AnyObject)
-                    self?.profileImageView.image = image
-                    self?.profileImageView.contentMode = .scaleAspectFill
-                }
+        detailLabel1.text = nil
+        dataLabel1.text = nil
+        detailLabel2.text = nil
+        dataLabel2.text = nil
+        detailLabel3.text = nil
+        dataLabel3.text = nil
+        detailLabel4.text = nil
+        dataLabel4.text = nil
+        
+        var counter = 1
+        for data in card.fields {
+            if counter > Constants.numFieldsShown {
+                break
             }
+            
+            let field = data["field"]!
+            let value = data["data"]
+            
+            if counter == 1 {
+                detailLabel1.text = field
+                dataLabel1.text = value
+            } else if counter == 2 {
+                detailLabel2.text = field
+                dataLabel2.text = value
+            } else if counter == 3 {
+                detailLabel3.text = field
+                dataLabel3.text = value
+            } else if counter == 4 {
+                detailLabel4.text = field
+                dataLabel4.text = value
+            }
+            
+            counter += 1
         }
-        
-        // TODO: configure data field labels
     }
     
 }

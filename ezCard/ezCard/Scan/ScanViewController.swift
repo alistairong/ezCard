@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import FirebaseDatabase
 
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
@@ -18,13 +19,21 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     let captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     
+    let usersRef = Database.database().reference(withPath: "users")
+    let cardsRef = Database.database().reference(withPath: "cards")
+    
     var isPresentingScanConfirmationViewController = false
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         
+        // set up back camera for QR Code Scanning
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
         
         if let captureDevice = deviceDiscoverySession.devices.first {
@@ -45,18 +54,18 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             } catch {
                 print("Error initializing AVCaptureDeviceInput:", error)
             }
-        } else {
-            // TODO: show "cannot find camera" UI
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // start camera
         captureSession.startRunning()
         
         isPresentingScanConfirmationViewController = false
         
+        // get rid of box highlighting a previous QR code
         qrCodeHighlightView?.removeFromSuperview()
         qrCodeHighlightView = nil
     }
@@ -65,6 +74,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
+        // stop camera when switching views
         captureSession.stopRunning()
     }
     
@@ -87,6 +97,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         if let underlyingData = metadataObj.stringValue, metadataObj.type == .qr, underlyingData.contains(GlobalConstants.QR_UUID) {
             // found a QR code
             
+            // highlight QR code with green box
             if qrCodeHighlightView == nil {
                 qrCodeHighlightView = UIView()
                 qrCodeHighlightView!.layer.borderColor = UIColor.green.cgColor
@@ -98,12 +109,33 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             let qrCodeObject = videoPreviewLayer!.transformedMetadataObject(for: metadataObj)
             qrCodeHighlightView!.frame = qrCodeObject!.bounds
 
+            // show the ScanConfirmationViewController after the scan
             if !isPresentingScanConfirmationViewController {
                 isPresentingScanConfirmationViewController = true
                 
-                let scanConfirmationViewController = ScanConfirmationViewController(style: .grouped)
-                scanConfirmationViewController.qrMetadata = underlyingData
-                present(scanConfirmationViewController, animated: true, completion: nil)
+                // check if QR code is a valid ezCard QR code
+                let qrMetadata = underlyingData.split(separator: " ")
+                cardsRef.child(String(qrMetadata[1])).observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                    // don't do anything if code is not valid
+                    guard let strongSelf = self, let card = Card(snapshot: snapshot) else {
+                        return
+                    }
+                    
+                    // show scanConfirmationViewController if code is valid
+                    let scanConfirmationViewController = ScanConfirmationViewController(style: .grouped)
+                    
+                    scanConfirmationViewController.card = card
+                    
+                    strongSelf.usersRef.child(card.userId).observeSingleEvent(of: .value, with: { (snapshot) in
+                        guard let user = User(snapshot: snapshot) else {
+                            return
+                        }
+                        
+                        scanConfirmationViewController.sharingUser = user
+                        
+                        strongSelf.present(scanConfirmationViewController, animated: true, completion: nil)
+                    })
+                }
             }
         }
     }

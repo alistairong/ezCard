@@ -9,6 +9,7 @@
 import Foundation
 import FirebaseDatabase
 
+/// Card class stores all information that is found in a single contact Card made by a User.
 class Card {
     
     let ref: DatabaseReference?
@@ -21,13 +22,13 @@ class Card {
     let createdAt: Date
     
     var name: String?
-    var fields: [String: String]
+    var fields: [[String: String]]
     
     var isValid: Bool {
         return ((name?.count ?? 0) > 0 && fields.count > 0)
     }
     
-    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), name: String? = nil, fields: [String: String] = [:]) {
+    init(ref: DatabaseReference? = nil, key: String = "", userId: String, identifier: String = UUID().uuidString, createdAt: Date = Date(), name: String? = nil, fields: [[String: String]] = []) {
         self.ref = ref
         self.key = key
         
@@ -48,14 +49,15 @@ class Card {
             let createdAtRaw = value["createdAt"] as? Double,
             let name = value["name"] as? String,
             let userId = value["userId"] as? String,
-            let fields = value["fields"] as? [String: String] else {
+            let fields = value["fields"] as? [[String: String]] else {
                 return nil
         }
         
         self.init(ref: snapshot.ref, key: snapshot.key, userId: userId, identifier: identifier, createdAt: Date(timeIntervalSince1970: createdAtRaw), name: name, fields: fields)
     }
     
-    func toAnyObject() -> Any {
+    /// For conversion of a Card to Firebase dictionary representation for storage in database.
+    func dictionaryRepresentation() -> [String: Any] {
         return [
             "identifier" : identifier,
             "createdAt" : createdAt.timeIntervalSince1970,

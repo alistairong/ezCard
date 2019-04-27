@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 
+/// LoginViewController controls what is being populated and shown on the login page.
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var usernameTextField: UITextField?
@@ -24,7 +25,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     @IBAction func loginTapped(_ sender: Any) {
@@ -43,14 +44,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            // user has successfully signed in
-            
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
     
     @IBAction func registerTapped(_ sender: Any) {
         let registerViewController = RegisterViewController(style: .grouped)
+        usernameTextField?.text = Optional.none
+        passwordTextField?.text = Optional.none
         navigationController?.pushViewController(registerViewController, animated: true)
     }
     

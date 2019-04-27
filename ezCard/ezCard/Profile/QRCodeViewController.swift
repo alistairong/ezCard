@@ -9,22 +9,38 @@
 import UIKit
 
 class QRCodeViewController: UIViewController {
-
+    
+    // put the generated QR code into an ImageView
+    @IBOutlet weak var imageView: UIImageView! {
+        didSet {
+            let qrData = GlobalConstants.QR_UUID + " " + card.identifier + " " + UUID().uuidString
+            imageView.image = generateQRCode(with: qrData)!
+        }
+    }
+    
+    var card: Card!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //title =  // TODO: set title to name of associated card
+        
+        title =  card.name
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    // generate the QR code based on the card id
+    // Source: https://www.hackingwithswift.com/example-code/media/how-to-create-a-qr-code
+    func generateQRCode(with string: String, scale: (x: CGFloat, y: CGFloat) = (3, 3)) -> UIImage? {
+        let data = string.data(using: String.Encoding.isoLatin1, allowLossyConversion: false)
+        
+        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+            filter.setValue(data, forKey: "inputMessage")
+            let transform = CGAffineTransform(scaleX: scale.x, y: scale.y)
+            
+            if let output = filter.outputImage?.transformed(by: transform) {
+                return UIImage(ciImage: output)
+            }
+        }
+        
+        return nil
     }
-    */
-
+    
 }

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 class ScanConfirmationViewController: UITableViewController {
     
@@ -18,16 +20,27 @@ class ScanConfirmationViewController: UITableViewController {
     private struct Constants {
         static let topSeparatorTag = 983743
         static let bottomSeparatorTag = 983742
+        static let labelPadding = CGFloat(20)
+        static let footerBottomPadding = CGFloat(75)
     }
+    
+
     
     var separatorColor: UIColor?
     
-    var qrMetadata: String!
+    var card: Card!
+    var sharingUser: User!
+    
+    var transactionDescription: String? {
+        guard let sharingUser = self.sharingUser, let card = self.card else {
+            return nil
+        }
+        
+        return "\(sharingUser.displayName) would like to share \(card.name == nil ? "a card" : "their \"\(card.name!)\" card") with you."
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("Showing scan confirmation VC for metadata:", qrMetadata)
         
         separatorColor = tableView.separatorColor
         tableView.separatorColor = .clear
@@ -37,7 +50,29 @@ class ScanConfirmationViewController: UITableViewController {
     }
     
     func acceptTransaction() {
-        // TODO: accept the transaction (add contact to current user's contact list)
+        let userRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid)
+
+        // write to transactions list
+        let transactionsRef = Database.database().reference(withPath: "transactions")
+        let transaction = Transaction(userId: Auth.auth().currentUser!.uid, cardId: card.identifier, otherUserDisplayName: sharingUser.displayName)
+        transactionsRef.child(transaction.identifier).setValue(transaction.dictionaryRepresentation())
+        
+        // write transaction id to user's transaction list
+        userRef.child("transactions").child(transaction.identifier).setValue(true)
+        
+        // write to contacts list
+        let contactsRef = Database.database().reference(withPath: "contacts")
+        
+        let contactIdentifier = Auth.auth().currentUser!.uid + "-" + sharingUser.uid
+        
+        let contactRef = contactsRef.child(contactIdentifier)
+        
+        contactRef.child("holdingUserId").setValue(Auth.auth().currentUser!.uid)
+        contactRef.child("actualUserId").setValue(sharingUser.uid)
+        contactRef.child("sharedCardIds").updateChildValues([card.identifier: true])
+        
+        // write contact id to user's contact list
+        userRef.child("contacts").child(sharingUser.uid).setValue(true)
         
         dismiss(animated: true, completion: nil)
     }
@@ -91,7 +126,17 @@ class ScanConfirmationViewController: UITableViewController {
             
             let cell = cell as! CardTableViewCell
             
+            cell.cardView.configure(with: card)
             
+            cell.cardView.qrCodeButton.isHidden = true
+            
+            cell.cardView.moreButtonTappedCallback = { [weak self] in
+                guard let self = self else { return }
+                
+                let expandedCardViewController = ExpandedCardViewController(style: .grouped)
+                expandedCardViewController.card = self.card
+                self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
+            }
         } else if indexPath.section == 1 { // accept
             let cell = cell as! CenteredTextTableViewCell
             
@@ -105,6 +150,45 @@ class ScanConfirmationViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        guard section == 0 else {
+            return nil
+        }
+        
+        return transactionDescription
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard section == 0 else {
+            return nil
+        }
+        
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width - Constants.labelPadding * 2, height: CGFloat.greatestFiniteMagnitude))
+        containerView.clipsToBounds = true
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: containerView.bounds.width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.text = self.tableView(tableView, titleForFooterInSection: section)
+        label.sizeToFit()
+        label.frame.origin = CGPoint(x: Constants.labelPadding, y: Constants.labelPadding / 2)
+        
+        containerView.frame.size = CGSize(width: label.bounds.width, height: label.bounds.height + Constants.labelPadding / 2 + Constants.footerBottomPadding)
+        containerView.addSubview(label)
+        
+        return containerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        guard section == 0 else {
+            return 0
+        }
+        
+        let view = self.tableView(tableView, viewForFooterInSection: section)!
+        return view.bounds.height
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
