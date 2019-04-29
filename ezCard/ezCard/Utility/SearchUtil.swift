@@ -44,7 +44,7 @@ class SearchUtil {
     static func containsCardValue(card: Card, fieldValue: String) -> Bool {
         for data in card.fields {
             let value = data["data"]
-            if (value?.lowercased().contains(fieldValue.lowercased())) {
+            if (value?.lowercased().contains(fieldValue.lowercased()) ?? false) {
                 return true
             }
         }
