@@ -405,7 +405,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         
         let row = self.tableView(tableView, numberOfRowsInSection: section) - 1
         
-        let defaultDataDict = ["field" : dataField.rawValue, "label" : (dataField == .socialProfile) ? DataLabel.defaultSocial.rawValue : DataLabel.default.rawValue, "data": ""]
+        let defaultDataDict = ["identifier": UUID().uuidString, "field" : dataField.rawValue, "label" : (dataField == .socialProfile) ? DataLabel.defaultSocial.rawValue : DataLabel.default.rawValue, "data": ""]
         user.data.append(defaultDataDict)
         
         tableView.insertRows(at: [IndexPath(row: row, section: section)], with: .automatic)

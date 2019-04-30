@@ -38,11 +38,11 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         if let company = user.company {
-            dataItems.append(["field" : "company", "data": company])
+            dataItems.append(["identifier": user.uid, "field" : "company", "data": company]) // use the user's uid as the identifier for this special field (since it doesn't ever change)
         }
         
         if let jobTitle = user.jobTitle {
-            dataItems.append(["field" : "job title", "data": jobTitle])
+            dataItems.append(["identifier": user.type.rawValue, "field" : "job title", "data": jobTitle]) // use the user's type as the identifier for this special field (since it doesn't ever change)
         }
         
         dataItems.append(contentsOf: user.data)
@@ -140,7 +140,11 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         } else if indexPath.section == 1 { // data fields
             let dataItem = dataItems[indexPath.row]
             
-            cell.accessoryType = scratchPadCard.fields.contains(dataItem) ? .checkmark : .none
+            if let identifier = dataItem["identifier"] {
+                cell.accessoryType = scratchPadCard.fields.contains(where: { $0["identifier"] == identifier }) ? .checkmark : .none
+            } else {
+                cell.accessoryType = .none
+            }
             
             let field = dataItem["field"]!
             
@@ -184,7 +188,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
             let dataItem = dataItems[indexPath.row]
             
             var fields = scratchPadCard.fields
-            if let index = fields.firstIndex(of: dataItem) {
+            if let index = fields.firstIndex(where: { $0["identifier"] == dataItem["identifier"] }) {
                 fields.remove(at: index)
             } else {
                 fields.append(dataItem)
