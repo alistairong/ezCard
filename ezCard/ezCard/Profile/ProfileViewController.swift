@@ -106,15 +106,73 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
         super.viewDidAppear(animated)
         
         refreshUI()
+        updateCardsAfterSettingsChange()
     }
     
     func refreshUI() {
+        //reload data from firebase
         userRelevantDataRef?.removeAllObservers()
         relevantDataRef?.removeAllObservers()
         observeData()
-        
         profileButtonView.userId = user?.uid
         nameLabel.text = Auth.auth().currentUser?.displayName ?? user?.displayName
+    }
+    
+    /// Current hacky fix for card updating (on firebase) after settings change
+    func updateCardsAfterSettingsChange() {
+        // if there are changes in settings, change and save cards as well
+        // preprocess dict of dict to check if there are updates to settings
+        var userSettingsFields: [String: [String : String]] = [:] as! [String : [String : String]]
+        for dataItem in (user?.data)! {
+            let field = dataItem["field"]
+            let label = dataItem["label"]
+            let fieldData = dataItem["data"]
+            userSettingsFields[field!] = [label : fieldData] as! [String : String]
+        }
+        
+        //save all updated cards (those with fields changed because of settings)
+        for card in dataArr {
+            var updatedCard = card as! Card
+            
+            var cardFields = (card as! Card).fields
+            
+            // done with index instead to make cardFields modifiable
+            for index in 0..<cardFields.count {
+                let dataItem = cardFields[index]
+                let field = dataItem["field"]
+                let label = dataItem["label"]
+                let fieldData = dataItem["data"]
+                var userSettingsFieldData : String = String()
+                
+                //because some fields don't have labels to differentiate them
+                //special hacky treatment for job and company fields
+                if (label == nil) {
+                    if field == "job title" {
+                        userSettingsFieldData = (user?.jobTitle)!
+                    } else if field == "company" {
+                        userSettingsFieldData = (user?.company)!
+                    }
+                } else {
+                    if (userSettingsFields[field!]![label!] == nil) {
+                        continue
+                    }
+                    userSettingsFieldData = userSettingsFields[field!]![label!]!
+                }
+                
+                if (fieldData != userSettingsFieldData) {
+                    cardFields[index]["data"] = userSettingsFieldData
+                }
+            }
+            //update data of updated card to firebase
+            updatedCard.fields = cardFields
+            let cardRef = relevantDataRef?.child(updatedCard.identifier)
+            cardRef?.setValue(updatedCard.dictionaryRepresentation())
+        }
+        
+        //reload data from firebase
+        userRelevantDataRef?.removeAllObservers()
+        relevantDataRef?.removeAllObservers()
+        observeData()
     }
     
     @objc func currentUserInfoDidChange() {
