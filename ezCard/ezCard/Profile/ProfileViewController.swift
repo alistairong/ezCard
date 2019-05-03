@@ -121,15 +121,22 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
     /// Current hacky fix for card updating (on firebase) after settings change
     func updateCardsAfterSettingsChange() {
         // if there are changes in settings, change and save cards as well
-        // preprocess dict of dict to check if there are updates to settings
-        var userSettingsFields: [String: [String : String]] = [:] as! [String : [String : String]]
+        // preprocess dict to check if there are updates to settings
+        // make identifier the key to find the value
+        var userSettingsFields: [String: String] = [:] as! [String : String]
         for dataItem in (user?.data)! {
             let field = dataItem["field"]
-            let label = dataItem["label"]
+            let identifier = dataItem["identifier"]
             let fieldData = dataItem["data"]
-            userSettingsFields[field!] = [label : fieldData] as! [String : String]
+            
+            if field == "job title" || field == "company" {
+                userSettingsFields[field!] = fieldData
+            } else {
+                userSettingsFields[identifier!] = fieldData
+            }
         }
         
+        print(userSettingsFields)
         //save all updated cards (those with fields changed because of settings)
         for card in dataArr {
             var updatedCard = card as! Card
@@ -140,23 +147,21 @@ class ProfileViewController: UITableViewController, ManageCardViewControllerDele
             for index in 0..<cardFields.count {
                 let dataItem = cardFields[index]
                 let field = dataItem["field"]
-                let label = dataItem["label"]
+                let identifier = dataItem["identifier"]
                 let fieldData = dataItem["data"]
                 var userSettingsFieldData : String = String()
                 
-                //because some fields don't have labels to differentiate them
+                //because some fields don't have unique identifiers to differentiate them
                 //special hacky treatment for job and company fields
-                if (label == nil) {
-                    if field == "job title" {
-                        userSettingsFieldData = (user?.jobTitle)!
-                    } else if field == "company" {
-                        userSettingsFieldData = (user?.company)!
-                    }
+                if field == "job title" {
+                    userSettingsFieldData = (user?.jobTitle)!
+                } else if field == "company" {
+                    userSettingsFieldData = (user?.company)!
                 } else {
-                    if (userSettingsFields[field!]![label!] == nil) {
+                    if (userSettingsFields[identifier!] == nil) {
                         continue
                     }
-                    userSettingsFieldData = userSettingsFields[field!]![label!]!
+                    userSettingsFieldData = userSettingsFields[identifier!]!
                 }
                 
                 if (fieldData != userSettingsFieldData) {
