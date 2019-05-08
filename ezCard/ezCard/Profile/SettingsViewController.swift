@@ -23,6 +23,10 @@ extension Notification.Name {
     static let currentUserInfoDidChange = Notification.Name("currentUserInfoDidChange")
 }
 
+protocol SettingsViewControllerDelegate: class {
+    func updateCardsAfterSettingsChange()
+}
+
 /// SettingsViewController controls what is being populated and shown on the settings page, accessible from the profile page.
 class SettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, LabelSelectionViewControllerDelegate {
     
@@ -45,6 +49,8 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
     let imagePickerController = UIImagePickerController()
     
     let profileButtonView = ProfileButtonView()
+    
+    var delegate:SettingsViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,11 +94,13 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
             }
             
             usersRef.child(user.uid).setValue(user.dictionaryRepresentation())
+            delegate?.updateCardsAfterSettingsChange()
         }
     }
     
     // MARK: - Set-up Functions
     
+    /// Sets up the sign out button, which should be red and perform the signOut function
     func setUpSignOutButton() {
         let signOutButton = UIBarButtonItem(title: "Sign Out".uppercased(), style: .done, target: self, action: #selector(signOut))
         signOutButton.tintColor = .red
@@ -108,6 +116,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         tableView.register(UINib(nibName: "DataFieldTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.dataCellReuseIdentifier)
     }
     
+    /// Sets up the header for the table view
     func setUpHeaderView() -> UIView {
         let headerViewHeight = Constants.headerViewPadding * 2 + (CGFloat(Constants.numTextFields) * Constants.textFieldHeight) + (Constants.textFieldSpacing * CGFloat(Constants.numTextFields - 1))
         
@@ -117,6 +126,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         return headerView
     }
     
+    /// Sets up the Profile Button View
     func setUpProfileButtonView(withHeaderView headerView: UIView) {
         profileButtonView.tappedCallback = { [weak self] in
             guard let self = self else { return }
@@ -202,8 +212,6 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         user.jobTitle = sender.text ?? ""
     }
     
-    // MARK: -
-    
     @objc func signOut() {
         signingOut = true
         
@@ -222,6 +230,9 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         }
     }
     
+    // MARK: - Supporting View Controller functions
+    
+    /// For picking a label for a field
     func labelSelectionViewController(_ labelSelectionViewController: LabelSelectionViewController, didFinishWithLabel label: String, for field: String?, at row: Int?) {
         guard let field = field, let row = row else {
             return
@@ -244,6 +255,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         tableView.reloadData()
     }
     
+    /// For picking a profile image
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let currentUser = Auth.auth().currentUser else {
             print("uid was nil")
@@ -315,7 +327,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.row < fieldData.count) ? Constants.dataCellReuseIdentifier : Constants.basicCellReuseIdentifier, for: indexPath)
         
         if indexPath.row < fieldData.count {
-            // data cell
+            // Data cell
             let cell = cell as! DataFieldTableViewCell
             
             let dataDict = fieldData[indexPath.row] // ["label": String, "data" : Any]
@@ -353,7 +365,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
             
             cell.selectionStyle = .none
         } else {
-            // add cell
+            // Add the cell
             cell.textLabel?.text = "add \(dataField.rawValue)"
             
             cell.selectionStyle = .default
@@ -400,6 +412,7 @@ class SettingsViewController: UITableViewController, UIImagePickerControllerDele
         insertNewField(in: indexPath.section)
     }
     
+    /// Creates a new data field
     func insertNewField(in section: Int) {
         let dataField = DataField.allCases[section]
         
