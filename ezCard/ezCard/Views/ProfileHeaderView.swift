@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Used to create Profile Header View by using a profile button view
 class ProfileHeaderView: UIView {
     
     var profileButtonView = ProfileButtonView()

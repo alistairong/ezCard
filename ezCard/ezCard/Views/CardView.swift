@@ -14,6 +14,8 @@ class CardView: UIView {
         static let numFieldsShown = 4
     }
     
+    
+    // outlets for all variables in card view
     @IBOutlet weak var profileButtonView: ProfileButtonView!
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -74,6 +76,7 @@ class CardView: UIView {
         moreButtonTappedCallback?()
     }
     
+    // Used to configure cards in card view by passing in a card
     func configure(with card: Card) {
         titleLabel.text = card.name
         
