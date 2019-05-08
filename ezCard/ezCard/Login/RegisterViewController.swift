@@ -68,12 +68,13 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
         tableView.register(UINib(nibName: "CenteredTextTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.centeredText)
     }
     
-    /// create the segmented control to switch between individuals and organizations
+    /// Create the segmented control to switch between individuals and organizations
     func createSegmentedControl() -> UIView {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: Constants.segmentedControlHeight + Constants.tableViewHeaderPadding))
         containerView.clipsToBounds = true
         
-        let segmentedControlXExtension = CGFloat(3.0) // used to "hide" segmented control corner radius
+        // Used to "hide" segmented control corner radius
+        let segmentedControlXExtension = CGFloat(3.0)
         
         let typeSegmentedControl = UISegmentedControl(items: UserType.allQuantifiableCases.map({ $0.rawValue.uppercased() }))
         typeSegmentedControl.backgroundColor = .white
@@ -89,6 +90,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Show the navigation bar
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
@@ -99,6 +101,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
         tableView.reloadData()
     }
     
+    /// Clear all of the textfields
     func clearText() {
         organizationName = nil
         firstName = nil
@@ -118,26 +121,31 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
 
     // MARK: - Table view data source
     
+    /// Two table sections. One for data fields, one for register button
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2 //one for data fields, one for register button
+        return 2
     }
 
+    /// Return either the number of fields an individual or organization has, or 1 for the register button
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let caseCount = (type == .individual) ? IndividualTypeRowIdentifier.allCases.count : OrganizationTypeRowIdentifier.allCases.count
         return (section == 0) ? caseCount : 1
     }
-
+    
+    /// Either make TextField for the each data field or create the sign in button
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.section == 0) ? ReuseIdentifiers.textField : ReuseIdentifiers.centeredText, for: indexPath)
 
         cell.backgroundColor = .clear
         
-        if indexPath.section == 0 { // data fields section
+        // Data fields section
+        if indexPath.section == 0 {
+            let index = indexPath.row
             let cell = cell as! TextFieldTableViewCell
-            
             cell.textField.delegate = self
             
-            if indexPath.row == OrganizationTypeRowIdentifier.organizationName.rawValue && type == .organization {
+            // Check which field is which and change the cell accordingly
+            if index == OrganizationTypeRowIdentifier.organizationName.rawValue && type == .organization {
                 cell.textField.placeholder = "Organization Name"
                 
                 cell.textField.text = organizationName
@@ -145,7 +153,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 cell.textFieldEditedAction = { [weak self] (textField: UITextField) in
                     self?.organizationName = textField.text
                 }
-            } else if indexPath.row == IndividualTypeRowIdentifier.firstName.rawValue && type == .individual {
+            } else if index == IndividualTypeRowIdentifier.firstName.rawValue && type == .individual {
                 cell.textField.placeholder = "First Name"
                 
                 cell.textField.text = firstName
@@ -153,7 +161,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 cell.textFieldEditedAction = { [weak self] (textField: UITextField) in
                     self?.firstName = textField.text
                 }
-            } else if indexPath.row == IndividualTypeRowIdentifier.lastName.rawValue && type == .individual {
+            } else if index == IndividualTypeRowIdentifier.lastName.rawValue && type == .individual {
                 cell.textField.placeholder = "Last Name"
                 
                 cell.textField.text = lastName
@@ -161,7 +169,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 cell.textFieldEditedAction = { [weak self] (textField: UITextField) in
                     self?.lastName = textField.text
                 }
-            } else if (indexPath.row == IndividualTypeRowIdentifier.email.rawValue && type == .individual) || (indexPath.row == OrganizationTypeRowIdentifier.email.rawValue && type == .organization) {
+            } else if (index == IndividualTypeRowIdentifier.email.rawValue && type == .individual) || (index == OrganizationTypeRowIdentifier.email.rawValue && type == .organization) {
                 cell.textField.placeholder = (type == .individual) ? "Email" : "Admin Email"
                 cell.textField.isSecureTextEntry = false
                 
@@ -170,7 +178,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 cell.textFieldEditedAction = { [weak self] (textField: UITextField) in
                     self?.email = textField.text
                 }
-            } else if (indexPath.row == IndividualTypeRowIdentifier.password.rawValue && type == .individual) || (indexPath.row == OrganizationTypeRowIdentifier.password.rawValue && type == .organization) {
+            } else if (index == IndividualTypeRowIdentifier.password.rawValue && type == .individual) || (index == OrganizationTypeRowIdentifier.password.rawValue && type == .organization) {
                 cell.textField.placeholder = "Password"
                 cell.textField.isSecureTextEntry = true
                 cell.textField.textContentType = .oneTimeCode
@@ -180,7 +188,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                 cell.textFieldEditedAction = { [weak self] (textField: UITextField) in
                     self?.password = textField.text
                 }
-            } else if (indexPath.row == IndividualTypeRowIdentifier.confirmPassword.rawValue && type == .individual) || (indexPath.row == OrganizationTypeRowIdentifier.confirmPassword.rawValue && type == .organization) {
+            } else if (index == IndividualTypeRowIdentifier.confirmPassword.rawValue && type == .individual) || (index == OrganizationTypeRowIdentifier.confirmPassword.rawValue && type == .organization) {
                 cell.textField.placeholder = "Confirm Password"
                 cell.textField.isSecureTextEntry = true
                 cell.textField.textContentType = .oneTimeCode
@@ -191,7 +199,9 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                     self?.confirmPassword = textField.text
                 }
             }
-        } else if indexPath.section == 1 { // button section
+        }
+        // Button section
+        else if indexPath.section == 1 { // button section
             let cell = cell as! CenteredTextTableViewCell
             cell.selectionStyle = .none
 

@@ -52,7 +52,8 @@ class ContactsViewController: UITableViewController, ContactDeletionDelegate {
         title = "Contacts"
         
         tableView.separatorInset = .zero
-        tableView.tableFooterView = UIView() // hide extra separators
+        // Hide extra separators
+        tableView.tableFooterView = UIView()
         
         tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: Constants.contactTableViewCellReuseIdentifier)
         
@@ -81,6 +82,7 @@ class ContactsViewController: UITableViewController, ContactDeletionDelegate {
         observeContacts()
     }
     
+    /// Looks for changes in the contacts in the database
     func observeContacts() {
         userContactsRef?.removeAllObservers()
         
@@ -128,6 +130,7 @@ class ContactsViewController: UITableViewController, ContactDeletionDelegate {
         }
     }
     
+    /// Deletes a contact from the user
     private func deleteContact(_ contact: Contact) {
         usersRef.child(contact.holdingUserId).child("contacts").child(contact.actualUserId).removeValue()
         contactsRef.child(contact.key).removeValue()
@@ -154,12 +157,12 @@ class ContactsViewController: UITableViewController, ContactDeletionDelegate {
                 return false
             }
             return SearchUtil.containsContactName(user: user, name: searchText)
-                //|| SearchUtil.containsContactValue(contact: contact, fieldValue: searchText)
         })
         
         tableView.reloadData()
     }
     
+    /// Says whether or not we are filtering with the search bar
     func isFiltering() -> Bool {
         return SearchUtil.isFiltering(searchController: contactSearchController)
     }
@@ -187,7 +190,7 @@ class ContactsViewController: UITableViewController, ContactDeletionDelegate {
         
         cell.profileButtonView.userId = contact.actualUserId
         
-        // "pass through" the tap on the profile button
+        // "Pass through" the tap on the profile button
         cell.profileButtonView.tappedCallback = { [weak self] in
             guard let self = self else { return }
             self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)

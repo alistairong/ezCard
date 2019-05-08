@@ -19,16 +19,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "" // remove back button text
+        // Removes back button text
+        navigationItem.title = ""
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Hide the navigation bar
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
-
+    
+    /// Log in the user if credentials are correct and login is tapped. Dismisses the LoginView
     @IBAction func loginTapped(_ sender: Any) {
+        // Do not do anything if username and password are not filled out
         guard let username = usernameTextField?.text, let password = passwordTextField?.text else {
             return
         }
@@ -48,6 +52,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    /// If register is tapped, pull up RegisterViewController
     @IBAction func registerTapped(_ sender: Any) {
         let registerViewController = RegisterViewController(style: .grouped)
         usernameTextField?.text = Optional.none

@@ -54,7 +54,7 @@ class User {
     
     let email: String
     
-    var data: [[String : String]] // [["data": "555-555-5555", "label": "personal", "field": "phone"], ["data": "222-222-2222", "label": "business", "field": "phone"]]
+    var data: [[String : String]]
     
     var transactionIds: [String: Bool]?
     
@@ -91,7 +91,7 @@ class User {
         
         self.transactionIds = transactionIds
         
-        // individual
+        // Individual
         
         self.firstName = firstName
         self.lastName = lastName
@@ -102,7 +102,7 @@ class User {
         self.cardIds = cardIds
         self.contactIds = contactIds
         
-        // organization
+        // Organization
         
         self.organizationName = organizationName
         
@@ -122,7 +122,7 @@ class User {
         
         let transactionIds = value["transactions"] as? [String: Bool]
         
-        // individual
+        // Individual
         
         let firstName = value["firstName"] as? String
         let lastName = value["lastName"] as? String
@@ -133,7 +133,7 @@ class User {
         let cardIds = value["cards"] as? [String: Bool]
         let contactIds = value["contacts"] as? [String: Bool]
         
-        // organization
+        // Organization
         
         let organizationName = value["organizationName"] as? String
         
@@ -142,6 +142,7 @@ class User {
         self.init(ref: snapshot.ref, key: snapshot.key, uid: uid, type: UserType(rawValue: type) ?? .unknown, email: email, data: data ?? [], transactionIds: transactionIds, firstName: firstName, lastName: lastName, company: company, jobTitle: jobTitle, cardIds: cardIds, contactIds: contactIds, organizationName: organizationName, members: members)
     }
     
+    /// Gets the user reference from the database
     static func fetchUser(with uid: String, completion: ((User?) -> Void)?) {
         let usersRef = Database.database().reference(withPath: "users")
         usersRef.child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
@@ -169,7 +170,7 @@ class User {
             dict["transactions"] = transactionIds
         }
         
-        // individual
+        // Individual
         
         if let firstName = self.firstName {
             dict["firstName"] = firstName
@@ -195,7 +196,7 @@ class User {
             dict["contacts"] = contactIds
         }
         
-        // organization
+        // Organization
         
         if let organizationName = self.organizationName {
             dict["organizationName"] = organizationName

@@ -24,13 +24,12 @@ class ScanConfirmationViewController: UITableViewController {
         static let footerBottomPadding = CGFloat(75)
     }
     
-
-    
     var separatorColor: UIColor?
     
     var card: Card!
     var sharingUser: User!
     
+    // Transaction message that describes who is trying to share their card
     var transactionDescription: String? {
         guard let sharingUser = self.sharingUser, let card = self.card else {
             return nil
@@ -49,18 +48,19 @@ class ScanConfirmationViewController: UITableViewController {
         tableView.register(UINib(nibName: "CenteredTextTableViewCell", bundle: nil), forCellReuseIdentifier: ReuseIdentifiers.centeredText)
     }
     
+    /// Accept the card that was scanned
     func acceptTransaction() {
         let userRef = Database.database().reference(withPath: "users").child(Auth.auth().currentUser!.uid)
 
-        // write to transactions list
+        // Write to transactions list
         let transactionsRef = Database.database().reference(withPath: "transactions")
         let transaction = Transaction(userId: Auth.auth().currentUser!.uid, cardId: card.identifier, otherUserDisplayName: sharingUser.displayName)
         transactionsRef.child(transaction.identifier).setValue(transaction.dictionaryRepresentation())
         
-        // write transaction id to user's transaction list
+        // Write transaction id to user's transaction list
         userRef.child("transactions").child(transaction.identifier).setValue(true)
         
-        // write to contacts list
+        // wWite to contacts list
         let contactsRef = Database.database().reference(withPath: "contacts")
         
         let contactIdentifier = Auth.auth().currentUser!.uid + "-" + sharingUser.uid
@@ -71,22 +71,24 @@ class ScanConfirmationViewController: UITableViewController {
         contactRef.child("actualUserId").setValue(sharingUser.uid)
         contactRef.child("sharedCardIds").updateChildValues([card.identifier: true])
         
-        // write contact id to user's contact list
+        // Write contact id to user's contact list
         userRef.child("contacts").child(sharingUser.uid).setValue(true)
         
         dismiss(animated: true, completion: nil)
     }
     
+    /// Reject the card that was scanned
     func declineTransaction() {
         dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Table view data source
-
+    
+    /// One section for the card, one for the accept button, one for the reject button
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -95,7 +97,7 @@ class ScanConfirmationViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: (indexPath.section == 0) ? ReuseIdentifiers.card : ReuseIdentifiers.centeredText, for: indexPath)
 
         if indexPath.section != 0 && cell.viewWithTag(Constants.bottomSeparatorTag) == nil && cell.viewWithTag(Constants.topSeparatorTag) == nil {
-            let topSeparator = UIView()
+            /*let topSeparator = UIView()
             topSeparator.tag = Constants.topSeparatorTag
             topSeparator.translatesAutoresizingMaskIntoConstraints = false
             topSeparator.backgroundColor = separatorColor
@@ -115,10 +117,13 @@ class ScanConfirmationViewController: UITableViewController {
             bottomSeparator.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
             bottomSeparator.rightAnchor.constraint(equalTo: cell.rightAnchor).isActive = true
             bottomSeparator.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-            bottomSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale).isActive = true
+            bottomSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale).isActive = true*/
+            createTopSeparator(cell)
+            createBottomSeparator(cell)
         }
         
-        if indexPath.section == 0 { // card
+        // The card that is being shared
+        if indexPath.section == 0 {
             let topSeparator = cell.viewWithTag(Constants.topSeparatorTag)
             topSeparator?.removeFromSuperview()
             let bottomSeparator = cell.viewWithTag(Constants.bottomSeparatorTag)
@@ -137,12 +142,16 @@ class ScanConfirmationViewController: UITableViewController {
                 expandedCardViewController.card = self.card
                 self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
             }
-        } else if indexPath.section == 1 { // accept
+        }
+        // Button for accepting the transaction
+        else if indexPath.section == 1 {
             let cell = cell as! CenteredTextTableViewCell
             
             cell.titleLabel.text = "Confirm".uppercased()
             cell.titleLabel.textColor = .green
-        } else if indexPath.section == 2 { // decline
+        }
+        // Button for declining the transaction
+        else if indexPath.section == 2 {
             let cell = cell as! CenteredTextTableViewCell
             
             cell.titleLabel.text = "Decline".uppercased()
@@ -152,6 +161,35 @@ class ScanConfirmationViewController: UITableViewController {
         return cell
     }
     
+    // Create top separator section of the cell
+    func createTopSeparator(_ cell:UITableViewCell) {
+        let topSeparator = UIView()
+        topSeparator.tag = Constants.topSeparatorTag
+        topSeparator.translatesAutoresizingMaskIntoConstraints = false
+        topSeparator.backgroundColor = separatorColor
+        cell.addSubview(topSeparator)
+        
+        topSeparator.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+        topSeparator.rightAnchor.constraint(equalTo: cell.rightAnchor).isActive = true
+        topSeparator.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        topSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale).isActive = true
+    }
+    
+    // Create bottom separator section of the cell
+    func createBottomSeparator(_ cell:UITableViewCell) {
+        let bottomSeparator = UIView()
+        bottomSeparator.tag = Constants.bottomSeparatorTag
+        bottomSeparator.translatesAutoresizingMaskIntoConstraints = false
+        bottomSeparator.backgroundColor = separatorColor
+        cell.addSubview(bottomSeparator)
+        
+        bottomSeparator.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+        bottomSeparator.rightAnchor.constraint(equalTo: cell.rightAnchor).isActive = true
+        bottomSeparator.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+        bottomSeparator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale).isActive = true
+    }
+    
+    /// Describes who is making the transaction
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         guard section == 0 else {
             return nil
@@ -160,6 +198,7 @@ class ScanConfirmationViewController: UITableViewController {
         return transactionDescription
     }
     
+    /// Create the view for the footer of the card that describes the transaction
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard section == 0 else {
             return nil
@@ -182,6 +221,7 @@ class ScanConfirmationViewController: UITableViewController {
         return containerView
     }
     
+    /// Only the card should have a footer height
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard section == 0 else {
             return 0
@@ -196,9 +236,12 @@ class ScanConfirmationViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 { // accept
+        // Accept pressed
+        if indexPath.section == 1 {
             acceptTransaction()
-        } else if indexPath.section == 2 { // decline
+        }
+        // Decline pressed
+        else if indexPath.section == 2 {
             declineTransaction()
         }
     }

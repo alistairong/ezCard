@@ -102,12 +102,13 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
                     allSharedFields.append(contentsOf: card.fields)
                 }
                 
-                // after the async work has been completed, unlock the group
+                // After the async work has been completed, unlock the group
                 cardsFetchGroup.leave()
             }
         }
         
-        // this block will be called after the final cardsFetchGroup.leave() of the looped async functions complete
+        // This block will be called after the final cardsFetchGroup.leave() of the looped
+        // async functions complete
         cardsFetchGroup.notify(queue: .main) {
             allSharedFields = Array(Set(allSharedFields)) // remove duplicates
             
@@ -195,11 +196,13 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
         return cell
     }
     
+    /// Removes a card from a contact. Deletes the contact if there are no more cards
     func removeCard(_ card: Card) {
-        // remove card from contact shared card ids
+        // Remove card from contact shared card ids
         contact.sharedCardIds.removeValue(forKey: card.key)
         
-        if contact.sharedCardIds.count == 0 { // if there are no more shared cards, delete the contact
+        // If there are no more shared cards, delete the contact
+        if contact.sharedCardIds.count == 0 {
             contactsRef.child(contact.key).removeValue()
             
             contactDeletionDelegate?.contactViewController(self, didDeleteContact: contact)
@@ -209,7 +212,7 @@ class ContactViewController: UITableViewController, CardRemovalDelegate {
             contactsRef.child(contact.key).child("sharedCardIds").child(card.key).removeValue()
         }
         
-        // refetch the data
+        // Refetch the data
         fetchCards { [weak self] (cards, allSharedFields)  in
             guard let self = self else { return }
             
