@@ -29,7 +29,8 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     var user: User!
     var dataItems: [[String: String]] = []
     
-    var card: Card? // IMPORTANT: this is only used in viewDidLoad to create a copy in scratchPadCard
+    // IMPORTANT: this is only used in viewDidLoad to create a copy in scratchPadCard
+    var card: Card?
     private var scratchPadCard: Card!
 
     var isEditingCard: Bool!
@@ -38,11 +39,13 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         if let company = user.company {
-            dataItems.append(["field" : "company", "data": company])
+            // Use the user's uid as the identifier for this special field (since it doesn't ever change)
+            dataItems.append(["identifier": user.uid, "field" : "company", "data": company])
         }
         
         if let jobTitle = user.jobTitle {
-            dataItems.append(["field" : "job title", "data": jobTitle])
+            // Use the user's type as the identifier for this special field (since it doesn't ever change)
+            dataItems.append(["identifier": user.type.rawValue, "field" : "job title", "data": jobTitle])
         }
         
         dataItems.append(contentsOf: user.data)
@@ -87,9 +90,11 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        var numSections = 2 // one for card name, one for data fields
+        // One for card name, one for data fields
+        var numSections = 2
         if isEditingCard {
-            numSections += 1 // if we're editing, a delete row
+            // If we're editing, a delete row
+            numSections += 1
         }
         return numSections
     }
@@ -120,7 +125,8 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
         
         cell.selectionStyle = .none
         
-        if indexPath.section == 0 { // card name
+        // Card name
+        if indexPath.section == 0 {
             let cell = cell as! TextFieldTableViewCell
             
             cell.textField.placeholder = "Card Name"
@@ -137,10 +143,16 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
                 
                 strongSelf.navigationItem.rightBarButtonItem?.isEnabled = strongSelf.scratchPadCard.isValid
             }
-        } else if indexPath.section == 1 { // data fields
+        }
+        // Data fields
+        else if indexPath.section == 1 {
             let dataItem = dataItems[indexPath.row]
             
-            cell.accessoryType = scratchPadCard.fields.contains(dataItem) ? .checkmark : .none
+            if let identifier = dataItem["identifier"] {
+                cell.accessoryType = scratchPadCard.fields.contains(where: { $0["identifier"] == identifier }) ? .checkmark : .none
+            } else {
+                cell.accessoryType = .none
+            }
             
             let field = dataItem["field"]!
             
@@ -152,7 +164,9 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
             
             cell.detailTextLabel?.text = dataItem["data"]
             cell.detailTextLabel?.textColor = .lightGray
-        } else if indexPath.section == 2 { // remove button
+        }
+        // Remove button
+        else if indexPath.section == 2 {
             let cell = cell as! CenteredTextTableViewCell
             
             cell.selectionStyle = .default
@@ -184,7 +198,7 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
             let dataItem = dataItems[indexPath.row]
             
             var fields = scratchPadCard.fields
-            if let index = fields.firstIndex(of: dataItem) {
+            if let index = fields.firstIndex(where: { $0["identifier"] == dataItem["identifier"] }) {
                 fields.remove(at: index)
             } else {
                 fields.append(dataItem)
@@ -203,10 +217,10 @@ class ManageCardViewController: UITableViewController, UITextFieldDelegate {
     }
     
     private func deleteCard() {
-        // delete card from user card ids
+        // Delete card from user card ids
         usersRef.child(user.key).child("cards").child(card!.key).removeValue()
         
-        // delete card from cards top level
+        // Delete card from cards top level
         cardsRef.child(card!.key).removeValue()
         
         dismiss(animated: true, completion: nil)

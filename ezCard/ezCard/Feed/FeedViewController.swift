@@ -24,6 +24,7 @@ class FeedViewController: UITableViewController {
         static let cardTableViewCellReuseIdentifier = "CardTableViewCell"
     }
     
+    //Get transactions for current user
     var userTransactionsRef: DatabaseReference? {
         guard let currentUser = User.current else {
             return nil
@@ -41,6 +42,7 @@ class FeedViewController: UITableViewController {
     
     let cardsRef = Database.database().reference(withPath: "cards")
     var cards: [String: Card] = [:]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +64,7 @@ class FeedViewController: UITableViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
+    ///Used to reload table view everything view appears
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -120,6 +123,7 @@ class FeedViewController: UITableViewController {
     
     // MARK: - Search Bar Functions
     
+    /// Used to set up transaction search bar
     func setUpTransactionSearchBar() {
         SearchUtil.setUpSearchBar(viewController: self, searchResultsUpdater: self,
                                   searchController: transactionSearchController, placeholder: "Search Feed")
@@ -145,6 +149,7 @@ class FeedViewController: UITableViewController {
     
     // MARK: - Table view data source
     
+    /// Returns number of transacitions in feed
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (isFiltering()) {
             return filteredTransactions.count
@@ -174,6 +179,7 @@ class FeedViewController: UITableViewController {
             self.present(UINavigationController(rootViewController: expandedCardViewController), animated: true, completion: nil)
         }
         
+        //calculations done to create timestamp to show when transaction occurred
         let numSecondsSince = Date().timeIntervalSince(transaction.createdAt)
         
         if numSecondsSince < 60 {

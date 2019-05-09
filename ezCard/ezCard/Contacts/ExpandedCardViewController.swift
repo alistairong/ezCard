@@ -95,6 +95,7 @@ class ExpandedCardViewController: UITableViewController {
         }
     }
     
+    /// Removes the card from the contact
     private func removeCard() {
         removalDelegate?.removeCard(card)
         dismiss(animated: true, completion: nil)

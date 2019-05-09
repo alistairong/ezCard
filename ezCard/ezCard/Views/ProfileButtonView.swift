@@ -64,6 +64,7 @@ class ProfileButtonView: UIView {
         commonInit()
     }
     
+    // used to initialize profile button view
     private func commonInit() {
         containerView = UIView(frame: CGRect(x: 0, y: -Constants.shadowOffset, width: frame.width, height: frame.height))
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -145,6 +146,7 @@ class ProfileButtonView: UIView {
         }
     }
     
+    // used to grab profile image 
     private func fetchProfileImage(forceRefetch: Bool = false, completion: @escaping ((UIImage?, Error?) -> Void)) {
         guard let userId = self.userId else {
             completion(nil, nil)

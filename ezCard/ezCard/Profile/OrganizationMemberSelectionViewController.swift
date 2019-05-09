@@ -89,6 +89,7 @@ class OrganizationMemberSelectionViewController: UITableViewController, UISearch
     
     // MARK: - Search
     
+    /// Used for searching for a specific contact
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.tableView.reloadData()
         var found = false
@@ -115,6 +116,7 @@ class OrganizationMemberSelectionViewController: UITableViewController, UISearch
         }
     }
     
+    /// Resets the table after the user is done searching
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchResult.removeAll()
         tableView.reloadData()

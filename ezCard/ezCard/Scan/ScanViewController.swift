@@ -33,7 +33,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        // set up back camera for QR Code Scanning
+        // Set up back camera for QR Code Scanning
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
         
         if let captureDevice = deviceDiscoverySession.devices.first {
@@ -60,12 +60,12 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // start camera
+        // Start scanning
         captureSession.startRunning()
         
         isPresentingScanConfirmationViewController = false
         
-        // get rid of box highlighting a previous QR code
+        // Get rid of box highlighting a previous QR code
         qrCodeHighlightView?.removeFromSuperview()
         qrCodeHighlightView = nil
     }
@@ -74,7 +74,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        // stop camera when switching views
+        // Stop camera when switching views
         captureSession.stopRunning()
     }
     
@@ -88,16 +88,16 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         guard let metadataObj = metadataObjects.first(where: { $0 is AVMetadataMachineReadableCodeObject }) as? AVMetadataMachineReadableCodeObject else {
-            // no QR code detected
+            // No QR code detected
             qrCodeHighlightView?.removeFromSuperview()
             qrCodeHighlightView = nil
             return
         }
         
+        // Found a QR code
         if let underlyingData = metadataObj.stringValue, metadataObj.type == .qr, underlyingData.contains(GlobalConstants.QR_UUID) {
-            // found a QR code
             
-            // highlight QR code with green box
+            // Highlight QR code with green box
             if qrCodeHighlightView == nil {
                 qrCodeHighlightView = UIView()
                 qrCodeHighlightView!.layer.borderColor = UIColor.green.cgColor
@@ -109,19 +109,19 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             let qrCodeObject = videoPreviewLayer!.transformedMetadataObject(for: metadataObj)
             qrCodeHighlightView!.frame = qrCodeObject!.bounds
 
-            // show the ScanConfirmationViewController after the scan
+            // Show the ScanConfirmationViewController after the scan
             if !isPresentingScanConfirmationViewController {
                 isPresentingScanConfirmationViewController = true
                 
-                // check if QR code is a valid ezCard QR code
+                // Check if QR code is a valid ezCard QR code
                 let qrMetadata = underlyingData.split(separator: " ")
                 cardsRef.child(String(qrMetadata[1])).observeSingleEvent(of: .value) { [weak self] (snapshot) in
-                    // don't do anything if code is not valid
+                    // Don't do anything if code is not valid
                     guard let strongSelf = self, let card = Card(snapshot: snapshot) else {
                         return
                     }
                     
-                    // show scanConfirmationViewController if code is valid
+                    // Show scanConfirmationViewController if code is valid
                     let scanConfirmationViewController = ScanConfirmationViewController(style: .grouped)
                     
                     scanConfirmationViewController.card = card
